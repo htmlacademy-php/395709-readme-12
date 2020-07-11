@@ -257,9 +257,6 @@ $user_name = 'Mansur'; // укажите здесь ваше имя
                             </blockquote>
 
                         <?php elseif ($post['type'] == 'post-text'): ?>
-                            <header class="post__header">
-                                <h2><a href="#">Полезный пост про Байкал</a></h2>
-                            </header>
                             <div class="post__main">
                                 <p><?=$post['content']?></p>
                                 <div class="post-text__more-link-wrapper">
