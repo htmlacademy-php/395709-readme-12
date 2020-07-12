@@ -19,12 +19,10 @@ $user_name = 'Mansur'; // укажите здесь ваше имя
 
 <?php
 function text_split($text, $lenght = 300) {
-    if (strlen($text) < $lenght){
-        return $text;
-    }      
-    else{ 
+
+    if (strlen($text) > $lenght){
         $words = explode(" ", $text);
-        $len = strlen($words[0]);
+        $len = mb_strlen($words[0], 'utf8' );
         $i= 0;
         while ($len < $lenght) {
             $str[] = $words[$i];
@@ -33,8 +31,13 @@ function text_split($text, $lenght = 300) {
         }
         $str = implode(" ",$str);
         $str = $str.'...';
-        return $str;
+        $read = '<div class="post-text__more-link-wrapper">
+                     <a class="post-text__more-link" href="#">Читать далее</a>
+                </div>';
+        return $str . $read;
     }
+
+    return $text;
 }
 ?>
 
@@ -237,7 +240,7 @@ function text_split($text, $lenght = 300) {
                     [
                         'title' => 'Игра престолов',
                         'type' => 'post-text',
-                        'content' => 'Не могу дождаться начала финального сезона своего любимого сериала!',
+                        'content' => 'Не могу дождаться начала финального сезона своего любимого сериала! ',
                         'author' => 'Владик',
                         'avatar' => 'userpic.jpg'
                     ],
@@ -282,11 +285,7 @@ function text_split($text, $lenght = 300) {
                         <?php elseif ($post['type'] == 'post-text'): ?>
                             <div class="post__main">
                                 <p><?= text_split($post['content']) ?></p>
-                                <?php if(strlen($post['content']) > 300): ?>
-                                <div class="post-text__more-link-wrapper">
-                                    <a class="post-text__more-link" href="#">Читать далее</a>
-                                </div>
-                                <?php endif; ?>
+                       
                             </div>
 
                         <?php elseif ($post['type'] == 'post-photo'): ?>
