@@ -19,8 +19,7 @@ $user_name = 'Mansur'; // укажите здесь ваше имя
 
 <?php
 function text_split($text, $lenght = 300) {
-
-    if (strlen($text) > $lenght){
+    if (mb_strlen($text, 'utf8') > $lenght){
         $words = explode(" ", $text);
         $len = mb_strlen($words[0], 'utf8' );
         $i= 0;
