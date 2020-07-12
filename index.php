@@ -25,7 +25,7 @@ function text_split($text, $lenght = 300) {
         $i= 0;
         while ($len < $lenght) {
             $str[] = $words[$i];
-            $len = $len + strlen($words[$i+1]);
+            $len = $len + mb_strlen($words[$i+1], 'utf8' );
             $i = $i + 1; 
         }
         $str = implode(" ",$str);
