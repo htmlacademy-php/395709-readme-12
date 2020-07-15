@@ -69,7 +69,7 @@ function text_split($text, $lenght = 300) {
         ];?>
  <?php       
     $page_content = include_template('main.php', ['posts' => $posts]);
-    $layout_content = include_template('layout.php', ['content1' => $page_content, 'title' => $user_name , 'user_name' => $user_name]);
+    $layout_content = include_template('layout.php', ['content1' => $page_content, 'title' => 'Blog' , 'user_name' => $user_name]);
     print($layout_content);        
 ?>
    
