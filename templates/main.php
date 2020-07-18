@@ -84,7 +84,12 @@
             </div>
         </div>
         <div class="popular__posts">
-            <?php foreach ($posts as $key => $post): ?>
+            <?php 
+            $index = 0;
+            foreach ($posts as $post):
+                $date = DateFormat($index);
+                $index = $index + 1;
+            ?>
                 <article class="popular__post post <?=$post['type']?>">
                     <header class="post__header">
                         <h2><?= htmlspecialchars($post['title']) ?></h2>
@@ -135,7 +140,7 @@
                                 </div>
                                 <div class="post__info">
                                     <b class="post__author-name"> <?= htmlspecialchars($post['author'])?></b>
-                                    <time class="post__time" datetime="">дата</time>
+                                    <time class="post__time" datetime=""><?= $date?> </time>
                                 </div>
                             </a>
                         </div>
