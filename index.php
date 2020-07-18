@@ -78,6 +78,6 @@ function DateFormat($index){
 }
     require('data.php');
     $page_content = include_template('main.php', ['posts' => $posts]);
-    $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Blog']);
+    $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Blog' , 'user_name' => $user_name]);
     print($layout_content);        
 ?>
