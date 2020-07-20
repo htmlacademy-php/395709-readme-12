@@ -1,9 +1,7 @@
 <?php
 $is_auth = rand(0, 1);
 include "helpers.php";
-$user_name = 'Mansur'; // укажите здесь ваше имя
-?>
-<?php
+$user_name = 'Mansur'; 
 function text_split($text, $lenght = 300) {
     if (mb_strlen($text, 'utf8') > $lenght){
         $words = explode(" ", $text);
@@ -24,52 +22,35 @@ function text_split($text, $lenght = 300) {
 
     return $text;
 }
-?>
+function DateFormat($index){
+  $RandomDate = date_create(generate_random_date($index));
+  $date  = date_diff(new DateTime(), $RandomDate);
+  if ( $date->format('%y') >= 1){
+      return $RandomDate->format("d-M-Y");
+  }
+  elseif (1.25 <= ((int)$date->format('%m')) + ($date->format('%d'))/31 ){
+    return seePlural($date ->format('%m'), 'месяц', 'месяца', 'месяцев');
+  }
+  elseif (7 <= (int)$date->format('%m')*31 + (int)$date->format('%d')){
+    return seePlural(floor(($date->format('%d'))/7) + (int)$date->format('%m')*4, ' неделю', 'недели', 'недель');
+  }
+  elseif((1 <=  $date->format('%d')) ){
+     return seePlural($date->format('%d'), 'день', 'дня','дней');
+  }
+  elseif(1 <=  $date->format('%h') ){
+     return seePlural( $date->format('%h'), 'час', 'часа','часов');
+  }
+  else {
+      return seePlural( $date->format('%i'), 'минута',  'минуты', 'минут');
+  }
+}
 
+function seePlural($str, $one, $two, $many, $ending = ' назад'){
+    return $str. ' '.get_noun_plural_form($str, $one, $two, $many) . $ending;
+}
 
-
-<?php 
-    $posts = [
-            [
-                'title' => 'Цитата',
-                'type' => 'post-quote',
-                'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
-                'author' => 'Лариса',
-                'avatar' => 'userpic-larisa-small.jpg'
-            ],
-            [
-                'title' => 'Игра престолов',
-                'type' => 'post-text',
-                'content' => 'Не могу дождаться начала финального сезона своего любимого сериала! ',
-                'author' => 'Владик',
-                'avatar' => 'userpic.jpg'
-            ],
-            [
-                'title' => 'Наконец, обработал фотки!',
-                'type' => 'post-photo',
-                'content' => 'rock-medium.jpg',
-                'author' => 'Виктор',
-                'avatar' => 'userpic-mark.jpg'
-            ],
-            [
-                'title' => 'Моя мечта',
-                'type' => 'post-photo',
-                'content' => 'coast-medium.jpg',
-                'author' => 'Лариса',
-                'avatar' => 'userpic-larisa-small.jpg'
-            ],
-            [
-                'title' => 'Лучшие курсы',
-                'type' => 'post-link',
-                'content' => 'www.htmlacademy.ru',
-                'author' => 'Владик',
-                'avatar' => 'userpic.jpg'
-            ]
-
-        ];?>
- <?php       
+    require('data.php');
     $page_content = include_template('main.php', ['posts' => $posts]);
-    $layout_content = include_template('layout.php', ['content1' => $page_content, 'title' => 'Blog' , 'user_name' => $user_name]);
+    $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Blog' , 'user_name' => $user_name]);
     print($layout_content);        
 ?>
-   

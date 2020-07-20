@@ -112,7 +112,7 @@
 </header>
 
 <section class="page__main page__main--popular">
-   <?= $content1; ?>
+   <?= $content; ?>
 </section>
 
 <footer class="footer">
