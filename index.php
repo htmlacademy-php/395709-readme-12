@@ -24,58 +24,31 @@ function text_split($text, $lenght = 300) {
 }
 function DateFormat($index){
   $RandomDate = date_create(generate_random_date($index));
-  $now =  date_create();
-  $date  = date_diff($now, $RandomDate);
+  $date  = date_diff(new DateTime(), $RandomDate);
   if ( $date->format('%y') >= 1){
       return $RandomDate->format("d-M-Y");
   }
-  elseif (1.25 <= ( $date->format('%m')) + ( $date->format('%d'))/31 ){
-    $date = " {$date->format('%m')} " .get_noun_plural_form(
-    $date->format('%m'),
-        'месяц',
-        'месяца',
-        'месяцев'
-    )." назад"; 
-       return $date;
+  elseif (1.25 <= ((int)$date->format('%m')) + ($date->format('%d'))/31 ){
+    return seePlural($date ->format('%m'), 'месяц', 'месяца', 'месяцев');
   }
-  elseif (7 <= (( $date->format('%m'))*31 + $date->format('%d'))){
-    $floored = floor(( $date->format('%d'))/7); 
-    $date = "{$floored} " .get_noun_plural_form(
-    (floor(( $date->format('%d'))/7)),
-        'неделю',
-        'недели',
-        'недель'
-         )." назад";
-      return $date;
+  elseif (7 <= (int)$date->format('%m')*31 + (int)$date->format('%d')){
+    return seePlural(floor(($date->format('%d'))/7) + (int)$date->format('%m')*4, ' неделю', 'недели', 'недель');
   }
   elseif((1 <=  $date->format('%d')) ){
-    $date = " {$date->format('%d')} " .get_noun_plural_form(
-    $date->format('%d'),
-        'день',
-        'дня',
-        'дней'
-         )." назад"; 
-     return $date;
+     return seePlural($date->format('%d'), 'день', 'дня','дней');
   }
   elseif(1 <=  $date->format('%h') ){
-    $date = " {$date->format('%h')} " .get_noun_plural_form(
-    $date->format('%h'),
-        'час',
-        'часа',
-        'часов'
-         )." назад";
-     return $date;
+     return seePlural( $date->format('%h'), 'час', 'часа','часов');
   }
   else {
-    $date = " {$date->format('%i')} " .get_noun_plural_form(
-    $date->format('%i'),
-       'минута',
-       'минуты',
-       'минут'
-     )." назад"; 
-      return $date;
+      return seePlural( $date->format('%i'), 'минута',  'минуты', 'минут');
   }
 }
+
+function seePlural($str, $one, $two, $many, $ending = ' назад'){
+    return $str. ' '.get_noun_plural_form($str, $one, $two, $many) . $ending;
+}
+
     require('data.php');
     $page_content = include_template('main.php', ['posts' => $posts]);
     $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Blog' , 'user_name' => $user_name]);

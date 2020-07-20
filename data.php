@@ -36,5 +36,4 @@
                 'avatar' => 'userpic.jpg'
             ]
 
-        ];  
-    ?>
+        ];?>
