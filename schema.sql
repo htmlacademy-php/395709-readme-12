@@ -9,7 +9,7 @@ CREATE TABLE users (
   registrationDate  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   email VARCHAR(128) NOT NULL UNIQUE,
   login VARCHAR(128) UNIQUE,
-  password CHAR(64),
+  password CHAR(64)  NOT NULL,
   avatar VARCHAR(255)
 );
 
@@ -24,12 +24,13 @@ CREATE TABLE posts (
   creationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   title VARCHAR(128),
   content VARCHAR(255),
-  typeID INT,
-  authorId INT,
+  typeID INT  NOT NULL,
+  authorId INT  NOT NULL,
   image VARCHAR(255),
   video VARCHAR(255),
   link VARCHAR(255),
   views INT,
+  avatar VARCHAR(128),
   FOREIGN KEY (authorId)  REFERENCES users(id),
   FOREIGN KEY (typeId)  REFERENCES content_type(id)
 );
@@ -39,24 +40,24 @@ CREATE TABLE comments(
   id INT AUTO_INCREMENT PRIMARY KEY,
   creationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   content VARCHAR(255),
-  authorId INT,
-  postId INT,
+  authorId INT  NOT NULL,
+  postId INT  NOT NULL,
   FOREIGN KEY (postId)  REFERENCES posts(id),
   FOREIGN KEY (authorId)  REFERENCES users(id)
 );
 
 CREATE TABLE likes(
   id INT AUTO_INCREMENT PRIMARY KEY,
-  userId INT,
-  recipientId INT,
+  userId INT  NOT NULL,
+  recipientId INT  NOT NULL,
   FOREIGN KEY (userId)  REFERENCES users(id),
   FOREIGN KEY (recipientId)  REFERENCES users(id)
 );
 
 CREATE TABLE subscription(
   id INT AUTO_INCREMENT PRIMARY KEY,
-  authorId INT,
-  userId INT,
+  authorId INT  NOT NULL,
+  userId INT  NOT NULL,
   FOREIGN KEY (userId)  REFERENCES users(id),
   FOREIGN KEY (authorId)  REFERENCES users(id)
 );
@@ -66,8 +67,8 @@ CREATE TABLE message(
   id INT AUTO_INCREMENT PRIMARY KEY,
   date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   content VARCHAR(255),
-  authorId INT,
-  recipientId INT,
+  authorId INT  NOT NULL,
+  recipientId INT  NOT NULL,
   FOREIGN KEY (recipientId)  REFERENCES users(id),
   FOREIGN KEY (authorId)  REFERENCES users(id)
 );
@@ -79,8 +80,8 @@ CREATE TABLE hashtag(
 
 CREATE TABLE PostHashtag(
   id INT AUTO_INCREMENT PRIMARY KEY,
-  userId INT,
-  hashtagId INT,
+  userId INT  NOT NULL,
+  hashtagId INT  NOT NULL,
   FOREIGN KEY (userId)  REFERENCES users(id),
   FOREIGN KEY (hashtagId)  REFERENCES hashtag(id)
 );
