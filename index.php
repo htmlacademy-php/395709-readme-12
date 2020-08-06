@@ -2,55 +2,19 @@
 $is_auth = rand(0, 1);
 include "helpers.php";
 $user_name = 'Mansur'; 
-function text_split($text, $lenght = 300) {
-    if (mb_strlen($text, 'utf8') > $lenght){
-        $words = explode(" ", $text);
-        $len = mb_strlen($words[0], 'utf8' );
-        $i= 0;
-        while ($len < $lenght) {
-            $str[] = $words[$i];
-            $len = $len + mb_strlen($words[$i+1], 'utf8' );
-            $i = $i + 1; 
-        }
-        $str = implode(" ",$str);
-        $str = $str.'...';
-        $read = '<div class="post-text__more-link-wrapper">
-                     <a class="post-text__more-link" href="#">Читать далее</a>
-                </div>';
-        return $str . $read;
-    }
+require('functions.php');
+require('data.php');
 
-    return $text;
-}
-function DateFormat($index){
-  $RandomDate = date_create(generate_random_date($index));
-  $date  = date_diff(new DateTime(), $RandomDate);
-  if ( $date->format('%y') >= 1){
-      return $RandomDate->format("d-M-Y");
-  }
-  elseif (1.25 <= ((int)$date->format('%m')) + ($date->format('%d'))/31 ){
-    return seePlural($date ->format('%m'), 'месяц', 'месяца', 'месяцев');
-  }
-  elseif (7 <= (int)$date->format('%m')*31 + (int)$date->format('%d')){
-    return seePlural(floor(($date->format('%d'))/7) + (int)$date->format('%m')*4, ' неделю', 'недели', 'недель');
-  }
-  elseif((1 <=  $date->format('%d')) ){
-     return seePlural($date->format('%d'), 'день', 'дня','дней');
-  }
-  elseif(1 <=  $date->format('%h') ){
-     return seePlural( $date->format('%h'), 'час', 'часа','часов');
-  }
-  else {
-      return seePlural( $date->format('%i'), 'минута',  'минуты', 'минут');
-  }
-}
+$con = mysqli_connect("395709-readme-12", "root", "root", "Blog");
+mysqli_set_charset($con, "utf8");
+$sql = "SELECT  title  from content_type";
+$result = mysqli_query($con, $sql);
+$rowsType = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$sqlPost = "SELECT p.title, login, p.title,  conT.icon_name, p.avatar, p.content FROM posts p JOIN users u ON p.authorId = u.id JOIN content_type conT ON typeID = conT.id ORDER BY views DESC;";
+$resultPosts = mysqli_query($con, $sqlPost);
+$rowsPosts = mysqli_fetch_all($resultPosts, MYSQLI_ASSOC);
 
-function seePlural($str, $one, $two, $many, $ending = ' назад'){
-    return $str. ' '.get_noun_plural_form($str, $one, $two, $many) . $ending;
-}
-
-    require('data.php');
-    $page_content = include_template('main.php', ['posts' => $posts]);
-    $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Blog' , 'user_name' => $user_name]);
-    print($layout_content);        
+$page_content = include_template('main.php', ['posts' => $rowsPosts]);
+$layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Blog' , 'user_name' => $user_name]);
+print($layout_content);        
 ?>

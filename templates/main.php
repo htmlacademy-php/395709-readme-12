@@ -90,12 +90,12 @@
                 $date = DateFormat($index);
                 $index = $index + 1;
             ?>
-                <article class="popular__post post <?=$post['type']?>">
+                <article class="popular__post post <?=$post['icon_name']?>">
                     <header class="post__header">
                         <h2><?= htmlspecialchars($post['title']) ?></h2>
                     </header>
                     <div class="post__main">
-                        <?php if($post['type'] == 'post-quote'):?>
+                        <?php if($post['icon_name'] == 'post-quote'):?>
                             <blockquote>
                             <p>
                                 <?= htmlspecialchars($post['content'])?>
@@ -103,18 +103,18 @@
                             <cite>Неизвестный Автор</cite>
                             </blockquote>
 
-                        <?php elseif ($post['type'] == 'post-text'): ?>
+                        <?php elseif ($post['icon_name'] == 'post-text'): ?>
                             <div class="post__main">
                                 <p><?= text_split(htmlspecialchars($post['content'])) ?></p>
                        
                             </div>
 
-                        <?php elseif ($post['type'] == 'post-photo'): ?>
+                        <?php elseif ($post['icon_name'] == 'post-photo'): ?>
                             <div class="post-photo__image-wrapper">
                             <img src="img/<?= htmlspecialchars($post['content']) ?>" alt="Фото от пользователя" width="360" height="240">
                             </div>
 
-                        <?php elseif ($post['type'] == 'post-link'): ?>  
+                        <?php elseif ($post['icon_name'] == 'post-link'): ?>  
                             <div class="post-link__wrapper">
                                 <a class="post-link__external" href="http://" title="Перейти по ссылке">
                                     <div class="post-link__info-wrapper">
@@ -139,7 +139,7 @@
                                     <img class="post__author-avatar" src="img/<?= htmlspecialchars($post['avatar']) ?>" alt="Аватар пользователя"> <!-----           --->
                                 </div>
                                 <div class="post__info">
-                                    <b class="post__author-name"> <?= htmlspecialchars($post['author'])?></b>
+                                    <b class="post__author-name"> <?= htmlspecialchars($post['login'])?></b>
                                     <time class="post__time" datetime=""><?= $date?> </time>
                                 </div>
                             </a>
