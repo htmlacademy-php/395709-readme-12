@@ -45,4 +45,21 @@ function DateFormat($index){
 function seePlural($str, $one, $two, $many, $ending = ' назад'){
     return $str. ' '.get_noun_plural_form($str, $one, $two, $many) . $ending;
 }
+ function SqlR($reques, $from, $where, $con,$id){
+    $sql = sprintf("SELECT  %s as L  from %s WHERE %s %s", $reques, $from, $where, $id);
+    $result = mysqli_query($con, $sql);
+    $Count = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $res= $Count[0];
+     return $res;
+ }
+
+
+
+function typeRequest($id){
+    $params = $_GET;
+    $params['id'] = $id;
+    $query = http_build_query($params);
+    $url = "http://395709-readme-12/" . "?" . $query;
+    return $url;
+}
 ?>
