@@ -1,11 +1,8 @@
 <?php 
-            $sqlPost = "SELECT title  FROM posts  WHERE id=$id";
-            $result = mysqli_query($con, $sqlPost);
-            $title= mysqli_fetch_all($result, MYSQLI_ASSOC);
-            $title = $title[0];
-            require('functions.php');
-            ?>
-<h1 class="page__title page__title--publication"><?= $title['title'];?></h1>
+require('functions.php');
+$title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
+?>
+<h1 class="page__title page__title--publication"><?= $title[0]['L'];?></h1>
 <section class="post-details" >
 
     <h2 class="visually-hidden">Публикация</h2>
@@ -33,10 +30,10 @@
             </svg>
             <?php 
       
-            $ComLike=SqlR('COUNT(userId)', 'likes', 'recipientId =', $con, $id);
+            $ComLike= SqlRequest('COUNT(userId)', 'likes', 'recipientId =', $con, $id, "as L");
             ?>
             
-            <span><?= $ComLike['L'] ?></span>
+            <span><?= $ComLike[0]['L'] ?></span>
             <span class="visually-hidden">количество лайков</span>
             </a>
             <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
@@ -44,9 +41,9 @@
                 <use xlink:href="#icon-comment"></use>
             </svg>
             <?php 
-            $Comment=SqlR('COUNT(content)', 'comments', 'postId =', $con, $id);
+            $Comment= SqlRequest('COUNT(content)', 'comments', 'postId =', $con, $id, "as L");
             ?>
-            <span><?php echo $Comment['L'] ?></span>
+            <span><?php echo $Comment[0]['L'] ?></span>
             <span class="visually-hidden">количество комментариев</span>
             </a>
             <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
@@ -58,9 +55,9 @@
             </a>
         </div>
         <?php 
-            $view=SqlR('views', 'posts', ' id =', $con, $id);
+            $view= SqlRequest('views', 'posts', ' id =', $con, $id, "as L");
          ?>
-        <span class="post__view"><?= $view['L'].' просмотров' ?></span>
+        <span class="post__view"><?= $view[0]['L'].' просмотров' ?></span>
         </div>
         <div class="comments">
         <form class="comments__form form" action="#" method="post">
@@ -81,11 +78,8 @@
         <div class="comments__list-wrapper">
             <ul class="comments__list">
             <?php 
-            $sqlPost = "SELECT content, login, authorId, avatar   FROM comments c JOIN users u ON c.authorId = u.id WHERE c.postId=$id";
-            $result = mysqli_query($con, $sqlPost);
-            $CommentInf= mysqli_fetch_all($result, MYSQLI_ASSOC);
-            ?>
-            <?php foreach  ($CommentInf as $inf):?>
+            $CommentInf = SqlRequest('content, login, authorId, avatar ', ' comments c' ,' c.postId= ',  $con,$id, '', "JOIN users u ON c.authorId = u.id");?>
+             <?php foreach  ($CommentInf as $inf):?>
             <li class="comments__item user">
                 <div class="comments__avatar">
                 <a class="user__avatar-link" href="#">
@@ -121,17 +115,14 @@
         <div class="post-details__avatar user__avatar">
         <a class="post-details__name user__name" href="#">
             <?php
-            $sql = "SELECT  login, authorId, u.avatar   FROM posts p JOIN users u ON p.authorId = u.id WHERE p.id = $id";
-            $result = mysqli_query($con, $sql);
-            $postAuthor = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            $postAuthor = $postAuthor[0];
+           $postAuthor=SqlRequest('login, authorId, u.avatar', 'posts p', 'p.id =', $con, $id, ' ', 'JOIN  users u ON p.authorId = u.id');
             ?>
             <a class="post-details__avatar-link user__avatar-link" href="#">
-            <img class="post-details__picture user__picture" src="img/<?= $postAuthor['avatar']?>" alt="Аватар пользователя">
+            <img class="post-details__picture user__picture" src="img/<?= $postAuthor[0]['avatar']?>" alt="Аватар пользователя">
             </a>
         </div>
         <div class="post-details__name-wrapper user__name-wrapper">
-            <span><?= $postAuthor['login'] ?> </span>
+            <span><?= $postAuthor[0]['login'] ?> </span>
             </a>
             <time class="post-details__time user__time" datetime="2014-03-20">5 лет на сайте</time>
         </div>

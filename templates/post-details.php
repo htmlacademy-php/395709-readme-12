@@ -115,29 +115,9 @@
     }
 
   else{
-        $post = $posts[0];
-        if($post['typeID'] == 1){
-          $page_content = include_template('post-text.php', ['post' => $post, 'con' =>$con ,'id' => $id]);
-          print($page_content); 
-        }
-        if($post['typeID'] == 2){
-          $page_content = include_template('post-quote.php', ['post' => $post, 'con' =>$con ,'id' => $id]);
-          print($page_content); 
-        }
-        if($post['typeID'] == 3){
-          $page_content = include_template('post-photo.php', ['post' => $post, 'con' =>$con ,'id' => $id]);
-          print($page_content);
-          
-        }
-        if($post['typeID'] == 4){
-          $page_content = include_template('post-photo.php', ['post' => $post, 'con' =>$con ,'id' => $id]);
-          print($page_content); 
-        }
-        if($post['typeID'] == 5){
-          $page_content = include_template('post-link.php', ['post' => $post, 'con' =>$con ,'id' => $id]);
-          print($page_content); 
-        }
-      }
+    $page_content = include_template($posts[0]['icon_name'].'.php', ['post' => $posts[0], 'con' =>$con ,'id' => $id]);
+    print($page_content); 
+  }
   ?>
   
   </div>

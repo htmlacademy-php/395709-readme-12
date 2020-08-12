@@ -19,6 +19,7 @@ function text_split($text, $lenght = 300) {
 
     return $text;
 }
+
 function DateFormat($index){
   $RandomDate = date_create(generate_random_date($index));
   $date  = date_diff(new DateTime(), $RandomDate);
@@ -45,12 +46,13 @@ function DateFormat($index){
 function seePlural($str, $one, $two, $many, $ending = ' назад'){
     return $str. ' '.get_noun_plural_form($str, $one, $two, $many) . $ending;
 }
- function SqlR($reques, $from, $where, $con,$id){
-    $sql = sprintf("SELECT  %s as L  from %s WHERE %s %s", $reques, $from, $where, $id);
+
+ function SqlRequest($reques, $from, $where, $con,$id, $as = '', $join =""){
+    $sql = sprintf("SELECT  %s %s  from %s %s WHERE %s %s", $reques, $as, $from,$join, $where, $id);
     $result = mysqli_query($con, $sql);
     $Count = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    $res= $Count[0];
-     return $res;
+    // $res= $Count[0];
+     return $Count;
  }
 
 
