@@ -33,3 +33,4 @@ INSERT INTO likes ( userId, recipientId ) VALUES (1, 2);
 -- подписаться на пользователя.
 INSERT INTO subscription ( userId, authorId ) VALUES (3, 2);
 
+

@@ -36,12 +36,25 @@
                 <b class="popular__filters-caption filters__caption">Тип контента:</b>
                 <ul class="popular__filters-list filters__list">
                     <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                        <a class="filters__button filters__button--ellipse filters__button--all filters__button--active" href="#">
+                    <?php
+                         if (isset($_GET['id'])) {
+                            $id = $_GET['id']; 
+                            $sqlPost = "SELECT p.id, p.title, login, p.title,  conT.icon_name, p.avatar, p.content FROM posts p JOIN users u ON p.authorId = u.id JOIN content_type conT ON typeID = conT.id WHERE p.typeID = $id   ORDER BY views DESC;";
+                            $resultPosts = mysqli_query($con, $sqlPost);
+                            $posts = mysqli_fetch_all($resultPosts, MYSQLI_ASSOC);
+                         } 
+                        else {
+                            $id = 0; 
+                        }
+                        ?>
+                        <?php $id == 0 ? $class = "filters__button--active" : $class=""; ?>
+                        <a class="filters__button filters__button--ellipse filters__button--all filters__button--active <?= $class?> " href="http://395709-readme-12/" > 
                             <span>Все</span>
                         </a>
                     </li>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--photo button" href="#">
+                        <?php $id == 3 ? $class = "filters__button--active" : $class=""; ?>
+                        <a class="filters__button filters__button--photo button <?= $class; ?>" href="<?=  typeRequest(3) ;?>">
                             <span class="visually-hidden">Фото</span>
                             <svg class="filters__icon" width="22" height="18">
                                 <use xlink:href="#icon-filter-photo"></use>
@@ -49,7 +62,8 @@
                         </a>
                     </li>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--video button" href="#">
+                        <?php $id == 4 ? $class = "filters__button--active" : $class=""; ?>
+                        <a class="filters__button filters__button--video button <?= $class; ?>" href="<?=   typeRequest(4); ?>">
                             <span class="visually-hidden">Видео</span>
                             <svg class="filters__icon" width="24" height="16">
                                 <use xlink:href="#icon-filter-video"></use>
@@ -57,7 +71,8 @@
                         </a>
                     </li>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--text button" href="#">
+                        <?php $id == 1 ? $class = "filters__button--active" : $class=""; ?>
+                        <a class="filters__button filters__button--text button <?= $class; ?>" href="<?=  typeRequest(1);?>">
                             <span class="visually-hidden">Текст</span>
                             <svg class="filters__icon" width="20" height="21">
                                 <use xlink:href="#icon-filter-text"></use>
@@ -65,7 +80,8 @@
                         </a>
                     </li>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--quote button" href="#">
+                    <?php $id == 2 ? $class = "filters__button--active" : $class=""; ?>
+                        <a class="filters__button filters__button--quote button <?= $class; ?>" href="<?=  typeRequest(2);?>">
                             <span class="visually-hidden">Цитата</span>
                             <svg class="filters__icon" width="21" height="20">
                                 <use xlink:href="#icon-filter-quote"></use>
@@ -73,7 +89,8 @@
                         </a>
                     </li>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--link button" href="#">
+                        <?php $id == 5 ? $class = "filters__button--active" : $class=""; ?>
+                        <a class="filters__button filters__button--link button <?= $class; ?>" href="<?=   typeRequest(5);?>">
                             <span class="visually-hidden">Ссылка</span>
                             <svg class="filters__icon" width="21" height="18">
                                 <use xlink:href="#icon-filter-link"></use>
@@ -91,8 +108,13 @@
                 $index = $index + 1;
             ?>
                 <article class="popular__post post <?=$post['icon_name']?>">
-                    <header class="post__header">
-                        <h2><?= htmlspecialchars($post['title']) ?></h2>
+                <?php
+                    $params['id'] = $post['id'];
+                    $query = http_build_query($params);
+                    $link = "/" ."post.php". "?".$query; 
+                ?>
+                    <header class="post__header" >
+                       <a href = "<?= $link; ?>"> <h2> <?= htmlspecialchars($post['title']) ?></h2> </a>
                     </header>
                     <div class="post__main">
                         <?php if($post['icon_name'] == 'post-quote'):?>

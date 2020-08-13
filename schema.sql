@@ -51,7 +51,7 @@ CREATE TABLE likes(
   userId INT  NOT NULL,
   recipientId INT  NOT NULL,
   FOREIGN KEY (userId)  REFERENCES users(id),
-  FOREIGN KEY (recipientId)  REFERENCES users(id)
+  FOREIGN KEY (recipientId)  REFERENCES posts(id)
 );
 
 CREATE TABLE subscription(
