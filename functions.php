@@ -55,6 +55,116 @@ function seePlural($str, $one, $two, $many, $ending = ' назад'){
      return $Count;
  }
 
+ function SQLINSERT($into, $values,$con){
+    $sql = sprintf("INSERT INTO %s VALUES (%s)", $into, $values );
+    $result = mysqli_query($con, $sql);
+    return $result;
+ }
+
+
+
+
+ function getPostVal($name) {
+    return $_POST[$name] ?? "";
+}
+
+function validateTag($tagValidation){
+    if($tagValidation!='')
+    {
+        if (strpos($tagValidation, '.') || strpos($tagValidation, ',')){
+            $errors =  'Недопустимый символ';
+        }
+        else{
+            return;
+        }
+      
+    }
+    else{
+        return ;
+    }
+    
+}
+
+function validateVideo(){
+    if(isset($_POST['Video-link']))
+    {
+        if($_POST['Video-link']!=''){
+            if (!filter_var($_POST['Video-link'], FILTER_VALIDATE_URL) ){
+                $errors =  'Неправильная ссылка';
+            }
+            else{
+                if (check_youtube_url($_POST['Video-link'])!=1){
+                         $errors = "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
+                         return $errors;
+                 }
+                else{                    
+                    return ;
+                }
+            } 
+        }
+        else {
+         
+            return;
+        }
+           
+    }  
+}
+
+
+function photoValidation(){
+    if(isset($_FILES['userpic-file-photo']['name']) && isset($_POST['photo-link']) ){
+        if($_POST['photo-link']!='' and $_FILES['userpic-file-photo']['name']!=''){
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $file_name = $_FILES['userpic-file-photo']['tmp_name']; 
+            $file_type = finfo_file($finfo, $file_name);
+            $extension = array("image/gif", "image/png", "image/jpeg");
+            if (!in_array($file_type, $extension)){
+                $errors = 'Неверный формат';
+            }
+           else{
+               return ;
+           }
+        }
+        else{
+            return  ;
+        }
+       
+    } 
+
+}
+
+
+function validatePhotoLink(){
+    if(isset($_POST['photo-link'])) {
+
+        if ($_POST['photo-link']!=''){
+            if (!filter_var($_POST['photo-link'], FILTER_VALIDATE_URL) ){
+                $errors =  'Неправильная ссылка';
+                return $errors;
+            }
+           
+            $content = file_get_contents($_POST['photo-link']);
+            $extension = explode(".",   $_POST['photo-link']);
+            $extension = end($extension);
+            // $filename = $_POST['photo-heading'];
+            $checkExtension = array("gif", "png", "jpeg");
+
+            if (!in_array($extension, $checkExtension)){
+                    $errors = 'Неверный формат';
+                    return $errors;
+                }
+            else{
+                return;
+            }
+        }
+        else {
+            $errors = 'Не заполненное поле';
+            return $errors;
+        }
+     
+    }
+}
+ 
 
 
 function typeRequest($id){
