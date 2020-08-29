@@ -1,4 +1,7 @@
 <?php
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 include "helpers.php";
 require("functions.php");
 $con = mysqli_connect("395709-readme-12", "root", "root", "Blog");
@@ -11,8 +14,8 @@ $res = 0;
 $url = 0;
 $type = 0;
 if(isset($_POST['Send']))
-{  
-    $type = $_POST['name'];
+{
+    $type = htmlspecialchars($_POST['name']);
     $required_fields = explode(" ", $_POST['Send']);
     $tagValidation = $_POST[$required_fields[2]];
     $file_path = __DIR__ . '/uploads/';
@@ -26,8 +29,8 @@ if(isset($_POST['Send']))
     }
     switch ($required_fields[0]) {
         case "video-heading":
-            $errors['video']=validateVideo(); 
-            if ($errors['video-heading']==NULL and $errors['Video-link']==NULL and $errors['video']==NULL){
+            $errors['video']=validateVideo();
+            if ($errors['video-heading']==NULL && $errors['Video-link']==NULL && $errors['video']==NULL){
                     $filename = $_POST['video-heading'];
                     $videoValidation =$_POST['Video-link'];
                     $res = SQLINSERT("posts(title,content,authorId, typeID,avatar)", "'$filename'". ",". "'$videoValidation'".",1,5,"."'userpic-larisa-small.jpg'",$con);
@@ -36,7 +39,8 @@ if(isset($_POST['Send']))
 
         case "photo-heading":
             $errors['Photo'] = photoValidation();
-            if (( $errors['photo-heading']==NULL and $errors['userpic-file-photo']==NULL and $errors['photo-link']==NULL) or ($errors['photo-heading']==NULL and $errors['userpic-file-photo']==NULL) and  $errors['Photo']==NULL) {
+            var_dump($errors);
+            if (( $errors['photo-heading']==NULL && $errors['userpic-file-photo']==NULL && $errors['photo-link']==NULL) || ($errors['photo-heading']==NULL && $errors['userpic-file-photo']==NULL) &&  $errors['Photo']==NULL) {
                     $file_name = $_FILES['userpic-file-photo']['tmp_name'];
                     $save_name =  $_FILES['userpic-file-photo']['name'];
                     move_uploaded_file($_FILES['userpic-file-photo']['tmp_name'], $file_path . $save_name );
@@ -45,7 +49,7 @@ if(isset($_POST['Send']))
             }
             $errors['PhotoLink'] = validatePhotoLink();
 
-            if ($errors['photo-heading']==NULL and $errors['photo-link']==NULL and $errors['PhotoLink']==NULL){
+            if ($errors['photo-heading']==NULL && $errors['photo-link']==NULL && $errors['PhotoLink']==NULL){
                     $content = file_get_contents($_POST['photo-link']);
                     $extension = explode(".",   $_POST['photo-link']);
                     $extension = end($extension);
@@ -57,7 +61,7 @@ if(isset($_POST['Send']))
             }
             break;
         case "quote-heading":
-            if($errors['quote-heading']==NULL and $errors['QuoteName']==NULL){
+            if($errors['quote-heading']==NULL && $errors['QuoteName']==NULL){
                 $filename = $_POST['quote-heading'];
                 $content = $_POST['QuoteName'];
                 $author = $_POST['quote-author'];
@@ -65,14 +69,14 @@ if(isset($_POST['Send']))
             }
             break;
         case "text-heading":
-            if($errors['text-heading']==NULL and $errors['PostText']==NULL){
+            if($errors['text-heading']==NULL && $errors['PostText']==NULL){
                 $filename = $_POST['text-heading'];
                 $content = $_POST['PostText'];
                 $res = SQLINSERT("posts(title,content,authorId, typeID,avatar)", "'$filename'". ",". "'$content'".",1,1,"."'userpic-larisa-small.jpg'",$con);
             }
             break;
-        case "link-heading":    
-            if($errors['link-heading']==NULL and $errors['link-link']==NULL){
+        case "link-heading":
+            if($errors['link-heading']==NULL && $errors['link-link']==NULL){
                 $filename = $_POST['link-heading'];
                 $content = $_POST['link-link'];
                 $res = SQLINSERT("posts(title,content,authorId, typeID,avatar)", "'$filename'". ",". "'$content'".",1,5,"."'userpic-larisa-small.jpg'",$con);
@@ -80,19 +84,19 @@ if(isset($_POST['Send']))
             break;
 
     }
-   
+
 
     $last_post_id = mysqli_insert_id($con);
     $tags = explode(" ", $tagValidation);
     $errors['tags'] = validateTag($tagValidation);
-    if ($errors['tags']==NULL and $res!=FALSE){
+    if ($errors['tags']==NULL && $res!=FALSE){
         foreach ($tags as $tag){
             SQLINSERT('hashtag(title)', "'$tagValidation'", $con);
             $last_id = mysqli_insert_id($con);
             SQLINSERT("PostHashtag(userId,hashtagId,postId)", "1, ".$last_id ."," .$last_post_id ,$con); //переделать пост айди
         }
     }
-    if ($res == 1 and  $last_id!=0 ){
+    if ($res == 1 &&  $last_id!=0 ){
         $query  = '/post.php?id='.$last_post_id ;
         $url = "http://395709-readme-12". $query;
         header(sprintf("Location: %s",$url));

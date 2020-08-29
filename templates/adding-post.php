@@ -111,50 +111,27 @@
         <div class="adding-post container">
           <div class="adding-post__tabs-wrapper tabs">
             <div class="adding-post__tabs filters">
-              <ul class="adding-post__tabs-list filters__list tabs__list"> <!---   ------------------------------------------------------------------------->
+              <ul class="adding-post__tabs-list filters__list tabs__list">
+                  <?php
+                  $post = [ $posts[2]['title'],$posts[3]['title'],$posts[0]['title'],$posts[1]['title'],$posts[4]['title']];
+                  $checkType = [(empty($error) || $type==1) ? true : false, $type==2 ? true : false, $type==3 ? true : false, $type==4 ? true : false, $type==5 ? true : false];
+                  $width = [22,24,20,21,21];
+                  $height = [18,16,21,20,18];
+                  $href = ["#icon-filter-photo","#icon-filter-video","#icon-filter-text","#icon-filter-quote","#icon-filter-link"];
+                  $i=0;
+                   foreach ($post as $postsTitle):?>
               <li class="adding-post__tabs-item filters__item">
-                  <a class=" adding-post__tabs-link filters__button filters__button--photo  tabs__item  button  tabs__item--active  <?= (empty($error) or $type==1) ? "  filters__button--active" : ""?>  " href="#">
-                    <svg class="filters__icon" width="22" height="18">
-                      <use xlink:href="#icon-filter-photo"></use>
+                  <a class=" adding-post__tabs-link filters__button filters__button--photo  tabs__item  button  tabs__item--active  <?=  $checkType[$i] ? "  filters__button--active" : ""?>  " href="#">
+                    <svg class="filters__icon" width= <?= $width[$i]; ?> height=<?= $height[$i]; ?>>
+                      <use xlink:href=<?= $href[$i];?> ></use>
                     </svg>
-                    <span><?= $posts[2]['title']?> </span>
+                    <span><?= $postsTitle ?> </span>
                   </a>
                 </li>
-                <li class="adding-post__tabs-item filters__item">
-                  <a class="adding-post__tabs-link filters__button filters__button--video tabs__item   button  tabs__item--active   <?= $type==2 ? " filters__button--active" : "" ?>  " href="#">
-                    <svg class="filters__icon" width="24" height="16">
-                      <use xlink:href="#icon-filter-video"></use>
-                    </svg>
-                    <span><?= $posts[3]['title']?></span>
-                  </a>
-                </li>
-                <li class="adding-post__tabs-item filters__item">
-                  <a class=" adding-post__tabs-link filters__button filters__button--text tabs__item button tabs__item--active  <?= $type==3 ? "  filters__button--active" : "" ?> " href="#">
-                    <svg class="filters__icon" width="20" height="21">
-                      <use xlink:href="#icon-filter-text"></use>
-                    </svg>
-                    <span><?= $posts[0]['title']?></span>
-                  </a>
-                </li>
-                <li class="adding-post__tabs-item filters__item">
-                  <a class=" adding-post__tabs-link filters__button filters__button--quote tabs__item button tabs__item--active   <?= $type==4 ? " filters__button--active" : "" ?>" href="#">
-                    <svg class="filters__icon" width="21" height="20">
-                      <use xlink:href="#icon-filter-quote"></use>
-                    </svg>
-                    <span><?= $posts[1]['title']?></span>
-                  </a>
-                </li>
-                <li class="adding-post__tabs-item filters__item">
-                  <a class="adding-post__tabs-link filters__button filters__button--link tabs__item button  tabs__item--active <?= $type==5 ? " filters__button--active" : "" ?>" href="#">
-                    <svg class="filters__icon" width="21" height="18">
-                      <use xlink:href="#icon-filter-link"></use>
-                    </svg>
-                    <span><?= $posts[4]['title']?></span>
-                  </a>
-                </li>
+                  <?php $i++;  endforeach;?>
               </ul>
             </div>
-           
+
             <div class="adding-post__tab-content">
               <section class="adding-post__photo tabs__content  <?= ($type==0 or $type==1) ? " tabs__content--active" : ""?> ">
                 <h2 class="visually-hidden">Форма добавления фото</h2>
@@ -164,8 +141,8 @@
                       <div class="adding-post__input-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="photo-heading">Заголовок <span class="form__input-required">*</span></label>
                         <div class="form__input-section <?= $error['photo-heading']!='' ? "form__input-section--error" : "" ?>">
-                        <input type="hidden" name="name" value="1">
-                          <input class="adding-post__input form__input  " id="photo-heading" type="text" name="photo-heading" value = "<?=getPostVal('photo-heading'); ?>" placeholder="Введите заголовок">  
+                          <input type="hidden" name="name" value="1">
+                          <input class="adding-post__input form__input  " id="photo-heading" type="text" name="photo-heading" value = "<?=getPostVal('photo-heading'); ?>" placeholder="Введите заголовок">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
                             <h3 class="form__error-title">Заголовок сообщения</h3>
@@ -173,13 +150,10 @@
                           </div>
                         </div>
                       </div>
-                      <?php 
-                            $page_content = include_template('AddPhoto.php' , ['error' => $error]);
-                            print($page_content);
-                      ?>   
+                      <?=  include_template('AddPhoto.php' , ['error' => $error]); ?>
                 </form>
               </section>
-          
+
               <section class="adding-post__video tabs__content  <?=  $type=="2" ? " tabs__content--active" : ""?> ">
                 <h2 class="visually-hidden">Форма добавления видео</h2>
                 <form class="adding-post__form form" action="add.php" name="addVideo" method="post" enctype="multipart/form-data">
@@ -188,7 +162,7 @@
                       <div class="adding-post__input-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="video-heading">Заголовок <span class="form__input-required">*</span></label>
                         <div class="form__input-section  <?= $error['video-heading']!='' ? "form__input-section--error" : "" ?>">
-                        <input type="hidden" name="name" value="2">
+                          <input type="hidden" name="name" value="2">
                           <input class="adding-post__input form__input" id="video-heading" type="text" name="video-heading" value="<?=getPostVal('video-heading')?>" placeholder="Введите заголовок">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
@@ -197,10 +171,7 @@
                           </div>
                         </div>
                       </div>
-                      <?php  
-                            $page_content = include_template('AddVideo.php', ['error' => $error,'scriptname'=> $scriptname]);
-                            print($page_content);
-                      ?>   
+                      <?= include_template('AddVideo.php', ['error' => $error,'scriptname'=> $scriptname]); ?>
                 </form>
               </section>
 
@@ -221,10 +192,7 @@
                           </div>
                         </div>
                       </div>
-                      <?php 
-                            $page_content = include_template('AddText.php', ['error' => $error]);
-                            print($page_content);
-                      ?> 
+                      <?= include_template('AddText.php', ['error' => $error]); ?>
                 </form>
               </section>
 
@@ -245,10 +213,7 @@
                           </div>
                         </div>
                       </div>
-                      <?php 
-                            $page_content = include_template('AddQuote.php', ['error' => $error]);
-                            print($page_content);
-                      ?> 
+                      <?= include_template('AddQuote.php', ['error' => $error]); ?>
                 </form>
               </section>
 
@@ -269,10 +234,7 @@
                           </div>
                         </div>
                       </div>
-                      <?php 
-                            $page_content = include_template('AddLink.php', ['error' => $error]);
-                            print($page_content);
-                      ?> 
+                      <?= include_template('AddLink.php', ['error' => $error]); ?>
                 </form>
               </section>
             </div>
