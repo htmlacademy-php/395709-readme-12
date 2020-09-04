@@ -7,7 +7,7 @@ function text_split($text, $lenght = 300) {
         while ($len < $lenght) {
             $str[] = $words[$i];
             $len = $len + mb_strlen($words[$i+1], 'utf8' );
-            $i = $i + 1; 
+            $i = $i + 1;
         }
         $str = implode(" ",$str);
         $str = $str.'...';
@@ -54,6 +54,112 @@ function seePlural($str, $one, $two, $many, $ending = ' назад'){
     // $res= $Count[0];
      return $Count;
  }
+
+ function SQLINSERT($into, $values,$con){
+    $sql = sprintf("INSERT INTO %s VALUES (%s)", $into, $values );
+    $result = mysqli_query($con, $sql);
+    return $result;
+ }
+
+
+
+
+ function getPostVal($name) {
+    return $_POST[$name] ?? "";
+}
+
+function validateTag($tagValidation){
+    if($tagValidation!='')
+    {
+        if (strpos($tagValidation, '.') || strpos($tagValidation, ',')){
+            return 'Недопустимый символ';
+        }
+        else{
+            return;
+        }
+
+    }
+    else{
+        return ;
+    }
+
+}
+
+function validateVideo(){
+    if(isset($_POST['Video-link']))
+    {
+        if($_POST['Video-link']!=''){
+            if (!filter_var($_POST['Video-link'], FILTER_VALIDATE_URL) ){
+                return  'Неправильная ссылка';
+            }
+            else{
+                if (check_youtube_url($_POST['Video-link'])!=1){
+                         return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
+                 }
+                else{
+                    return ;
+                }
+            }
+        }
+        else {
+
+            return;
+        }
+
+    }
+}
+
+
+function photoValidation(){
+    if(isset($_FILES['userpic-file-photo']['name']) && isset($_POST['photo-link']) ){
+        if($_POST['photo-link']!='' and $_FILES['userpic-file-photo']['name']!=''){
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $file_name = $_FILES['userpic-file-photo']['tmp_name'];
+            $file_type = finfo_file($finfo, $file_name);
+            $extension = array("image/gif", "image/png", "image/jpeg");
+            if (!in_array($file_type, $extension)){
+                return 'Неверный формат';
+            }
+           else{
+               return ;
+           }
+        }
+        else{
+            return  ;
+        }
+
+    }
+
+}
+
+
+function validatePhotoLink(){
+    if(isset($_POST['photo-link'])) {
+
+        if ($_POST['photo-link']!=''){
+            if (!filter_var($_POST['photo-link'], FILTER_VALIDATE_URL) ){
+                return 'Неправильная ссылка';
+            }
+
+            $content = file_get_contents($_POST['photo-link']);
+            $extension = explode(".",   $_POST['photo-link']);
+            $extension = end($extension);
+            // $filename = $_POST['photo-heading'];
+            $checkExtension = array("gif", "png", "jpeg");
+
+            if (!in_array($extension, $checkExtension)){
+                    return 'Неверный формат';
+                }
+            else{
+                return;
+            }
+        }
+        else {
+            return 'Не заполненное поле';
+        }
+
+    }
+}
 
 
 

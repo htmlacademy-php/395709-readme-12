@@ -11,12 +11,16 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
     <div class="post-details__wrapper post-photo">
         
     <div class="post-details__main-block post post--details">
+    <?php 
+            $content= SqlRequest('content', 'posts', ' id =', $con, $id);
+            $author= SqlRequest('author', 'posts', ' id =', $con, $id, "as L");
+         ?>
     <div class="post__main">
                   <blockquote>
                     <p>
-                      Тысячи людей живут без любви, но никто — без воды.
+                     <?= $content[0]['content']; ?>
                     </p>
-                    <cite>Xью Оден</cite>
+                    <cite><?= $author[0]['L']; ?></cite>
                   </blockquote>
                 </div>
         <div class="post__indicators">

@@ -31,6 +31,7 @@ CREATE TABLE posts (
   link VARCHAR(255),
   views INT,
   avatar VARCHAR(128),
+  author VARCHAR(128),
   FOREIGN KEY (authorId)  REFERENCES users(id),
   FOREIGN KEY (typeId)  REFERENCES content_type(id)
 );
@@ -82,8 +83,10 @@ CREATE TABLE PostHashtag(
   id INT AUTO_INCREMENT PRIMARY KEY,
   userId INT  NOT NULL,
   hashtagId INT  NOT NULL,
+  postId  INT  NOT NULL,
   FOREIGN KEY (userId)  REFERENCES users(id),
-  FOREIGN KEY (hashtagId)  REFERENCES hashtag(id)
+  FOREIGN KEY (hashtagId)  REFERENCES hashtag(id),
+  FOREIGN KEY ( postId )  REFERENCES posts(id)
 );
 
 

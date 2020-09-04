@@ -34,3 +34,7 @@ INSERT INTO likes ( userId, recipientId ) VALUES (1, 2);
 INSERT INTO subscription ( userId, authorId ) VALUES (3, 2);
 
 
+
+UPDATE posts
+SET  views =100
+WHERE id>0;
