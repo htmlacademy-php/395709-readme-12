@@ -39,7 +39,6 @@ if(isset($_POST['Send']))
 
         case "photo-heading":
             $errors['Photo'] = photoValidation();
-            var_dump($errors);
             if (( $errors['photo-heading']==NULL && $errors['userpic-file-photo']==NULL && $errors['photo-link']==NULL) || ($errors['photo-heading']==NULL && $errors['userpic-file-photo']==NULL) &&  $errors['Photo']==NULL) {
                     $file_name = $_FILES['userpic-file-photo']['tmp_name'];
                     $save_name =  $_FILES['userpic-file-photo']['name'];

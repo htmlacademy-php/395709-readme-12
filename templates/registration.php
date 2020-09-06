@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>readme: регистрация</title>
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="../css/main.css">
 </head>
 <body class="page">
 <div style="display: none">
@@ -16,7 +16,7 @@
   <div class="header__wrapper container">
     <div class="header__logo-wrapper">
       <a class="header__logo-link" href="main.html">
-        <img class="header__logo" src="img/logo.svg" alt="Логотип readme" width="128" height="24">
+        <img class="header__logo" src="../img/logo.svg" alt="Логотип readme" width="128" height="24">
       </a>
       <p class="header__topic">
         micro blogging
@@ -55,7 +55,7 @@
         </ul>
         <ul class="header__user-nav">
           <li class="header__authorization">
-            <a class="header__user-button header__authorization-button button" href="login.html">Вход</a>
+            <a class="header__user-button header__authorization-button button" href="/templates/login.php">Вход</a>
           </li>
           <li>
             <a class="header__user-button header__user-button--active header__register-button button">Регистрация</a>
@@ -77,61 +77,79 @@
         <div class="form__text-inputs">
           <div class="registration__input-wrapper form__input-wrapper">
             <label class="registration__label form__label" for="registration-email">Электронная почта <span class="form__input-required">*</span></label>
-            <div class="form__input-section">
-              <input class="registration__input form__input" id="registration-email" type="email" name="email" placeholder="Укажите эл.почту">
+            <div class="form__input-section  <?= $errors['email']!='' ? "form__input-section--error" : "" ?>">
+              <input class="registration__input form__input" id="registration-email" type="email" name="email"  value="<?=getPostVal('email')?>" placeholder="Укажите эл.почту">
               <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
               <div class="form__error-text">
                 <h3 class="form__error-title">Заголовок сообщения</h3>
-                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                <p class="form__error-desc"><?= $errors['email'] ?></p>
               </div>
             </div>
           </div>
           <div class="registration__input-wrapper form__input-wrapper">
             <label class="registration__label form__label" for="registration-login">Логин <span class="form__input-required">*</span></label>
-            <div class="form__input-section">
-              <input class="registration__input form__input" id="registration-login" type="text" name="login" placeholder="Укажите логин">
+            <div class="form__input-section <?= $errors['login']!='' ? "form__input-section--error" : "" ?>">
+              <input class="registration__input form__input" id="registration-login" type="text" name="login"  value="<?=getPostVal('login')?>" placeholder="Укажите логин">
               <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
               <div class="form__error-text">
                 <h3 class="form__error-title">Заголовок сообщения</h3>
-                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                <p class="form__error-desc"><?= $errors['login']; ?></p>
               </div>
             </div>
           </div>
           <div class="registration__input-wrapper form__input-wrapper">
             <label class="registration__label form__label" for="registration-password">Пароль<span class="form__input-required">*</span></label>
-            <div class="form__input-section">
+            <div class="form__input-section <?= $errors['password']!='' ? "form__input-section--error" : "" ?>">
               <input class="registration__input form__input" id="registration-password" type="password" name="password" placeholder="Придумайте пароль">
               <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
               <div class="form__error-text">
                 <h3 class="form__error-title">Заголовок сообщения</h3>
-                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                <p class="form__error-desc"><?= $errors['password'] ?></p>
               </div>
             </div>
           </div>
           <div class="registration__input-wrapper form__input-wrapper">
             <label class="registration__label form__label" for="registration-password-repeat">Повтор пароля<span class="form__input-required">*</span></label>
-            <div class="form__input-section">
+            <div class="form__input-section <?= $errors['password-repeat']!='' ? "form__input-section--error" : "" ?>">
               <input class="registration__input form__input" id="registration-password-repeat" type="password" name="password-repeat" placeholder="Повторите пароль">
               <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
               <div class="form__error-text">
                 <h3 class="form__error-title">Заголовок сообщения</h3>
-                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                <p class="form__error-desc"><?= $errors['password-repeat'] ?></p>
               </div>
             </div>
           </div>
         </div>
-        <div class="form__invalid-block">
-          <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-          <ul class="form__invalid-list">
-            <li class="form__invalid-item">Заголовок. Это поле должно быть заполнено.</li>
-            <li class="form__invalid-item">Цитата. Она не должна превышать 70 знаков.</li>
-          </ul>
-        </div>
+          <?php
+          if(isset($errors['login'])){
+              if(isset($errors)):?>
+                  <div class="form__invalid-block">
+                      <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
+                      <ul class="form__invalid-list">
+                          <?php $errorLogin=["Email","Логин","Пароль","Повтор пароля ","Аватар"];$i = 0; ?>
+                          <?php foreach ($errors as $er) { ?>
+                              <?php
+                              if($er!=''):?>
+                                  <li class="form__invalid-item"><?= $errorLogin[$i].': '.$er; ?></li>
+                              <?php endif;?>
+                              <?php $i = $i+1;?>
+                          <?php } ?>
+                      </ul>
+                  </div>
+              <?php endif;
+          }?>
+<!--        <div class="form__invalid-block">-->
+<!--          <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>-->
+<!--          <ul class="form__invalid-list">-->
+<!--            <li class="form__invalid-item">Заголовок. Это поле должно быть заполнено.</li>-->
+<!--            <li class="form__invalid-item">Цитата. Она не должна превышать 70 знаков.</li>-->
+<!--          </ul>-->
+<!--        </div>-->
       </div>
       <div class="registration__input-file-container form__input-container form__input-container--file">
         <div class="registration__input-file-wrapper form__input-file-wrapper">
           <div class="registration__file-zone form__file-zone dropzone">
-            <input class="registration__input-file form__input-file" id="userpic-file" type="file" name="userpic-file" title=" ">
+            <input class="registration__input-file form__input-file" id="userpic-file-photo" type="file" name="userpic-file-photo" title=" ">
             <div class="form__file-zone-text">
               <span>Перетащите фото сюда</span>
             </div>
@@ -147,7 +165,7 @@
 
         </div>
       </div>
-      <button class="registration__submit button button--main" type="submit">Отправить</button>
+      <button class="registration__submit button button--main" value ="email login password password-repeat userpic-file-photo" type="submit" name="Send">Отправить</button>
     </form>
   </section>
 </main>

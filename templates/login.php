@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>readme: авторизация</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="../css/main.css">
   </head>
   <body class="page">
     <div style="display: none">
@@ -16,7 +16,7 @@
       <div class="header__wrapper container">
         <div class="header__logo-wrapper">
           <a class="header__logo-link" href="main.html">
-            <img class="header__logo" src="img/logo.svg" alt="Логотип readme" width="128" height="24">
+            <img class="header__logo" src="../img/logo.svg" alt="Логотип readme" width="128" height="24">
           </a>
           <p class="header__topic">
             micro blogging
@@ -58,7 +58,7 @@
                 <a class="header__user-button header__user-button--active header__authorization-button button">Вход</a>
               </li>
               <li>
-                <a class="header__user-button header__register-button button">Регистрация</a>
+                <a class="header__user-button header__register-button button" href = "../registration.php">Регистрация</a>
               </li>
             </ul>
           </nav>
@@ -98,6 +98,7 @@
           <button class="login__submit button button--main" type="submit">Отправить</button>
         </form>
       </section>
+
     </main>
 
     <footer class="footer">

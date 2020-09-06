@@ -112,7 +112,7 @@ function validateVideo(){
 
 function photoValidation(){
     if(isset($_FILES['userpic-file-photo']['name']) && isset($_POST['photo-link']) ){
-        if($_POST['photo-link']!='' and $_FILES['userpic-file-photo']['name']!=''){
+        if($_FILES['userpic-file-photo']['name']!=''){
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $file_name = $_FILES['userpic-file-photo']['tmp_name'];
             $file_type = finfo_file($finfo, $file_name);
@@ -125,7 +125,7 @@ function photoValidation(){
            }
         }
         else{
-            return  ;
+            return "Поле не заполнено";
         }
 
     }
@@ -161,6 +161,33 @@ function validatePhotoLink(){
     }
 }
 
+function EmailValidation($con){
+    if(isset($_POST['email'])) {
+        if ($_POST['email']!='') {
+            $name = $_POST['email'];
+            if (filter_input(INPUT_POST, $name, FILTER_VALIDATE_EMAIL)) {
+                return "Введите корректный email";
+            }
+            $sql = sprintf("SELECT  email  from users where email = '%s'",htmlspecialchars($_POST['email']));
+            if(mysqli_fetch_all(mysqli_query($con, $sql))){
+                  return " Данный email уже используется";
+         }
+        }
+        else{
+            return "Поле не заполнено";
+        }
+    }
+}
+
+function validatePassword(){
+    if ($_POST['password'] == '') {
+        return "Поле не заполнено";
+    }
+    if (!($_POST['password'] == $_POST['password-repeat'] and $_POST['password'] != "")) {
+        return "Пaроли не совпадают";
+    }
+
+}
 
 
 function typeRequest($id){
