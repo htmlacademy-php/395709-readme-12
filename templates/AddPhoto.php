@@ -21,13 +21,13 @@
                 </div>
                 </div>
             </div>
-            <?php if (isset($error['photo-heading'])):?> 
+            <?php if (isset($error['photo-heading'])):?>
             <div class="form__invalid-block">
                 <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                 <ul class="form__invalid-list">
                 <?php $errorPhotoHeader=["Заголовок","Ссылка из интернета","Теги","Фото","","Cсылка"];$i = 0; ?>
-                <?php foreach ($error as $er) { ?>    
-                    <?php 
+                <?php foreach ($error as $er) { ?>
+                    <?php
                     if($er!=''):?>
                         <li class="form__invalid-item"><?= $errorPhotoHeader[$i].': '.$er; ?></li>
                     <?php endif;?>

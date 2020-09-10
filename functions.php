@@ -112,7 +112,7 @@ function validateVideo(){
 
 function photoValidation(){
     if(isset($_FILES['userpic-file-photo']['name']) && isset($_POST['photo-link']) ){
-        if($_POST['photo-link']!='' and $_FILES['userpic-file-photo']['name']!=''){
+        if($_FILES['userpic-file-photo']['name']!=''){
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $file_name = $_FILES['userpic-file-photo']['tmp_name'];
             $file_type = finfo_file($finfo, $file_name);
@@ -125,7 +125,7 @@ function photoValidation(){
            }
         }
         else{
-            return  ;
+            return "Поле не заполнено";
         }
 
     }
@@ -140,13 +140,10 @@ function validatePhotoLink(){
             if (!filter_var($_POST['photo-link'], FILTER_VALIDATE_URL) ){
                 return 'Неправильная ссылка';
             }
-
             $content = file_get_contents($_POST['photo-link']);
             $extension = explode(".",   $_POST['photo-link']);
             $extension = end($extension);
-            // $filename = $_POST['photo-heading'];
             $checkExtension = array("gif", "png", "jpeg");
-
             if (!in_array($extension, $checkExtension)){
                     return 'Неверный формат';
                 }
@@ -161,6 +158,39 @@ function validatePhotoLink(){
     }
 }
 
+function IsEmailExist($con,$email){
+    if ($email!='') {
+        $sql = sprintf("SELECT  email  from users where email = '%s'",htmlspecialchars($email));
+        if(mysqli_fetch_all(mysqli_query($con, $sql))){
+            return " Данный email уже используется";
+        }
+    }
+    else{
+        return;
+    }
+}
+
+function EmailValidation($email){
+    if(isset($email)) {
+        if ($email!='') {
+            if (filter_input(INPUT_POST, $email, FILTER_VALIDATE_EMAIL)) {
+                return "Введите корректный email";
+            }
+        }
+        else{
+            return "Поле не заполнено";
+        }
+    }
+}
+
+function comparePassword(){
+    if (!($_POST['password'] == $_POST['password-repeat'] and $_POST['password'] != "")) {
+        return "Пaроли не совпадают";
+    }
+    else{
+        return;
+    }
+}
 
 
 function typeRequest($id){
@@ -170,4 +200,11 @@ function typeRequest($id){
     $url = "http://395709-readme-12/" . "?" . $query;
     return $url;
 }
+
+//function getConnectDb(){
+//    static $db = mysqli_connect("395709-readme-12", "root", "root", "Blog");
+//    return $db;
+//}
+
+
 ?>
