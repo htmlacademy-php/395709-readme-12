@@ -140,13 +140,10 @@ function validatePhotoLink(){
             if (!filter_var($_POST['photo-link'], FILTER_VALIDATE_URL) ){
                 return 'Неправильная ссылка';
             }
-
             $content = file_get_contents($_POST['photo-link']);
             $extension = explode(".",   $_POST['photo-link']);
             $extension = end($extension);
-            // $filename = $_POST['photo-heading'];
             $checkExtension = array("gif", "png", "jpeg");
-
             if (!in_array($extension, $checkExtension)){
                     return 'Неверный формат';
                 }
@@ -161,17 +158,24 @@ function validatePhotoLink(){
     }
 }
 
-function EmailValidation($con){
-    if(isset($_POST['email'])) {
-        if ($_POST['email']!='') {
-            $name = $_POST['email'];
-            if (filter_input(INPUT_POST, $name, FILTER_VALIDATE_EMAIL)) {
+function IsEmailExist($con,$email){
+    if ($email!='') {
+        $sql = sprintf("SELECT  email  from users where email = '%s'",htmlspecialchars($email));
+        if(mysqli_fetch_all(mysqli_query($con, $sql))){
+            return " Данный email уже используется";
+        }
+    }
+    else{
+        return;
+    }
+}
+
+function EmailValidation($email){
+    if(isset($email)) {
+        if ($email!='') {
+            if (filter_input(INPUT_POST, $email, FILTER_VALIDATE_EMAIL)) {
                 return "Введите корректный email";
             }
-            $sql = sprintf("SELECT  email  from users where email = '%s'",htmlspecialchars($_POST['email']));
-            if(mysqli_fetch_all(mysqli_query($con, $sql))){
-                  return " Данный email уже используется";
-         }
         }
         else{
             return "Поле не заполнено";
@@ -179,14 +183,13 @@ function EmailValidation($con){
     }
 }
 
-function validatePassword(){
-    if ($_POST['password'] == '') {
-        return "Поле не заполнено";
-    }
+function comparePassword(){
     if (!($_POST['password'] == $_POST['password-repeat'] and $_POST['password'] != "")) {
         return "Пaроли не совпадают";
     }
-
+    else{
+        return;
+    }
 }
 
 
@@ -197,4 +200,11 @@ function typeRequest($id){
     $url = "http://395709-readme-12/" . "?" . $query;
     return $url;
 }
+
+//function getConnectDb(){
+//    static $db = mysqli_connect("395709-readme-12", "root", "root", "Blog");
+//    return $db;
+//}
+
+
 ?>

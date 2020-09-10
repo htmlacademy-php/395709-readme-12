@@ -121,12 +121,11 @@
           </div>
         </div>
           <?php
-          if(isset($errors['login'])){
-              if(isset($errors)):?>
+              if(!empty($errors)):?>
                   <div class="form__invalid-block">
                       <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                       <ul class="form__invalid-list">
-                          <?php $errorLogin=["Email","Логин","Пароль","Повтор пароля ","Аватар"];$i = 0; ?>
+                          <?php $errorLogin=["Email","Логин","Пароль","Повтор пароля ","Аватар","Email"];$i = 0; ?>
                           <?php foreach ($errors as $er) { ?>
                               <?php
                               if($er!=''):?>
@@ -136,15 +135,8 @@
                           <?php } ?>
                       </ul>
                   </div>
-              <?php endif;
-          }?>
-<!--        <div class="form__invalid-block">-->
-<!--          <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>-->
-<!--          <ul class="form__invalid-list">-->
-<!--            <li class="form__invalid-item">Заголовок. Это поле должно быть заполнено.</li>-->
-<!--            <li class="form__invalid-item">Цитата. Она не должна превышать 70 знаков.</li>-->
-<!--          </ul>-->
-<!--        </div>-->
+              <?php endif; ?>
+
       </div>
       <div class="registration__input-file-container form__input-container form__input-container--file">
         <div class="registration__input-file-wrapper form__input-file-wrapper">
