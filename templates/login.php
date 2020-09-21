@@ -38,12 +38,12 @@
           <nav class="header__nav">
             <ul class="header__my-nav">
               <li class="header__my-page header__my-page--popular">
-                <a class="header__page-link" href="popular.html" title="Популярный контент">
+                <a class="header__page-link" href="../popular.php" title="Популярный контент">
                   <span class="visually-hidden">Популярный контент</span>
                 </a>
               </li>
               <li class="header__my-page header__my-page--feed">
-                <a class="header__page-link" href="feed.html" title="Моя лента">
+                <a class="header__page-link" href="feed.php" title="Моя лента">
                   <span class="visually-hidden">Моя лента</span>
                 </a>
               </li>
@@ -134,10 +134,10 @@
           <div class="footer__my-info">
             <ul class="footer__my-pages">
               <li class="footer__my-page footer__my-page--feed">
-                <a class="footer__page-link" href="feed.html">Моя лента</a>
+                <a class="footer__page-link" href="feed.php">Моя лента</a>
               </li>
               <li class="footer__my-page footer__my-page--popular">
-                <a class="footer__page-link" href="popular.html">Популярный контент</a>
+                <a class="footer__page-link" href="../popular.php">Популярный контент</a>
               </li>
               <li class="footer__my-page footer__my-page--messages">
                 <a class="footer__page-link" href="messages.html">Личные сообщения</a>

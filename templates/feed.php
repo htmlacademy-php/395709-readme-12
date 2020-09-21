@@ -1,11 +1,14 @@
+<?php session_start();
+if(isset($_SESSION['userName'])):?>
 <!DOCTYPE html>
+
 <html lang="ru">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>readme: моя лента</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="../css/main.css">
   </head>
   <body class="page">
     <div style="display: none">
@@ -16,7 +19,7 @@
       <div class="header__wrapper container">
         <div class="header__logo-wrapper">
           <a class="header__logo-link" href="main.html">
-            <img class="header__logo" src="img/logo.svg" alt="Логотип readme" width="128" height="24">
+            <img class="header__logo" src="../img/logo.svg" alt="Логотип readme" width="128" height="24">
           </a>
           <p class="header__topic">
             micro blogging
@@ -38,7 +41,7 @@
           <nav class="header__nav">
             <ul class="header__my-nav">
               <li class="header__my-page header__my-page--popular">
-                <a class="header__page-link" href="popular.html" title="Популярный контент">
+                <a class="header__page-link" href="../popular.php" title="Популярный контент">
                   <span class="visually-hidden">Популярный контент</span>
                 </a>
               </li>
@@ -57,10 +60,10 @@
               <li class="header__profile">
                 <a class="header__profile-link" href="#">
                   <div class="header__avatar-wrapper">
-                    <img class="header__profile-avatar" src="img/userpic-medium.jpg" alt="Аватар профиля">
+                    <img class="header__profile-avatar" src="<?= '../'.$_SESSION['avatar'] ?>" alt="Аватар профиля">
                   </div>
                   <div class="header__profile-name">
-                    <span>Антон Глуханько</span>
+                    <span><?= $_SESSION['userName'] ?></span>
                     <svg class="header__link-arrow" width="10" height="6">
                       <use xlink:href="#icon-arrow-right-ad"></use>
                     </svg>
@@ -85,7 +88,7 @@
                         </a>
                       </li>
                       <li class="header__profile-nav-item">
-                        <a class="header__profile-nav-link" href="#">
+                        <a class="header__profile-nav-link" href="../logout.php">
                           <span class="header__profile-nav-text">
                             Выход
                           </span>
@@ -117,7 +120,7 @@
                 <header class="post__header post__author">
                   <a class="post__author-link" href="#" title="Автор">
                     <div class="post__avatar-wrapper">
-                      <img class="post__author-avatar" src="img/userpic-elvira.jpg" alt="Аватар пользователя" width="60" height="60">
+                      <img class="post__author-avatar" src="../img/userpic-elvira.jpg" alt="Аватар пользователя" width="60" height="60">
                     </div>
                     <div class="post__info">
                       <b class="post__author-name">Эльвира Хайпулинова</b>
@@ -128,7 +131,7 @@
                 <div class="post__main">
                   <h2><a href="#">Наконец, обработала фотки!</a></h2>
                   <div class="post-photo__image-wrapper">
-                    <img src="img/rock.jpg" alt="Фото от пользователя" width="760" height="396">
+                    <img src="../img/rock.jpg" alt="Фото от пользователя" width="760" height="396">
                   </div>
                 </div>
                 <footer class="post__footer post__indicators">
@@ -165,7 +168,7 @@
                 <header class="post__header post__author">
                   <a class="post__author-link" href="#" title="Автор">
                     <div class="post__avatar-wrapper">
-                      <img class="post__author-avatar" src="img/userpic-tanya.jpg" alt="Аватар пользователя">
+                      <img class="post__author-avatar" src="../img/userpic-tanya.jpg" alt="Аватар пользователя">
                     </div>
                     <div class="post__info">
                       <b class="post__author-name">Таня Фирсова</b>
@@ -176,7 +179,7 @@
                 <div class="post__main">
                   <h2><a href="#">Полезный пост про Байкал</a></h2>
                   <p>
-                    Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих упряжках.
+                    Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих упряжках.
                   </p>
                   <a class="post-text__more-link" href="#">Читать далее</a>
                 </div>
@@ -214,7 +217,7 @@
                 <header class="post__header post__author">
                   <a class="post__author-link" href="#" title="Автор">
                     <div class="post__avatar-wrapper">
-                      <img class="post__author-avatar" src="img/userpic-petro.jpg" alt="Аватар пользователя">
+                      <img class="post__author-avatar" src="../img/userpic-petro.jpg" alt="Аватар пользователя">
                     </div>
                     <div class="post__info">
                       <b class="post__author-name">Петр Демин</b>
@@ -225,7 +228,7 @@
                 <div class="post__main">
                   <div class="post-video__block">
                     <div class="post-video__preview">
-                      <img src="img/coast.jpg" alt="Превью к видео" width="760" height="396">
+                      <img src="../img/coast.jpg" alt="Превью к видео" width="760" height="396">
                     </div>
                     <div class="post-video__control">
                       <button class="post-video__play post-video__play--paused button button--video" type="button"><span class="visually-hidden">Запустить видео</span></button>
@@ -280,7 +283,7 @@
                 <header class="post__header post__author">
                   <a class="post__author-link" href="#" title="Автор">
                     <div class="post__avatar-wrapper">
-                      <img class="post__author-avatar" src="img/userpic-mark.jpg" alt="Аватар пользователя">
+                      <img class="post__author-avatar" src="../img/userpic-mark.jpg" alt="Аватар пользователя">
                     </div>
                     <div class="post__info">
                       <b class="post__author-name">Марк Смолов</b>
@@ -330,7 +333,7 @@
                 <header class="post__header post__author">
                   <a class="post__author-link" href="#" title="Автор">
                     <div class="post__avatar-wrapper">
-                      <img class="post__author-avatar" src="img/userpic-larisa.jpg" alt="Аватар пользователя">
+                      <img class="post__author-avatar" src="../img/userpic-larisa.jpg" alt="Аватар пользователя">
                     </div>
                     <div class="post__info">
                       <b class="post__author-name">Лариса Роговая</b>
@@ -342,7 +345,7 @@
                   <div class="post-link__wrapper">
                     <a class="post-link__external" href="http://www.vitadental.ru" title="Перейти по ссылке">
                       <div class="post-link__icon-wrapper">
-                        <img src="img/logo-vita.jpg" alt="Иконка">
+                        <img src="../img/logo-vita.jpg" alt="Иконка">
                       </div>
                       <div class="post-link__info">
                         <h3>Стоматология «Вита»</h3>
@@ -524,3 +527,8 @@
     <script src="js/main.js"></script>
   </body>
 </html>
+
+<?php   else:
+            header("Location:http://395709-readme-12/");
+        endif; ?>
+

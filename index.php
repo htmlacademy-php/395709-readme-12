@@ -1,20 +1,47 @@
 <?php
-$is_auth = rand(0, 1);
-include "helpers.php";
-$user_name = 'Mansur'; 
-require('functions.php');
-require('data.php');
+    include "helpers.php";
+    require("functions.php");
+    $errors = [];
+    $con =[];
+    $con = mysqli_connect("395709-readme-12", "root", "root", "Blog");
+    mysqli_set_charset($con, "utf8");
+    if(isset($_POST['Send'])) {
+            $required_fields = explode(" ", htmlspecialchars($_POST['Send']));
+            foreach ($required_fields as $field) {
+                if (empty($_POST[$field])) {
+                    $errors[$field] = 'Поле не заполнено';
+                } else {
+                    $errors[$field] = NULL;
+                }
+            }
+            if($errors['login']==null && $errors['password']==null) {
+                $hash = mysqli_fetch_all(mysqli_query($con, sprintf("SELECT  password  from users WHERE login ='%s'", htmlspecialchars($_POST['login']))), MYSQLI_ASSOC);
+                $photo = mysqli_fetch_all(mysqli_query($con, sprintf("SELECT  avatar  from users WHERE login ='%s'", htmlspecialchars($_POST['login']))), MYSQLI_ASSOC);
+                if(!empty($hash)) {
+                    if (password_verify(htmlspecialchars($_POST['password']), $hash[0]["password"])) {
+                        session_start();
+                        $_SESSION['userName'] = htmlspecialchars($_POST['login']);
+                        $_SESSION['avatar'] = $photo[0]['avatar']==NULL ? 'img/userpic-medium.jpg' : $photo[0]['avatar'];
+                    }
+                    else {
+                        $errors["password"] = "Неверный пароль";
+                    }
 
-$con = mysqli_connect("395709-readme-12", "root", "root", "Blog");
-mysqli_set_charset($con, "utf8");
-$sql = "SELECT  title  from content_type";
-$result = mysqli_query($con, $sql);
-$rowsType = mysqli_fetch_all($result, MYSQLI_ASSOC);
-$sqlPost = "SELECT p.id,p.title, login, p.title,  conT.icon_name, p.avatar, p.content FROM posts p JOIN users u ON p.authorId = u.id JOIN content_type conT ON typeID = conT.id  ORDER BY views DESC;";
-$resultPosts = mysqli_query($con, $sqlPost);
-$rowsPosts = mysqli_fetch_all($resultPosts, MYSQLI_ASSOC);
+                }
+                else{
+                    $errors["login"] = "Неверный логин";
+                }
 
-$page_content = include_template('main.php', ['posts' => $rowsPosts, 'con' =>$con]);
-$layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Blog' , 'user_name' => $user_name]);
-print($layout_content);        
+            }
+        }
+
+        if(isset($_SESSION)){
+            header("Location: http://395709-readme-12/templates/feed.php");
+        }
+        else {
+            print(include_template('authorization.php', ['con' => $con, 'errors' => $errors]));
+        }
+
+
+
 ?>

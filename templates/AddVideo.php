@@ -1,3 +1,4 @@
+<?php if(isset($_SESSION)):?>
 <div class="adding-post__input-wrapper form__input-wrapper">
     <label class="adding-post__label form__label" for="video-url">Ссылка youtube <span class="form__input-required">*</span></label>
     <div class="form__input-section <?= $error['Video-link']!='' ? "form__input-section--error" : "" ?>">
@@ -26,14 +27,14 @@
     <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
     <ul class="form__invalid-list">
     <?php $errorVideoHeader=["Заголовок","Ссылка youtube","Теги","Ccылка"];$i = 0; ?>
-        <?php foreach ($error as $er) { ?>    
-            <?php 
+        <?php foreach ($error as $er) { ?>
+            <?php
             if($er!=''):?>
                  <li class="form__invalid-item"><?= $errorVideoHeader[$i].': '.$er; ?></li>
             <?php endif;?>
             <?php $i = $i+1;?>
         <?php } ?>
-  
+
     </ul>
 </div>
 <?php endif;?>
@@ -42,3 +43,4 @@
 <button class="adding-post__submit button button--main" type="submit" value="video-heading Video-link Video-tag" name='Send'>Опубликовать</button>
 <a class="adding-post__close" href="#">Закрыть</a>
 </div>
+<?php endif;?>
