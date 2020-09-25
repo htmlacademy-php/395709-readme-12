@@ -1,4 +1,3 @@
-<?php if(isset($_SESSION)):?>
 <div class="adding-post__input-wrapper form__input-wrapper">
     <label class="adding-post__label form__label" for="video-url">Ссылка youtube <span class="form__input-required">*</span></label>
     <div class="form__input-section <?= $error['Video-link']!='' ? "form__input-section--error" : "" ?>">
@@ -43,4 +42,3 @@
 <button class="adding-post__submit button button--main" type="submit" value="video-heading Video-link Video-tag" name='Send'>Опубликовать</button>
 <a class="adding-post__close" href="#">Закрыть</a>
 </div>
-<?php endif;?>

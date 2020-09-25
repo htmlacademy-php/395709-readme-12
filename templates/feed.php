@@ -51,7 +51,7 @@ if(isset($_SESSION['userName'])):?>
                 </a>
               </li>
               <li class="header__my-page header__my-page--messages">
-                <a class="header__page-link" href="messages.html" title="Личные сообщения">
+                <a class="header__page-link" href="../messages.html" title="Личные сообщения">
                   <span class="visually-hidden">Личные сообщения</span>
                 </a>
               </li>
@@ -508,7 +508,7 @@ if(isset($_SESSION['userName'])):?>
                 <a class="footer__page-link" href="popular.html">Популярный контент</a>
               </li>
               <li class="footer__my-page footer__my-page--messages">
-                <a class="footer__page-link" href="messages.html">Личные сообщения</a>
+                <a class="footer__page-link" href="../messages.html">Личные сообщения</a>
               </li>
             </ul>
             <div class="footer__copyright">
