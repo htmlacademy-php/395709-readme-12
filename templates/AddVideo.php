@@ -26,14 +26,14 @@
     <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
     <ul class="form__invalid-list">
     <?php $errorVideoHeader=["Заголовок","Ссылка youtube","Теги","Ccылка"];$i = 0; ?>
-        <?php foreach ($error as $er) { ?>    
-            <?php 
+        <?php foreach ($error as $er) { ?>
+            <?php
             if($er!=''):?>
                  <li class="form__invalid-item"><?= $errorVideoHeader[$i].': '.$er; ?></li>
             <?php endif;?>
             <?php $i = $i+1;?>
         <?php } ?>
-  
+
     </ul>
 </div>
 <?php endif;?>

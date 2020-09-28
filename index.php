@@ -1,20 +1,48 @@
 <?php
-$is_auth = rand(0, 1);
-include "helpers.php";
-$user_name = 'Mansur'; 
-require('functions.php');
-require('data.php');
+    session_start();
+    include "helpers.php";
+    require("functions.php");
+    $errors = [];
+    $con =[];
+    $con = mysqli_connect("395709-readme-12", "root", "root", "Blog");
+    mysqli_set_charset($con, "utf8");
+    if(isset($_POST['Send'])) {
+            $required_fields = explode(" ", htmlspecialchars($_POST['Send']));
+            foreach ($required_fields as $field) {
+                if (empty($_POST[$field])) {
+                    $errors[$field] = 'Поле не заполнено';
+                } else {
+                    $errors[$field] = NULL;
+                }
+            }
 
-$con = mysqli_connect("395709-readme-12", "root", "root", "Blog");
-mysqli_set_charset($con, "utf8");
-$sql = "SELECT  title  from content_type";
-$result = mysqli_query($con, $sql);
-$rowsType = mysqli_fetch_all($result, MYSQLI_ASSOC);
-$sqlPost = "SELECT p.id,p.title, login, p.title,  conT.icon_name, p.avatar, p.content FROM posts p JOIN users u ON p.authorId = u.id JOIN content_type conT ON typeID = conT.id  ORDER BY views DESC;";
-$resultPosts = mysqli_query($con, $sqlPost);
-$rowsPosts = mysqli_fetch_all($resultPosts, MYSQLI_ASSOC);
+            if(is_null($errors['login']) && is_null($errors['password'])) {
+                $UserData = mysqli_fetch_all(mysqli_query($con, sprintf("SELECT  password, avatar  from users WHERE login ='%s'", htmlspecialchars($_POST['login']))), MYSQLI_ASSOC);
+                if(!empty($UserData[0]['password'])) {
+                    if (password_verify(htmlspecialchars($_POST['password']), $UserData[0]['password'])) {
+                        $_SESSION['userName'] = htmlspecialchars($_POST['login']);
+                        $_SESSION['avatar'] = is_null($UserData[0]['avatar']) ? 'img/userpic-medium.jpg' : $UserData[0]['avatar'];
+                    }
+                    else {
+                        $errors["password"] = " Неверный логин или пароль";
+                    }
 
-$page_content = include_template('main.php', ['posts' => $rowsPosts, 'con' =>$con]);
-$layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'Blog' , 'user_name' => $user_name]);
-print($layout_content);        
+                }
+                else{
+                    $errors["login"] = "Неверный логин или пароль";
+                }
+
+            }
+        }
+
+        if(isset($_SESSION['userName'])){
+            header("Location: http://395709-readme-12/templates/feed.php");
+//            echo include_template('feed.php');
+        }
+        else {
+           echo include_template('authorization.php', ['con' => $con, 'errors' => $errors]);
+        }
+
+
+
 ?>
