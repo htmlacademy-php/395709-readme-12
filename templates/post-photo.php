@@ -1,4 +1,4 @@
-<?php 
+<?php
 require('functions.php');
 $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
 ?>
@@ -19,10 +19,10 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
             <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                 <use xlink:href="#icon-heart-active"></use>
             </svg>
-            <?php 
+            <?php
             $ComLike= SqlRequest('COUNT(userId)', 'likes', 'recipientId =', $con, $id, "as L");
             ?>
-            
+
             <span><?= $ComLike[0]['L'] ?></span>
             <span class="visually-hidden">количество лайков</span>
             </a>
@@ -30,7 +30,7 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
             <svg class="post__indicator-icon" width="19" height="17">
                 <use xlink:href="#icon-comment"></use>
             </svg>
-            <?php 
+            <?php
             $Comment= SqlRequest('COUNT(content)', 'comments', 'postId =', $con, $id, "as L");
             ?>
             <span><?php echo $Comment[0]['L'] ?></span>
@@ -44,7 +44,7 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
             <span class="visually-hidden">количество репостов</span>
             </a>
         </div>
-        <?php 
+        <?php
             $view= SqlRequest('views', 'posts', ' id =', $con, $id, "as L");
             ?>
         <span class="post__view"><?= $view[0]['L'].' просмотров' ?></span>
@@ -67,14 +67,13 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
         </form>
         <div class="comments__list-wrapper">
             <ul class="comments__list">
-            <?php 
+            <?php
             $CommentInf = SqlRequest('content, login, authorId, avatar ', ' comments c' ,' c.postId= ',  $con,$id, '', "JOIN users u ON c.authorId = u.id");?>
-            ?>
             <?php foreach  ($CommentInf as $inf):?>
             <li class="comments__item user">
                 <div class="comments__avatar">
                 <a class="user__avatar-link" href="#">
-                    <img class="comments__picture" src="img/<?= $inf['avatar']?>" alt="Аватар пользователя">
+                    <img class="comments__picture" src="<?= $inf['avatar']?>" alt="Аватар пользователя">
                 </a>
                 </div>
                 <div class="comments__info">
@@ -91,9 +90,9 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
                 </div>
             </li>
             <?php endforeach; ?>
-          
+
             </ul>
-           
+
             <a class="comments__more-link" href="#">
             <span>Показать все комментарии</span>
             <sup class="comments__amount">45</sup>
@@ -109,7 +108,7 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
                  $postAuthor=SqlRequest('login, authorId, u.avatar', 'posts p', 'p.id =', $con, $id, ' ', 'JOIN  users u ON p.authorId = u.id');
             ?>
             <a class="post-details__avatar-link user__avatar-link" href="#">
-            <img class="post-details__picture user__picture" src="img/<?= $postAuthor[0]['avatar']?>" alt="Аватар пользователя">
+            <img class="post-details__picture user__picture" src="<?= $postAuthor[0]['avatar']?>" alt="Аватар пользователя">
             </a>
         </div>
         <div class="post-details__name-wrapper user__name-wrapper">

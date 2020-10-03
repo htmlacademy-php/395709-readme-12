@@ -48,7 +48,7 @@
                     }
                     ?>
                     <?php $id == 0 ? $class = "filters__button--active" : $class=""; ?>
-                    <a class="filters__button filters__button--ellipse filters__button--all filters__button--active <?= $class?> " href="http://395709-readme-12/" >
+                    <a class="filters__button filters__button--ellipse filters__button--all filters__button--active <?= $class?> " href="http://395709-readme-12/popular.php" >
                         <span>Все</span>
                     </a>
                 </li>
@@ -136,6 +136,8 @@
                             <img src="img/<?= htmlspecialchars($post['content']) ?>" alt="Фото от пользователя" width="360" height="240">
                         </div>
 
+
+
                     <?php elseif ($post['icon_name'] == 'post-link'): ?>
                         <div class="post-link__wrapper">
                             <a class="post-link__external" href="http://" title="Перейти по ссылке">
@@ -151,6 +153,15 @@
                             </a>
                         </div>
                     <?php endif; ?>
+                    <br>
+                    <div style = "display:flex; margin-left: 10px">
+                        <?php
+                        $tagsId  = SqlRequest('hashtagId','posthashtag', 'postId =',$con,$post['id']);
+                        foreach ($tagsId as $tag){
+                            $tagLink = SqlRequest('title','hashtag', 'id= ',$con, $tag["hashtagId"]); ?>
+                            <a style = "background-color: white; border: solid transparent; color: #2a4ad0;" href=<?= sprintf("http://395709-readme-12/search.php?request=%s", '%23'.$tagLink[0]['title'])?>> <?= '#'.$tagLink[0]['title']; ?> </a>
+                        <?php  } ?>
+                    </div>
                 </div>
                 <footer class="post__footer">
                     <div class="post__author">
@@ -158,7 +169,7 @@
                             <div class="post__avatar-wrapper">
                                 <!--укажите путь к файлу аватара-->
 
-                                <img class="post__author-avatar" src="img/<?= htmlspecialchars($post['avatar']) ?>" alt="Аватар пользователя"> <!-----           --->
+                                <img class="post__author-avatar" src="img/<?= htmlspecialchars($post['avatar']) ?>" alt="Аватар пользователя" style="float:none"> <!-----           --->
                             </div>
                             <div class="post__info">
                                 <b class="post__author-name"> <?= htmlspecialchars($post['login'])?></b>

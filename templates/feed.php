@@ -25,10 +25,10 @@ if(isset($_SESSION['userName'])):?>
             micro blogging
           </p>
         </div>
-        <form class="header__search-form form" action="#" method="get">
+        <form class="header__search-form form" action="../search.php" method="get">
           <div class="header__search">
             <label class="visually-hidden">Поиск</label>
-            <input class="header__search-input form__input" type="search">
+            <input class="header__search-input form__input" name = "request" type="search">
             <button class="header__search-button button" type="submit">
               <svg class="header__search-icon" width="18" height="18">
                 <use xlink:href="#icon-search"></use>
@@ -134,7 +134,7 @@ if(isset($_SESSION['userName'])):?>
                     <img src="../img/rock.jpg" alt="Фото от пользователя" width="760" height="396">
                   </div>
                 </div>
-                <footer class="post__footer post__indicators">
+                  <footer class="post__footer post__indicators">
                   <div class="post__buttons">
                     <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
                       <svg class="post__indicator-icon" width="20" height="17">
