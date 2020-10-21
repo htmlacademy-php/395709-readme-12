@@ -50,18 +50,24 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
         <span class="post__view"><?= $view[0]['L'].' просмотров' ?></span>
         </div>
         <div class="comments">
-        <form class="comments__form form" action="#" method="post">
+<!--            --><?php //require('postCommentForm.php') ?>
+        <form class="comments__form form" action="../SendComment.php" method="post">
             <div class="comments__my-avatar">
-            <img class="comments__picture" src="img/userpic-medium.jpg" alt="Аватар пользователя">
+            <img class="comments__picture" src=<?=  $_SESSION['avatar']?> alt="Аватар пользователя">
             </div>
             <div class="form__input-section form__input-section--error">
-            <textarea class="comments__textarea form__textarea form__input" placeholder="Ваш комментарий"></textarea>
-            <label class="visually-hidden">Ваш комментарий</label>
-            <button class="form__error-button button" type="button">!</button>
-            <div class="form__error-text">
-                <h3 class="form__error-title">Ошибка валидации</h3>
-                <p class="form__error-desc">Это поле обязательно к заполнению</p>
-            </div>
+                <input type="hidden" id="postId" name="postId" value=<?=$post['id'] ?> >
+                <textarea class="comments__textarea form__textarea form__input" name = "comment" placeholder="Ваш комментарий"></textarea>
+                <label class="visually-hidden">Ваш комментарий</label>
+                <button class="form__error-button button" type="button" >!</button>
+                <?php if(isset($_GET['error']) ){?>
+                    <?php if(!empty($_GET['error'])){?>
+                         <div class="form__error-text">
+                            <h3 class="form__error-title">Ошибка валидации</h3>
+                            <p class="form__error-desc"><?= htmlspecialchars($_GET['error']); ?></p>
+                         </div>
+                    <?php }
+                } ?>
             </div>
             <button class="comments__submit button button--green" type="submit">Отправить</button>
         </form>
@@ -108,7 +114,7 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
                  $postAuthor=SqlRequest('login, authorId, u.avatar', 'posts p', 'p.id =', $con, $id, ' ', 'JOIN  users u ON p.authorId = u.id');
             ?>
             <a class="post-details__avatar-link user__avatar-link" href="#">
-            <img class="post-details__picture user__picture" src="<?= $postAuthor[0]['avatar']?>" alt="Аватар пользователя">
+            <img class="post-details__picture user__picture" src="../<?= $postAuthor[0]['avatar']?>" alt="Аватар пользователя">
             </a>
         </div>
         <div class="post-details__name-wrapper user__name-wrapper">

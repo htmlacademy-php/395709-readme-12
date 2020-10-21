@@ -1,11 +1,14 @@
 <!DOCTYPE html>
+<?php
+if(isset($_SESSION['userName'])){
+   ?>
 <html lang="ru">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>readme: профиль</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="../css/main.css">
   </head>
   <body class="page">
     <div style="display: none">
@@ -15,8 +18,8 @@
     <header class="header">
       <div class="header__wrapper container">
         <div class="header__logo-wrapper">
-          <a class="header__logo-link" href="main.html">
-            <img class="header__logo" src="img/logo.svg" alt="Логотип readme" width="128" height="24">
+          <a class="header__logo-link" href="../main.html">
+            <img class="header__logo" src="../img/logo.svg" alt="Логотип readme" width="128" height="24">
           </a>
           <p class="header__topic">
             micro blogging
@@ -38,17 +41,17 @@
           <nav class="header__nav">
             <ul class="header__my-nav">
               <li class="header__my-page header__my-page--popular">
-                <a class="header__page-link" href="popular.html" title="Популярный контент">
+                <a class="header__page-link" href="../popular.php" title="Популярный контент">
                   <span class="visually-hidden">Популярный контент</span>
                 </a>
               </li>
               <li class="header__my-page header__my-page--feed">
-                <a class="header__page-link" href="feed.html" title="Моя лента">
+                <a class="header__page-link" href="feed.php" title="Моя лента">
                   <span class="visually-hidden">Моя лента</span>
                 </a>
               </li>
               <li class="header__my-page header__my-page--messages">
-                <a class="header__page-link" href="messages.html" title="Личные сообщения">
+                <a class="header__page-link" href="../messages.html" title="Личные сообщения">
                   <span class="visually-hidden">Личные сообщения</span>
                 </a>
               </li>
@@ -57,7 +60,7 @@
               <li class="header__profile">
                 <a class="header__profile-link" href="#">
                   <div class="header__avatar-wrapper">
-                    <img class="header__profile-avatar" src="img/userpic-medium.jpg" alt="Аватар профиля">
+                    <img class="header__profile-avatar" src="../img/userpic-medium.jpg" alt="Аватар профиля">
                   </div>
                   <div class="header__profile-name">
                     <span>Антон Глуханько</span>
@@ -96,7 +99,7 @@
                 </div>
               </li>
               <li>
-                <a class="header__post-button button button--transparent" href="adding-post.html">Пост</a>
+                <a class="header__post-button button button--transparent" href="adding-post.php">Пост</a>
               </li>
             </ul>
           </nav>
@@ -111,16 +114,20 @@
           <div class="profile__user user container">
             <div class="profile__user-info user__info">
               <div class="profile__avatar user__avatar">
-                <img class="profile__picture user__picture" src="img/userpic-medium.jpg" alt="Аватар пользователя">
+                <img class="profile__picture user__picture" src="../<?=$AuthorInfo[0]['avatar']?>" alt="Аватар пользователя" style = "width: 100px;">
               </div>
               <div class="profile__name-wrapper user__name-wrapper">
-                <span class="profile__name user__name">Антон<br> Глуханько</span>
+                <span class="profile__name user__name"><?=$AuthorInfo[0]['login']?></span>
                 <time class="profile__user-time user__time" datetime="2014-03-20">5 лет на сайте</time>
               </div>
             </div>
             <div class="profile__rating user__rating">
               <p class="profile__rating-item user__rating-item user__rating-item--publications">
-                <span class="user__rating-amount">556</span>
+                  <?php
+                  $postsCount = SqlRequest("COUNT(id)", "posts","authorId=", $con,$AuthorInfo[0]['id'],"count");
+                  $posts = SqlRequest("*", "posts","authorId=", $con,$AuthorInfo[0]['id']);
+                  ?>
+                <span class="user__rating-amount"><?= $postsCount[0]["count"]; ?></span>
                 <span class="profile__rating-text user__rating-text">публикаций</span>
               </p>
               <p class="profile__rating-item user__rating-item user__rating-item--subscribers">
@@ -129,7 +136,10 @@
               </p>
             </div>
             <div class="profile__user-buttons user__buttons">
-              <button class="profile__user-button user__button user__button--subscription button button--main" type="button">Подписаться</button>
+                <form action="../profileControl.php?UserId=<?= htmlspecialchars($_GET['UserId'])?>" method="post">
+                    <input  name="UserId" type="hidden" value="<?= htmlspecialchars($_GET['UserId'])?>">
+                    <button class="profile__user-button user__button user__button--subscription button button--main" style = "width: 100%;"  type="submit" ><?= $isSubscribedOnPostAuthor == 0 ? "Подписаться" : "Отписаться" ?></button>
+                </form>
               <a class="profile__user-button user__button user__button--writing button button--green" href="#">Сообщение</a>
             </div>
           </div>
@@ -151,16 +161,55 @@
               </ul>
             </div>
             <div class="profile__tab-content">
-              <section class="profile__posts tabs__content tabs__content--active">
+                <section class="profile__posts tabs__content tabs__content--active">
+                <?php  $index = 0;
+                foreach ($posts as $post):
+                $date = DateFormat($index);
+                $index = $index + 1;
+
+                ?>
                 <h2 class="visually-hidden">Публикации</h2>
                 <article class="profile__post post post-photo">
                   <header class="post__header">
-                    <h2><a href="#">Наконец, обработал фотки!</a></h2>
+                    <h2><a href="#"><?= htmlspecialchars($post['title']) ?></a></h2>
                   </header>
                   <div class="post__main">
-                    <div class="post-photo__image-wrapper">
-                      <img src="img/rock.jpg" alt="Фото от пользователя" width="760" height="396">
-                    </div>
+                      <?php if($post['typeID'] == 2):?>
+                          <blockquote>
+                              <p>
+                                  <?= htmlspecialchars($post['content'])?>
+                              </p>
+                              <cite>Неизвестный Автор</cite>
+                          </blockquote>
+
+                      <?php elseif ($post['typeID'] == 1): ?>
+                          <div class="post__main">
+                              <p style="margin-left: 10%"><?= text_split(htmlspecialchars($post['content'])) ?></p>
+
+                          </div>
+
+                      <?php elseif ($post['typeID'] == 3): ?>
+                          <div class="post-photo__image-wrapper">
+                              <img src="img/<?= htmlspecialchars($post['content']) ?>" alt="Фото от пользователя" width="760" height="396">
+                          </div>
+
+
+
+                      <?php elseif ($post['typeID'] == 5): ?>
+                          <div class="post-link__wrapper">
+                              <a class="post-link__external" href="http://" title="Перейти по ссылке">
+                                  <div class="post-link__info-wrapper">
+                                      <div class="post-link__icon-wrapper">
+                                          <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
+                                      </div>
+                                      <div class="post-link__info">
+                                          <h3><?= htmlspecialchars($post['title']) ?></h3>
+                                      </div>
+                                  </div>
+                                  <span><?= htmlspecialchars($post['content']) ?></span>
+                              </a>
+                          </div>
+                      <?php endif; ?>
                   </div>
                   <footer class="post__footer">
                     <div class="post__indicators">
@@ -172,8 +221,11 @@
                           <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                             <use xlink:href="#icon-heart-active"></use>
                           </svg>
-                          <span>250</span>
-                          <span class="visually-hidden">количество лайков</span>
+                            <?php
+                            $ComLike= SqlRequest('COUNT(userId)', 'likes', 'recipientId =', $con, $post['id'], "as L");
+                            ?>
+                            <span><?= $ComLike[0]['L'] ?></span>
+                            <span class="visually-hidden">количество лайков</span>
                         </a>
                         <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
                           <svg class="post__indicator-icon" width="19" height="17">
@@ -183,129 +235,79 @@
                           <span class="visually-hidden">количество репостов</span>
                         </a>
                       </div>
-                      <time class="post__time" datetime="2019-01-30T23:41">15 минут назад</time>
+                      <time class="post__time" datetime="2019-01-30T23:41"><?= $date ?></time>
                     </div>
-                    <ul class="post__tags">
-                      <li><a href="#">#nature</a></li>
-                      <li><a href="#">#globe</a></li>
-                      <li><a href="#">#photooftheday</a></li>
-                      <li><a href="#">#canon</a></li>
-                      <li><a href="#">#landscape</a></li>
-                      <li><a href="#">#щикарныйвид</a></li>
-                    </ul>
+                      <div style = "display:flex; margin-left: 10px">
+                          <?php
+                          $tagsId  = SqlRequest('hashtagId','posthashtag', 'postId =',$con,$post['id']);
+                          foreach ($tagsId as $tag){
+                              $tagLink = SqlRequest('title','hashtag', 'id= ',$con, $tag["hashtagId"]); ?>
+                              <a style = "background-color: white; border: solid transparent; color: #2a4ad0;" href=<?= sprintf("http://395709-readme-12/search.php?request=%s", '%23'.$tagLink[0]['title'])?>> <?= '#'.$tagLink[0]['title']; ?> </a>
+                          <?php  } ?>
+                      </div>
                   </footer>
                   <div class="comments">
                     <a class="comments__button button" href="#">Показать комментарии</a>
                   </div>
                 </article>
-                <article class="profile__post post post-text">
-                  <header class="post__header">
-                    <div class="post__author">
-                      <a class="post__author-link" href="#" title="Автор">
-                        <div class="post__avatar-wrapper post__avatar-wrapper--repost">
-                          <img class="post__author-avatar" src="img/userpic-tanya.jpg" alt="Аватар пользователя">
-                        </div>
-                        <div class="post__info">
-                          <b class="post__author-name">Репост: Таня Фирсова</b>
-                          <time class="post__time" datetime="2019-03-30T14:31">25 минут назад</time>
-                        </div>
-                      </a>
-                    </div>
-                  </header>
-                  <div class="post__main">
-                    <h2><a href="#">Полезный пост про Байкал</a></h2>
-                    <p>
-                      Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих упряжках.
-                    </p>
-                    <a class="post-text__more-link" href="#">Читать далее</a>
-                  </div>
-                  <footer class="post__footer">
-                    <div class="post__indicators">
-                      <div class="post__buttons">
-                        <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
-                          <svg class="post__indicator-icon" width="20" height="17">
-                            <use xlink:href="#icon-heart"></use>
-                          </svg>
-                          <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
-                            <use xlink:href="#icon-heart-active"></use>
-                          </svg>
-                          <span>250</span>
-                          <span class="visually-hidden">количество лайков</span>
-                        </a>
-                        <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
-                          <svg class="post__indicator-icon" width="19" height="17">
-                            <use xlink:href="#icon-repost"></use>
-                          </svg>
-                          <span>5</span>
-                          <span class="visually-hidden">количество репостов</span>
-                        </a>
-                      </div>
-                      <time class="post__time" datetime="2019-01-30T23:41">15 минут назад</time>
-                    </div>
-                    <ul class="post__tags">
-                      <li><a href="#">#nature</a></li>
-                      <li><a href="#">#globe</a></li>
-                      <li><a href="#">#photooftheday</a></li>
-                      <li><a href="#">#canon</a></li>
-                      <li><a href="#">#landscape</a></li>
-                      <li><a href="#">#щикарныйвид</a></li>
-                    </ul>
-                  </footer>
-                  <div class="comments">
-                    <div class="comments__list-wrapper">
-                      <ul class="comments__list">
-                        <li class="comments__item user">
-                          <div class="comments__avatar">
-                            <a class="user__avatar-link" href="#">
-                              <img class="comments__picture" src="img/userpic-larisa.jpg" alt="Аватар пользователя">
-                            </a>
-                          </div>
-                          <div class="comments__info">
-                            <div class="comments__name-wrapper">
-                              <a class="comments__user-name" href="#">
-                                <span>Лариса Роговая</span>
-                              </a>
-                              <time class="comments__time" datetime="2019-03-20">1 ч назад</time>
-                            </div>
-                            <p class="comments__text">
-                              Красота!!!1!
-                            </p>
-                          </div>
-                        </li>
-                        <li class="comments__item user">
-                          <div class="comments__avatar">
-                            <a class="user__avatar-link" href="#">
-                              <img class="comments__picture" src="img/userpic-larisa.jpg" alt="Аватар пользователя">
-                            </a>
-                          </div>
-                          <div class="comments__info">
-                            <div class="comments__name-wrapper">
-                              <a class="comments__user-name" href="#">
-                                <span>Лариса Роговая</span>
-                              </a>
-                              <time class="comments__time" datetime="2019-03-18">2 дня назад</time>
-                            </div>
-                            <p class="comments__text">
-                              Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих упряжках.
-                            </p>
-                          </div>
-                        </li>
-                      </ul>
-                      <a class="comments__more-link" href="#">
-                        <span>Показать все комментарии</span>
-                        <sup class="comments__amount">45</sup>
-                      </a>
-                    </div>
-                  </div>
-                  <form class="comments__form form" action="#" method="post">
-                    <div class="comments__my-avatar">
-                      <img class="comments__picture" src="img/userpic-medium.jpg" alt="Аватар пользователя">
-                    </div>
-                    <textarea class="comments__textarea form__textarea" placeholder="Ваш комментарий"></textarea>
-                    <label class="visually-hidden">Ваш комментарий</label>
-                    <button class="comments__submit button button--green" type="submit">Отправить</button>
-                  </form>
-                </article>
+                <? endforeach;?>
+
+
+<!--                  <div class="comments">-->
+<!--                    <div class="comments__list-wrapper">-->
+<!--                      <ul class="comments__list">-->
+<!--                        <li class="comments__item user">-->
+<!--                          <div class="comments__avatar">-->
+<!--                            <a class="user__avatar-link" href="#">-->
+<!--                              <img class="comments__picture" src="../img/userpic-larisa.jpg" alt="Аватар пользователя">-->
+<!--                            </a>-->
+<!--                          </div>-->
+<!--                          <div class="comments__info">-->
+<!--                            <div class="comments__name-wrapper">-->
+<!--                              <a class="comments__user-name" href="#">-->
+<!--                                <span>Лариса Роговая</span>-->
+<!--                              </a>-->
+<!--                              <time class="comments__time" datetime="2019-03-20">1 ч назад</time>-->
+<!--                            </div>-->
+<!--                            <p class="comments__text">-->
+<!--                              Красота!!!1!-->
+<!--                            </p>-->
+<!--                          </div>-->
+<!--                        </li>-->
+<!--                        <li class="comments__item user">-->
+<!--                          <div class="comments__avatar">-->
+<!--                            <a class="user__avatar-link" href="#">-->
+<!--                              <img class="comments__picture" src="../img/userpic-larisa.jpg" alt="Аватар пользователя">-->
+<!--                            </a>-->
+<!--                          </div>-->
+<!--                          <div class="comments__info">-->
+<!--                            <div class="comments__name-wrapper">-->
+<!--                              <a class="comments__user-name" href="#">-->
+<!--                                <span>Лариса Роговая</span>-->
+<!--                              </a>-->
+<!--                              <time class="comments__time" datetime="2019-03-18">2 дня назад</time>-->
+<!--                            </div>-->
+<!--                            <p class="comments__text">-->
+<!--                              Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих упряжках.-->
+<!--                            </p>-->
+<!--                          </div>-->
+<!--                        </li>-->
+<!--                      </ul>-->
+<!--                      <a class="comments__more-link" href="#">-->
+<!--                        <span>Показать все комментарии</span>-->
+<!--                        <sup class="comments__amount">45</sup>-->
+<!--                      </a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <form class="comments__form form" action="#" method="post">-->
+<!--                    <div class="comments__my-avatar">-->
+<!--                      <img class="comments__picture" src="../img/userpic-medium.jpg" alt="Аватар пользователя">-->
+<!--                    </div>-->
+<!--                    <textarea class="comments__textarea form__textarea" placeholder="Ваш комментарий"></textarea>-->
+<!--                    <label class="visually-hidden">Ваш комментарий</label>-->
+<!--                    <button class="comments__submit button button--green" type="submit">Отправить</button>-->
+<!--                  </form>-->
+<!--                </article>-->
               </section>
 
               <section class="profile__likes tabs__content">
@@ -315,7 +317,7 @@
                     <div class="post-mini__user-info user__info">
                       <div class="post-mini__avatar user__avatar">
                         <a class="user__avatar-link" href="#">
-                          <img class="post-mini__picture user__picture" src="img/userpic-petro.jpg" alt="Аватар пользователя">
+                          <img class="post-mini__picture user__picture" src="../img/userpic-petro.jpg" alt="Аватар пользователя">
                         </a>
                       </div>
                       <div class="post-mini__name-wrapper user__name-wrapper">
@@ -331,7 +333,7 @@
                     <div class="post-mini__preview">
                       <a class="post-mini__link" href="#" title="Перейти на публикацию">
                         <div class="post-mini__image-wrapper">
-                          <img class="post-mini__image" src="img/rock-small.png" width="109" height="109" alt="Превью публикации">
+                          <img class="post-mini__image" src="../img/rock-small.png" width="109" height="109" alt="Превью публикации">
                         </div>
                         <span class="visually-hidden">Фото</span>
                       </a>
@@ -341,7 +343,7 @@
                     <div class="post-mini__user-info user__info">
                       <div class="post-mini__avatar user__avatar">
                         <a class="user__avatar-link" href="#">
-                          <img class="post-mini__picture user__picture" src="img/userpic-petro.jpg" alt="Аватар пользователя">
+                          <img class="post-mini__picture user__picture" src="../img/userpic-petro.jpg" alt="Аватар пользователя">
                         </a>
                       </div>
                       <div class="post-mini__name-wrapper user__name-wrapper">
@@ -367,7 +369,7 @@
                     <div class="post-mini__user-info user__info">
                       <div class="post-mini__avatar user__avatar">
                         <a class="user__avatar-link" href="#">
-                          <img class="post-mini__picture user__picture" src="img/userpic-petro.jpg" alt="Аватар пользователя">
+                          <img class="post-mini__picture user__picture" src="../img/userpic-petro.jpg" alt="Аватар пользователя">
                         </a>
                       </div>
                       <div class="post-mini__name-wrapper user__name-wrapper">
@@ -383,7 +385,7 @@
                     <div class="post-mini__preview">
                       <a class="post-mini__link" href="#" title="Перейти на публикацию">
                         <div class="post-mini__image-wrapper">
-                          <img class="post-mini__image" src="img/coast-small.png" width="109" height="109" alt="Превью публикации">
+                          <img class="post-mini__image" src="../img/coast-small.png" width="109" height="109" alt="Превью публикации">
                           <span class="post-mini__play-big">
                             <svg class="post-mini__play-big-icon" width="12" height="13">
                               <use xlink:href="#icon-video-play-big"></use>
@@ -398,7 +400,7 @@
                     <div class="post-mini__user-info user__info">
                       <div class="post-mini__avatar user__avatar">
                         <a class="user__avatar-link" href="#">
-                          <img class="post-mini__picture user__picture" src="img/userpic-petro.jpg" alt="Аватар пользователя">
+                          <img class="post-mini__picture user__picture" src="../img/userpic-petro.jpg" alt="Аватар пользователя">
                         </a>
                       </div>
                       <div class="post-mini__name-wrapper user__name-wrapper">
@@ -424,7 +426,7 @@
                     <div class="post-mini__user-info user__info">
                       <div class="post-mini__avatar user__avatar">
                         <a class="user__avatar-link" href="#">
-                          <img class="post-mini__picture user__picture" src="img/userpic-petro.jpg" alt="Аватар пользователя">
+                          <img class="post-mini__picture user__picture" src="../img/userpic-petro.jpg" alt="Аватар пользователя">
                         </a>
                       </div>
                       <div class="post-mini__name-wrapper user__name-wrapper">
@@ -456,7 +458,7 @@
                     <div class="post-mini__user-info user__info">
                       <div class="post-mini__avatar user__avatar">
                         <a class="user__avatar-link" href="#">
-                          <img class="post-mini__picture user__picture" src="img/userpic-petro.jpg" alt="Аватар пользователя">
+                          <img class="post-mini__picture user__picture" src="../img/userpic-petro.jpg" alt="Аватар пользователя">
                         </a>
                       </div>
                       <div class="post-mini__name-wrapper user__name-wrapper">
@@ -484,7 +486,7 @@
                     <div class="post-mini__user-info user__info">
                       <div class="post-mini__avatar user__avatar">
                         <a class="user__avatar-link" href="#">
-                          <img class="post-mini__picture user__picture" src="img/userpic-petro.jpg" alt="Аватар пользователя">
+                          <img class="post-mini__picture user__picture" src="../img/userpic-petro.jpg" alt="Аватар пользователя">
                         </a>
                       </div>
                       <div class="post-mini__name-wrapper user__name-wrapper">
@@ -533,7 +535,10 @@
                       </p>
                     </div>
                     <div class="post-mini__user-buttons user__buttons">
-                      <button class="post-mini__user-button user__button user__button--subscription button button--main" type="button">Подписаться</button>
+                        <form action="../subscription.php">
+                            <input type="hidden" name="UserId" value = "<?= htmlspecialchars($_GET['UserId']) ?>">
+                            <button class="post-mini__user-button user__button user__button--subscription button button--main" type="submit">Подписаться</button>
+                        </form>
                     </div>
                   </li>
                   <li class="post-mini post-mini--photo post user">
@@ -605,13 +610,13 @@
           <div class="footer__my-info">
             <ul class="footer__my-pages">
               <li class="footer__my-page footer__my-page--feed">
-                <a class="footer__page-link" href="feed.html">Моя лента</a>
+                <a class="footer__page-link" href="feed.php">Моя лента</a>
               </li>
               <li class="footer__my-page footer__my-page--popular">
-                <a class="footer__page-link" href="popular.html">Популярный контент</a>
+                <a class="footer__page-link" href="../popular.php">Популярный контент</a>
               </li>
               <li class="footer__my-page footer__my-page--messages">
-                <a class="footer__page-link" href="messages.html">Личные сообщения</a>
+                <a class="footer__page-link" href="../messages.html">Личные сообщения</a>
               </li>
             </ul>
             <div class="footer__copyright">
@@ -628,5 +633,10 @@
     </footer>
 
     <script src="js/main.js"></script>
+
   </body>
 </html>
+<?php
+}
+else{
+}?>

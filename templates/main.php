@@ -39,7 +39,7 @@
                     <?php
                     if (isset($_GET['id'])) {
                         $id = $_GET['id'];
-                        $sqlPost = "SELECT p.id, p.title, login, p.title,  conT.icon_name, p.avatar, p.content FROM posts p JOIN users u ON p.authorId = u.id JOIN content_type conT ON typeID = conT.id WHERE p.typeID = $id   ORDER BY views DESC;";
+                        $sqlPost = "SELECT p.id, p.authorId, p.title, login, p.title,  conT.icon_name, p.avatar, p.content FROM posts p JOIN users u ON p.authorId = u.id JOIN content_type conT ON typeID = conT.id WHERE p.typeID = $id   ORDER BY views DESC;";
                         $resultPosts = mysqli_query($con, $sqlPost);
                         $posts = mysqli_fetch_all($resultPosts, MYSQLI_ASSOC);
                     }
@@ -165,7 +165,7 @@
                 </div>
                 <footer class="post__footer">
                     <div class="post__author">
-                        <a class="post__author-link" href="#" title="Автор">
+                        <a class="post__author-link" href=<?= sprintf("profileControl.php?UserId=%s", $post['authorId'] )?> title="Автор">
                             <div class="post__avatar-wrapper">
                                 <!--укажите путь к файлу аватара-->
 
@@ -179,14 +179,17 @@
                     </div>
                     <div class="post__indicators">
                         <div class="post__buttons">
-                            <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
+                            <a class="post__indicator post__indicator--likes button" href="like.php?postId=<?= $post['id']?>" title="Лайк">
                                 <svg class="post__indicator-icon" width="20" height="17">
                                     <use xlink:href="#icon-heart"></use>
                                 </svg>
                                 <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                                     <use xlink:href="#icon-heart-active"></use>
                                 </svg>
-                                <span>0</span>
+                                <?php
+                                $ComLike= SqlRequest('COUNT(id)', 'likes', 'recipientId =', $con, $post['id'], "as L");
+                                ?>
+                                <span><?= $ComLike[0]['L'] ?></span>
                                 <span class="visually-hidden">количество лайков</span>
                             </a>
                             <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
@@ -201,6 +204,11 @@
                 </footer>
             </article>
         <?php endforeach; ?>
+
+    </div>
+    <div class="popular__page-links">
+        <a class="popular__page-link popular__page-link--prev button button--gray" href="http://395709-readme-12/popular.php?offset=<?= $offset > 0 ? $offset-6 : $offset  ?>">Предыдущая страница</a>
+        <a class="popular__page-link popular__page-link--next button button--gray"  href="http://395709-readme-12/popular.php?offset=<?= $offset+6 < $postCount ? $offset+6 : $offset  ?>">Следующая страница</a>
     </div>
 </div>
 
