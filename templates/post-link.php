@@ -1,4 +1,4 @@
-<?php 
+<?php
 require('functions.php');
 $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
 ?>
@@ -12,11 +12,11 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
     <div class="post-link__wrapper">
             <a class="post-link__external" href="http://www.vitadental.ru" title="Перейти по ссылке">
                 <div class="post-link__icon-wrapper">
-                <img src="img/logo-vita.jpg" alt="Иконка">
+                <img src="../img/logo-vita.jpg" alt="Иконка">
                 </div>
                 <div class="post-link__info">
                 <h3><?= $post['title']?></h3>
-                
+
                 <span><?= $post['content']?></span>
                 </div>
                 <svg class="post-link__arrow" width="11" height="16">
@@ -24,7 +24,7 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
                 </svg>
             </a>
             </div>
-    
+
         <div class="post__indicators">
         <div class="post__buttons">
             <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
@@ -34,11 +34,11 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
             <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                 <use xlink:href="#icon-heart-active"></use>
             </svg>
-            <?php 
-      
+            <?php
+
            $ComLike= SqlRequest('COUNT(userId)', 'likes', 'recipientId =', $con, $id, "as L");
             ?>
-            
+
             <span><?= $ComLike[0]['L'] ?></span>
             <span class="visually-hidden">количество лайков</span>
             </a>
@@ -46,8 +46,8 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
             <svg class="post__indicator-icon" width="19" height="17">
                 <use xlink:href="#icon-comment"></use>
             </svg>
-            <?php 
-             $Comment= SqlRequest('COUNT(content)', 'comments', 'postId =', $con, $id, "as L");            
+            <?php
+             $Comment= SqlRequest('COUNT(content)', 'comments', 'postId =', $con, $id, "as L");
              ?>
             <span><?php echo $Comment[0]['L'] ?></span>
             <span class="visually-hidden">количество комментариев</span>
@@ -60,37 +60,42 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
             <span class="visually-hidden">количество репостов</span>
             </a>
         </div>
-        <?php 
+        <?php
              $view= SqlRequest('views', 'posts', ' id =', $con, $id, "as L");
          ?>
         <span class="post__view"><?= $view[0]['L'].' просмотров' ?></span>
         </div>
         <div class="comments">
-        <form class="comments__form form" action="#" method="post">
-            <div class="comments__my-avatar">
-            <img class="comments__picture" src="img/userpic-medium.jpg" alt="Аватар пользователя">
-            </div>
-            <div class="form__input-section form__input-section--error">
-            <textarea class="comments__textarea form__textarea form__input" placeholder="Ваш комментарий"></textarea>
-            <label class="visually-hidden">Ваш комментарий</label>
-            <button class="form__error-button button" type="button">!</button>
-            <div class="form__error-text">
-                <h3 class="form__error-title">Ошибка валидации</h3>
-                <p class="form__error-desc">Это поле обязательно к заполнению</p>
-            </div>
-            </div>
-            <button class="comments__submit button button--green" type="submit">Отправить</button>
-        </form>
+            <form class="comments__form form" action="../SendComment.php" method="post">
+                <div class="comments__my-avatar">
+                    <img class="comments__picture" src=../<?=  $_SESSION['avatar']?> alt="Аватар пользователя">
+                </div>
+                <div class="form__input-section form__input-section--error">
+                    <input type="hidden" id="postId" name="postId" value=<?=$post['id'] ?> >
+                    <textarea class="comments__textarea form__textarea form__input" name = "comment" placeholder="Ваш комментарий"></textarea>
+                    <label class="visually-hidden">Ваш комментарий</label>
+                    <button class="form__error-button button" type="button" >!</button>
+                    <?php if(isset($_GET['error']) ){?>
+                        <?php if(!empty($_GET['error'])){?>
+                            <div class="form__error-text">
+                                <h3 class="form__error-title">Ошибка валидации</h3>
+                                <p class="form__error-desc"><?= htmlspecialchars($_GET['error']); ?></p>
+                            </div>
+                        <?php }
+                    } ?>
+                </div>
+                <button class="comments__submit button button--green" type="submit">Отправить</button>
+            </form>
         <div class="comments__list-wrapper">
             <ul class="comments__list">
-            <?php 
+            <?php
             $CommentInf = SqlRequest('content, login, authorId, avatar ', ' comments c' ,' c.postId= ',  $con,$id, '', "JOIN users u ON c.authorId = u.id");
             ?>
             <?php foreach  ($CommentInf as $inf):?>
             <li class="comments__item user">
                 <div class="comments__avatar">
                 <a class="user__avatar-link" href="#">
-                    <img class="comments__picture" src="img/<?= $inf['avatar']?>" alt="Аватар пользователя">
+                    <img class="comments__picture" src="../<?= $inf['avatar']?>" alt="Аватар пользователя">
                 </a>
                 </div>
                 <div class="comments__info">
@@ -107,9 +112,9 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
                 </div>
             </li>
             <?php endforeach; ?>
-          
+
             </ul>
-           
+
             <a class="comments__more-link" href="#">
             <span>Показать все комментарии</span>
             <sup class="comments__amount">45</sup>
@@ -125,7 +130,7 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
                  $postAuthor=SqlRequest('login, authorId, u.avatar', 'posts p', 'p.id =', $con, $id, ' ', 'JOIN  users u ON p.authorId = u.id');
             ?>
             <a class="post-details__avatar-link user__avatar-link" href="#">
-            <img class="post-details__picture user__picture" src="img/<?= $postAuthor[0]['avatar']?>" alt="Аватар пользователя">
+            <img class="post-details__picture user__picture" src="../<?= $postAuthor[0]['avatar']?>" alt="Аватар пользователя">
             </a>
         </div>
         <div class="post-details__name-wrapper user__name-wrapper">
@@ -145,11 +150,11 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
         </p>
         </div>
         <div class="post-details__user-buttons user__buttons">
-        <button class="user__button user__button--subscription button button--main" type="button">Подписаться</button>
+        <button class="user__button user__button--subscription button button--main" type="button" >Подписаться</button>
         <a class="user__button user__button--writing button button--green" href="#">Сообщение</a>
         </div>
     </div>
     </div>
-</article>        
+</article>
 </section>
 

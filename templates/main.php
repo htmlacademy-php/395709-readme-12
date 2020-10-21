@@ -36,19 +36,9 @@
             <b class="popular__filters-caption filters__caption">Тип контента:</b>
             <ul class="popular__filters-list filters__list">
                 <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                    <?php
-                    if (isset($_GET['id'])) {
-                        $id = $_GET['id'];
-                        $sqlPost = "SELECT p.id, p.title, login, p.title,  conT.icon_name, p.avatar, p.content FROM posts p JOIN users u ON p.authorId = u.id JOIN content_type conT ON typeID = conT.id WHERE p.typeID = $id   ORDER BY views DESC;";
-                        $resultPosts = mysqli_query($con, $sqlPost);
-                        $posts = mysqli_fetch_all($resultPosts, MYSQLI_ASSOC);
-                    }
-                    else {
-                        $id = 0;
-                    }
-                    ?>
+
                     <?php $id == 0 ? $class = "filters__button--active" : $class=""; ?>
-                    <a class="filters__button filters__button--ellipse filters__button--all filters__button--active <?= $class?> " href="http://395709-readme-12/" >
+                    <a class="filters__button filters__button--ellipse filters__button--all filters__button--active <?= $class?> " href="http://395709-readme-12/popular.php" >
                         <span>Все</span>
                     </a>
                 </li>
@@ -136,6 +126,8 @@
                             <img src="img/<?= htmlspecialchars($post['content']) ?>" alt="Фото от пользователя" width="360" height="240">
                         </div>
 
+
+
                     <?php elseif ($post['icon_name'] == 'post-link'): ?>
                         <div class="post-link__wrapper">
                             <a class="post-link__external" href="http://" title="Перейти по ссылке">
@@ -151,14 +143,23 @@
                             </a>
                         </div>
                     <?php endif; ?>
+                    <br>
+                    <div style = "display:flex; margin-left: 10px">
+                        <?php
+                        $tagsId  = SqlRequest('hashtagId','posthashtag', 'postId =',$con,$post['id']);
+                        foreach ($tagsId as $tag){
+                            $tagLink = SqlRequest('title','hashtag', 'id= ',$con, $tag["hashtagId"]); ?>
+                            <a style = "background-color: white; border: solid transparent; color: #2a4ad0;" href=<?= sprintf("http://395709-readme-12/search.php?request=%s", '%23'.$tagLink[0]['title'])?>> <?= '#'.$tagLink[0]['title']; ?> </a>
+                        <?php  } ?>
+                    </div>
                 </div>
                 <footer class="post__footer">
                     <div class="post__author">
-                        <a class="post__author-link" href="#" title="Автор">
+                        <a class="post__author-link" href=<?= sprintf("profileControl.php?UserId=%s", $post['authorId'] )?> title="Автор">
                             <div class="post__avatar-wrapper">
                                 <!--укажите путь к файлу аватара-->
 
-                                <img class="post__author-avatar" src="img/<?= htmlspecialchars($post['avatar']) ?>" alt="Аватар пользователя"> <!-----           --->
+                                <img class="post__author-avatar" src="img/<?= htmlspecialchars($post['avatar']) ?>" alt="Аватар пользователя" style="float:none"> <!-----           --->
                             </div>
                             <div class="post__info">
                                 <b class="post__author-name"> <?= htmlspecialchars($post['login'])?></b>
@@ -168,14 +169,17 @@
                     </div>
                     <div class="post__indicators">
                         <div class="post__buttons">
-                            <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
+                            <a class="post__indicator post__indicator--likes button" href="like.php?postId=<?= $post['id']?>" title="Лайк">
                                 <svg class="post__indicator-icon" width="20" height="17">
                                     <use xlink:href="#icon-heart"></use>
                                 </svg>
                                 <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                                     <use xlink:href="#icon-heart-active"></use>
                                 </svg>
-                                <span>0</span>
+                                <?php
+                                $ComLike= SqlRequest('COUNT(id)', 'likes', 'recipientId =', $con, $post['id'], "as L");
+                                ?>
+                                <span><?= $ComLike[0]['L'] ?></span>
                                 <span class="visually-hidden">количество лайков</span>
                             </a>
                             <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
@@ -190,6 +194,11 @@
                 </footer>
             </article>
         <?php endforeach; ?>
+
+    </div>
+    <div class="popular__page-links">
+        <a class="popular__page-link popular__page-link--prev button button--gray" href="http://395709-readme-12/popular.php?offset=<?= $offset > 0 ? $offset-6 : $offset  ?>&id=<?= isset($_GET['id']) ? htmlspecialchars($_GET['id']) : '' ?> ">Предыдущая страница</a>
+        <a class="popular__page-link popular__page-link--next button button--gray"  href="http://395709-readme-12/popular.php?offset=<?= $offset+6 < $postCount ? $offset+6 : $offset  ?>&id=<?= isset($_GET['id']) ? htmlspecialchars($_GET['id']) : '' ?> ">Следующая страница</a>
     </div>
 </div>
 

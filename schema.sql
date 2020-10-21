@@ -95,4 +95,6 @@ CREATE INDEX u_mail ON users(email);
 CREATE INDEX u_login ON users(login);
 CREATE INDEX post_title ON posts(title);
 CREATE INDEX h_title ON hashtag(title);
+CREATE FULLTEXT INDEX post_search ON posts(title, content);
+CREATE FULLTEXT INDEX Tag_search ON hashtag(title)
 

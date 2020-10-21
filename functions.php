@@ -47,11 +47,10 @@ function seePlural($str, $one, $two, $many, $ending = ' назад'){
     return $str. ' '.get_noun_plural_form($str, $one, $two, $many) . $ending;
 }
 
- function SqlRequest($reques, $from, $where, $con,$id, $as = '', $join =""){
+ function SqlRequest($reques, $from, $where, $con,$id='', $as = '', $join =""){
     $sql = sprintf("SELECT  %s %s  from %s %s WHERE %s %s", $reques, $as, $from,$join, $where, $id);
     $result = mysqli_query($con, $sql);
     $Count = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    // $res= $Count[0];
      return $Count;
  }
 
@@ -197,7 +196,7 @@ function typeRequest($id){
     $params = $_GET;
     $params['id'] = $id;
     $query = http_build_query($params);
-    $url = "http://395709-readme-12/" . "?" . $query;
+    $url = "http://395709-readme-12/popular.php" . "?" . $query;
     return $url;
 }
 
