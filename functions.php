@@ -197,7 +197,8 @@ function typeRequest($id){
     $params['id'] = $id;
     $params['offset'] = 0;
     $query = http_build_query($params);
-    $url = "http://395709-readme-12/popular.php" . "?" . $query ;
+
+    $url = "http://395709-readme-12/popular.php" . "?" . $query;
     return $url;
 }
 

@@ -1,4 +1,6 @@
+
 <img class="post-details__picture user__picture" src="<?= $postAuthor[0]['avatar']?>" alt="Аватар пользователя">
+
 <?php
 require('functions.php');
 $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
