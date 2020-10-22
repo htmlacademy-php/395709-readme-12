@@ -195,7 +195,9 @@ function comparePassword(){
 function typeRequest($id){
     $params = $_GET;
     $params['id'] = $id;
+    $params['offset'] = 0;
     $query = http_build_query($params);
+
     $url = "http://395709-readme-12/popular.php" . "?" . $query;
     return $url;
 }

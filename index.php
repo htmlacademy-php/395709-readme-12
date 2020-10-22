@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include "helpers.php";
+    require("helpers.php");
     require("functions.php");
     $errors = [];
     $con =[];
@@ -17,9 +17,10 @@
             }
 
             if(is_null($errors['login']) && is_null($errors['password'])) {
-                $UserData = mysqli_fetch_all(mysqli_query($con, sprintf("SELECT  password, avatar  from users WHERE login ='%s'", htmlspecialchars($_POST['login']))), MYSQLI_ASSOC);
+                $UserData = mysqli_fetch_all(mysqli_query($con, sprintf("SELECT id, password, avatar  from users WHERE login ='%s'", htmlspecialchars($_POST['login']))), MYSQLI_ASSOC);
                 if(!empty($UserData[0]['password'])) {
                     if (password_verify(htmlspecialchars($_POST['password']), $UserData[0]['password'])) {
+                        $_SESSION['id'] =   $UserData[0]['id'];
                         $_SESSION['userName'] = htmlspecialchars($_POST['login']);
                         $_SESSION['avatar'] = is_null($UserData[0]['avatar']) ? 'img/userpic-medium.jpg' : $UserData[0]['avatar'];
                     }

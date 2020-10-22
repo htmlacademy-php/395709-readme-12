@@ -13,6 +13,7 @@ $errors = [];
 $res = 0;
 $url = 0;
 $type = 0;
+
 if(isset($_POST['Send']))
 {
     $type = htmlspecialchars($_POST['name']);
