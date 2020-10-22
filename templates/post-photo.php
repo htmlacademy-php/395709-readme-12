@@ -115,7 +115,7 @@ $title = SqlRequest('title', 'posts', 'id = ', $con, $id, "as L");
                  $postAuthor=SqlRequest('login, authorId, u.avatar', 'posts p', 'p.id =', $con, $id, ' ', 'JOIN  users u ON p.authorId = u.id');
             ?>
             <a class="post-details__avatar-link user__avatar-link" href="#">
-            <img class="post-details__picture user__picture" src="../<?= $postAuthor[0]['avatar']?>" alt="Аватар пользователя">
+            <img class="post-details__picture user__picture" src="<?= $postAuthor[0]['avatar']?>" alt="Аватар пользователя">
             </a>
         </div>
         <div class="post-details__name-wrapper user__name-wrapper">
