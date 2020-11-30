@@ -1,6 +1,6 @@
 Use blog;
 INSERT INTO users (login, email, password,avatar)
-VALUES ('Лариса', 'lar@.gmail.com', '123', 'userpic-larisa.jpg');
+VALUES ('Лариса', 'mansik18@.mail.ru', '123', 'userpic-larisa.jpg');
 INSERT INTO users (login, email, password,avatar)
 VALUES ('Владик', 'vlad@gmail.com', '124', 'userpic-mark.jpg');
 INSERT INTO users (login, email, password,avatar)

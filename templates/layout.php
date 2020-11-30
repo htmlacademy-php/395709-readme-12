@@ -126,57 +126,77 @@
                         </a>
                     </li>
                 </ul>
-                <!-- здесь должен быть PHP код, который показывает следующий тег по условию -->
-                <ul class="header__user-nav">
-                    <li class="header__profile">
-                        <a class="header__profile-link" href="#">
-                            <div class="header__avatar-wrapper">
-                                <img class="header__profile-avatar" src="<?= '../img/'.$_SESSION['avatar'] ?>"
-                                     alt="Аватар профиля">
-                            </div>
-                            <div class="header__profile-name">
-                                <span>
-                                <?= $_SESSION['userName']; ?>  <!--здесь должно быть имя пользователя-->
-                                </span>
-                                <svg class="header__link-arrow" width="10" height="6">
-                                    <use xlink:href="#icon-arrow-right-ad"></use>
-                                </svg>
-                            </div>
-                        </a>
-                        <div class="header__tooltip-wrapper">
-                            <div class="header__profile-tooltip">
-                                <ul class="header__profile-nav">
-                                    <li class="header__profile-nav-item">
-                                        <a class="header__profile-nav-link"
-                                           href="http://395709-readme-12/profileControl.php?UserId=<?= $_SESSION['id'] ?>">
-                          <span class="header__profile-nav-text">
-                            Мой профиль
-                          </span>
-                                        </a>
-                                    </li>
-                                    <li class="header__profile-nav-item">
-                                        <a class="header__profile-nav-link" href="http://395709-readme-12/messages.php">
-                          <span class="header__profile-nav-text">
-                            Сообщения
-                          </span>
-                                        </a>
-                                    </li>
 
-                                    <li class="header__profile-nav-item">
-                                        <a class="header__profile-nav-link" href="../logout.php">
-                          <span class="header__profile-nav-text">
-                            Выход
-                          </span>
+                    <?php
+                    if(!isset($_SESSION)) {?>
+                        <li class="header__authorization">
+                            <a class="header__user-button header__authorization-button button" href="http://395709-readme-12/">Вход</a>
+                        </li>
+                        <li>
+                            <a class="header__user-button header__user-button--active header__register-button button">Регистрация</a>
+                        </li>
+
+                    <?php }else{ ?>
+                        <ul class="header__user-nav">
+                            <li class="header__profile">
+                                        <a class="header__profile-link" href="#">
+                                            <div class="header__avatar-wrapper">
+                                                <?php
+                                                if(!isset($_SESSION)) {
+                                                    $avatar = "../img/userpic-larisa.jpg";
+                                                    $name = 'Новый юзер';
+                                                }else{
+                                                    $name = $_SESSION['userName'];
+                                                    $avatar = "../img/". $_SESSION['avatar'];
+                                                }?>
+                                                <img class="header__profile-avatar" src="<?= $avatar ?>"
+                                                     alt="Аватар профиля">
+                                            </div>
+                                            <div class="header__profile-name">
+                                            <span>
+                                            <?= $name; ?>  <!--здесь должно быть имя пользователя-->
+                                            </span>
+                                                <svg class="header__link-arrow" width="10" height="6">
+                                                    <use xlink:href="#icon-arrow-right-ad"></use>
+                                                </svg>
+                                            </div>
                                         </a>
+                                        <div class="header__tooltip-wrapper">
+                                            <div class="header__profile-tooltip">
+                                                <ul class="header__profile-nav">
+                                                    <li class="header__profile-nav-item">
+                                                        <a class="header__profile-nav-link"
+                                                           href="http://395709-readme-12/profileControl.php?UserId=<?= $_SESSION['id'] ?>">
+                                      <span class="header__profile-nav-text">
+                                        Мой профиль
+                                      </span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="header__profile-nav-item">
+                                                        <a class="header__profile-nav-link" href="http://395709-readme-12/messages.php">
+                                      <span class="header__profile-nav-text">
+                                        Сообщения
+                                      </span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li class="header__profile-nav-item">
+                                                        <a class="header__profile-nav-link" href="../logout.php">
+                                      <span class="header__profile-nav-text">
+                                        Выход
+                                      </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <a class="header__post-button button button--transparent" href="add.php">Пост</a>
-                    </li>
-                </ul>
+                                    <li>
+                                        <a class="header__post-button button button--transparent" href="add.php">Пост</a>
+                                    </li>
+                          </ul>
+                <?php }?>
+
             </nav>
         </div>
     </div>

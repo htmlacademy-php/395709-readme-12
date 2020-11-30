@@ -22,7 +22,8 @@ if (isset($_SESSION['userName'])){
                         <?php
                         $postsCount = SqlRequest("COUNT(id)", "posts", "authorId=", $con, $AuthorInfo[0]['id'],
                             "count");
-                        $posts = SqlRequest("*", "posts", "authorId=", $con, $AuthorInfo[0]['id']);
+                        $id = $AuthorInfo[0]['id'];
+                        $posts = SqlRequest("*", "posts", "authorId=$id ORDER BY creationDate DESC", $con );
                         $subscribersCount = SqlRequest('COUNT(users.id) ', 'subscription', 'authorId=', $con,
                             htmlspecialchars($_GET['UserId']), 'count', 'JOIN users ON users.id = subscription.userId');
 
@@ -35,16 +36,18 @@ if (isset($_SESSION['userName'])){
                         <span class="profile__rating-text user__rating-text">подписчиков</span>
                     </p>
                 </div>
-                <div class="profile__user-buttons user__buttons">
-                    <form action="../profileControl.php?UserId=<?= htmlspecialchars($_GET['UserId']) ?>" method="post">
-                        <input name="UserId" type="hidden" value="<?= htmlspecialchars($_GET['UserId']) ?>">
-                        <button class="profile__user-button user__button user__button--subscription button button--main"
-                                style="width: 100%;"
-                                type="submit"><?= $isSubscribedOnPostAuthor == 0 ? "Подписаться" : "Отписаться" ?></button>
-                    </form>
-                    <a class="profile__user-button user__button user__button--writing button button--green"
-                       href="messages.php?newMessage=<?= htmlspecialchars($_GET['UserId']) ?>&id=<?= htmlspecialchars($_GET['UserId']) ?>">Сообщение</a>
-                </div>
+                <?php if( htmlspecialchars($_GET['UserId'])!=$_SESSION['id']){ ?>
+                    <div class="profile__user-buttons user__buttons">
+                        <form action="../profileControl.php?UserId=<?= htmlspecialchars($_GET['UserId']) ?>" method="post">
+                            <input name="UserId" type="hidden" value="<?= htmlspecialchars($_GET['UserId']) ?>">
+                            <button class="profile__user-button user__button user__button--subscription button button--main"
+                                    style="width: 100%;"
+                                    type="submit"><?= $isSubscribedOnPostAuthor == 0 ? "Подписаться" : "Отписаться" ?></button>
+                        </form>
+                        <a class="profile__user-button user__button user__button--writing button button--green"
+                           href="messages.php?newMessage=<?= htmlspecialchars($_GET['UserId']) ?>&id=<?= htmlspecialchars($_GET['UserId']) ?>">Сообщение</a>
+                    </div>
+                <?php }?>
             </div>
         </div>
         <div class="profile__tabs-wrapper tabs">
@@ -68,104 +71,56 @@ if (isset($_SESSION['userName'])){
                 </div>
                 <div class="profile__tab-content">
                     <section class="profile__posts tabs__content tabs__content--active">
-                        <?php $index = 0;
+                        <?php
                         foreach ($posts as $post):
-                            $date = DateFormat($index);
-                            $index = $index + 1;
-
-                            ?>
+                            $date = DateFormat(1,$post['creationDate']);?>
                             <h2 class="visually-hidden">Публикации</h2>
                             <article class="profile__post post post-photo">
                                 <header class="post__header">
                                     <h2><a href="#"><?= htmlspecialchars($post['title']) ?></a></h2>
                                 </header>
-                                <div class="post__main">
-                                    <?php if ($post['typeID'] == 2): ?>
-                                        <blockquote>
-                                            <p>
-                                                <?= htmlspecialchars($post['content']) ?>
-                                            </p>
-                                            <cite>Неизвестный Автор</cite>
-                                        </blockquote>
-
-                                    <?php elseif ($post['typeID'] == 1): ?>
-                                        <div class="post__main">
-                                            <p style="margin-left: 10%"><?= text_split(htmlspecialchars($post['content'])) ?></p>
-
-                                        </div>
-
-                                    <?php elseif ($post['typeID'] == 3): ?>
-                                        <div class="post-photo__image-wrapper">
-                                            <img src="img/<?= htmlspecialchars($post['content']) ?>"
-                                                 alt="Фото от пользователя" width="760" height="396">
-                                        </div>
-
-
-                                    <?php elseif ($post['typeID'] == 5): ?>
-                                        <div class="post-link__wrapper">
-                                            <a class="post-link__external" href="http://" title="Перейти по ссылке">
-                                                <div class="post-link__info-wrapper">
-                                                    <div class="post-link__icon-wrapper">
-                                                        <img src="https://www.google.com/s2/favicons?domain=vitadental.ru"
-                                                             alt="Иконка">
-                                                    </div>
-                                                    <div class="post-link__info">
-                                                        <h3><?= htmlspecialchars($post['title']) ?></h3>
-                                                    </div>
-                                                </div>
-                                                <span><?= htmlspecialchars($post['content']) ?></span>
-                                            </a>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
+                                <?php
+                                $link = '';
+                                echo include_template('widgets/postFeed.php', ['con'=>$con, 'id' => $post['id'], 'content' =>$post['content'], 'typeID' =>$post['typeID'], 'link' => $link, 'title'=>$post['title']]);?>
                                 <footer class="post__footer">
+                                    <div style="display:flex; margin-left: 10px">
+                                        <?php getTags($con,$post['id']);?>
+                                    </div>
                                     <div class="post__indicators">
-                                        <div class="post__buttons">
-                                            <a class="post__indicator post__indicator--likes button"
-                                               href="like.php?postId=<?= $post['id'] ?>"
-                                               title="Лайк">
-                                                <svg class="post__indicator-icon" width="20" height="17">
-                                                    <use xlink:href="#icon-heart"></use>
-                                                </svg>
-                                                <svg class="post__indicator-icon post__indicator-icon--like-active"
-                                                     width="20" height="17">
-                                                    <use xlink:href="#icon-heart-active"></use>
-                                                </svg>
-                                                <?php
-                                                $ComLike = SqlRequest('COUNT(userId)', 'likes', 'recipientId =', $con,
-                                                    $post['id'], "as L");
-                                                ?>
-                                                <span><?= $ComLike[0]['L'] ?></span>
-                                                <span class="visually-hidden">количество лайков</span>
-                                            </a>
-                                            <a class="post__indicator post__indicator--repost button"
-                                               href="../repost.php?id=<?= $post['id'] ?>" title="Репост">
-                                                <svg class="post__indicator-icon" width="19" height="17">
-                                                    <use xlink:href="#icon-repost"></use>
-                                                </svg>
-                                                <?php $reposts = SqlRequest("link", "posts", "id = ", $con,
-                                                    $post['id']) ?>
-                                                <span><?= $reposts[0]['link'] ?></span>
-                                                <span class="visually-hidden">количество репостов</span>
-                                            </a>
-                                        </div>
+                                        <?php echo include_template('widgets/likesRepostsComments.php', ['con'=>$con, 'id' => $post['id']]);?>
                                         <time class="post__time" datetime="2019-01-30T23:41"><?= $date ?></time>
                                     </div>
-                                    <div style="display:flex; margin-left: 10px">
-                                        <?php
-                                        $tagsId = SqlRequest('hashtagId', 'posthashtag', 'postId =', $con, $post['id']);
-                                        foreach ($tagsId as $tag) {
-                                            $tagLink = SqlRequest('title', 'hashtag', 'id= ', $con,
-                                                $tag["hashtagId"]); ?>
-                                            <a style="background-color: white; border: solid transparent; color: #2a4ad0;"
-                                               href=<?= sprintf("http://395709-readme-12/search.php?request=%s",
-                                                '%23'.$tagLink[0]['title']) ?>> <?= '#'.$tagLink[0]['title']; ?> </a>
-                                        <?php } ?>
-                                    </div>
+                                    <ul class="comments__list">
+                                        <div style="margin:1%">
+                                            <?php
+                                            $CommentInf = SqlRequest('content, login, authorId, avatar ', ' comments c', ' c.postId= ',
+                                                $con, $post['id'], '', "JOIN users u ON c.authorId = u.id"); ?>
+                                            <?php foreach ($CommentInf as $inf): ?>
+                                                <li class="comments__item user">
+                                                    <div class="comments__avatar">
+                                                        <a class="user__avatar-link" href="#">
+                                                            <img class="comments__picture" src="img/<?= $inf['avatar'] ?>"
+                                                                 alt="Аватар пользователя">
+                                                        </a>
+                                                    </div>
+                                                    <div class="comments__info">
+                                                        <div class="comments__name-wrapper">
+                                                            <a class="comments__user-name" href="#">
+                                                                <span><?= $inf['login'] ?></span>
+                                                            </a>
+                                                            <time class="comments__time" datetime="2019-03-20">1 ч назад</time>
+                                                        </div>
+                                                        <p class="comments__text">
+                                                            <?= $inf['content'] ?>
+
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </ul>
                                 </footer>
-                                <div class="comments">
-                                    <a class="comments__button button" href="#">Показать комментарии</a>
-                                </div>
+
                             </article>
                         <? endforeach; ?>
 
@@ -181,8 +136,6 @@ if (isset($_SESSION['userName'])){
                                     "likes ", "likes.recipientId IN (SELECT id FROM posts WHERE authorId = $authorId) ",
                                     $con, '', '',
                                     ' JOIN posts ON  likes.recipientId = posts.id JOIN users ON users.id = userId');
-                                //                            echo '<pre>' ;
-                                //                            print_r($likes);
                                 foreach ($likes as $like) { ?>
                                     <li class="post-mini post-mini--photo post user">
                                         <a class="post-mini post-mini--photo post user">
@@ -280,6 +233,7 @@ if (isset($_SESSION['userName'])){
                                             </div>
                                         </div>
                                         <div class="post-mini__rating user__rating">
+
                                             <?php
                                             $postsCount = SqlRequest("COUNT(id)", "posts", "authorId=", $con,
                                                 $subscriber['id'], "count");

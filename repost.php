@@ -11,13 +11,13 @@ if (isset($_SESSION['userName'])) {
     $content = $data[0]['content'];
     $typeID = $data[0]['typeID'];
     $authorId = $_SESSION['id'];
-    $link = $data[0]['link'] + 1;
+    $repostCount = $data[0]['repostCount'] + 1;
     $avatar = $_SESSION['avatar'];
-    $sql = "UPDATE posts SET link =".$link." WHERE id = $id";
+    $sql = "UPDATE posts SET repostCount =".$repostCount." WHERE id = $id";
     $result = mysqli_query($con, $sql);
 
-    $X = SQLINSERT("posts(title,content,typeID,authorId,link,avatar,views)",
-        "'$title'".", "."'$content'".','."'$typeID'".', '."'$authorId'".','."'$link'".','."'$avatar'".', 0', $con);
+    SQLINSERT("posts(title,content,typeID,authorId,repostCount,avatar,views)",
+        "'$title'".", "."'$content'".','."'$typeID'".', '."'$authorId'".','."0".','."'$avatar'".', 0', $con);
     header("Location: ".$_SERVER['HTTP_REFERER']);
 
 } else {

@@ -40,22 +40,11 @@
     </div>
 </div>
 </div>
-<?php if (isset($error['quote-heading'])): ?>
-    <div class="form__invalid-block">
-        <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-        <ul class="form__invalid-list">
-            <?php $errorHeader = ["Заголовок", "Текст цитаты", "Автор", "Теги"];
-            $i = 0; ?>
-            <?php foreach ($error as $er) { ?>
-                <?php
-                if ($er != ''):?>
-                    <li class="form__invalid-item"><?= $errorHeader[$i].': '.$er; ?></li>
-                <?php endif; ?>
-                <?php $i = $i + 1; ?>
-            <?php } ?>
-        </ul>
-    </div>
-<?php endif; ?>
+<?php
+$errorHeader = ["Заголовок", "Текст цитаты", "Автор", "Теги"];
+if (array_key_exists('quote-heading',$error)){
+AddErrors($error,$errorHeader);
+} ?>
 </div>
 <div class="adding-post__buttons">
     <button class="adding-post__submit button button--main" type="submit"
