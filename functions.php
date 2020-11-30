@@ -60,8 +60,6 @@ function SqlRequest($reques, $from, $where, $con, $id = '', $as = '', $join = ""
     $sql = sprintf("SELECT  %s %s  from %s %s WHERE %s %s", $reques, $as, $from, $join, $where, $id);
     $result = mysqli_query($con, $sql);
     $Count = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-//    return $sql;
     return $Count;
 }
 
@@ -69,9 +67,7 @@ function SQLINSERT($into, $values, $con)
 {
     $sql = sprintf("INSERT INTO %s VALUES (%s)", $into, $values);
     $result = mysqli_query($con, $sql);
-
     return $result;
-//    return $sql;
 
 }
 
@@ -100,7 +96,7 @@ function validateVideo()
 {
     if (isset($_POST['Video-link'])) {
         if ($_POST['Video-link'] != '') {
-            if ( ! filter_var($_POST['Video-link'], FILTER_VALIDATE_URL)) {
+            if ( !filter_var($_POST['Video-link'], FILTER_VALIDATE_URL)) {
                 return 'Неправильная ссылка';
             } else {
                 if (check_youtube_url($_POST['Video-link']) != 1) {
@@ -145,14 +141,14 @@ function validatePhotoLink()
     if (isset($_POST['photo-link'])) {
 
         if ($_POST['photo-link'] != '') {
-            if ( ! filter_var($_POST['photo-link'], FILTER_VALIDATE_URL)) {
+            if ( !filter_var($_POST['photo-link'], FILTER_VALIDATE_URL)) {
                 return 'Неправильная ссылка';
             }
             $content = file_get_contents($_POST['photo-link']);
             $extension = explode(".", $_POST['photo-link']);
             $extension = end($extension);
-            $checkExtension = array("gif", "png", "jpeg");
-            if ( ! in_array($extension, $checkExtension)) {
+            $checkExtension = array("gif", "png", "jpeg","jpg");
+            if ( !in_array($extension, $checkExtension)) {
                 return 'Неверный формат';
             } else {
                 return;
@@ -161,6 +157,12 @@ function validatePhotoLink()
             return 'Не заполненное поле';
         }
 
+    }
+}
+
+function validateLink($link){
+    if (  !filter_var($link, FILTER_VALIDATE_URL) ) {
+        return 'Неправильная ссылка';
     }
 }
 
@@ -198,21 +200,51 @@ function comparePassword()
     }
 }
 
+function AddErrors($error,$errorHeader){
+       echo '<div class="form__invalid-block">
+        <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
+        <ul class="form__invalid-list">';
+             $i = 0;
+             foreach ($error as $er) {
+                if ($er != ''){
+                   echo "<li class='form__invalid-item'> $errorHeader[$i]  : $er </li>";
+                 };
+                 $i = $i + 1;
+             };
+        echo '</ul>
+    </div>';
+}
+
 
 function typeRequest($id, $vertical = 0)
 {
     $params = $_GET;
     $params['id'] = $id;
     $params['offset'] = 0;
+    $params['tab'] = 'popular';
     $query = http_build_query($params);
-
     $url = "http://395709-readme-12/popular.php"."?".$query;
+
     if ($vertical == 1) {
+        $params['tab'] = 'feed';
+        $query = http_build_query($params);
         $url = "http://395709-readme-12/"."?".$query;
     }
 
     return $url;
 }
+
+function getTags($con, $id){
+$tagsId = SqlRequest('hashtagId', 'posthashtag', 'postId =', $con, $id);
+foreach ($tagsId as $tag) {
+    $tagLink = SqlRequest('title', 'hashtag', 'id= ', $con,
+        $tag["hashtagId"]);
+    $title = $tagLink[0]['title'];
+    echo "<a style='background-color: white; border: solid transparent; color: #2a4ad0;'".
+      " href=http://395709-readme-12/search.php?request=%23$title>".$title."</a>";
+    }
+}
+
 
 
 ?>

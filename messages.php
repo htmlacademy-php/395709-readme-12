@@ -7,7 +7,6 @@ if (isset($_SESSION['userName'])) {
     $con = mysqli_connect("395709-readme-12", "root", "root", "Blog");
     $newMessageId = 0;
     $errors = [];
-
     if (htmlspecialchars(isset($_POST['text']))) {
         if (htmlspecialchars($_POST['text']) == '') {
             $errors['text'] = 'Поле не заполнено';
@@ -43,9 +42,7 @@ if (isset($_SESSION['userName'])) {
     if ( ! empty($newMessageAuthor)) {
         array_unshift($messageAuthor, $newMessageAuthor[0]);
     }
-
-
-    $layout_content = include_template("messages.php", ['messageAuthor' => $messageAuthor, 'con' => $con]);
+    $layout_content = include_template("messages.php", ['messageAuthor' => $messageAuthor, 'con' => $con, 'error' => $errors]);
     echo include_template('layout.php', ['content' => $layout_content, 'title' => 'Blog']);
 
 } else {

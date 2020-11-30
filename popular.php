@@ -19,7 +19,7 @@ if (isset($_SESSION['userName'])) {
     $sql = "SELECT  title  from content_type";
     $result = mysqli_query($con, $sql);
     $rowsType = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    $sqlPost = "SELECT p.id,p.title, p.authorId, login, p.title,  conT.icon_name, p.avatar, p.content FROM posts p JOIN users u ON p.authorId = u.id JOIN content_type conT ON typeID = conT.id  ORDER BY views DESC LIMIT 6 OFFSET $offset";
+    $sqlPost = "SELECT p.id,p.title, p.authorId, login, p.title,  conT.icon_name, p.avatar, p.content, p.author, p.creationDate FROM posts p JOIN users u ON p.authorId = u.id JOIN content_type conT ON typeID = conT.id  left JOIN  likes l  ON p.id = l.recipientId  GROUP BY p.id ORDER BY Count(l.id) DESC LIMIT 6 OFFSET $offset";
     $resultPosts = mysqli_query($con, $sqlPost);
     $rowsPosts = mysqli_fetch_all($resultPosts, MYSQLI_ASSOC);
     $postsCount = mysqli_fetch_all(mysqli_query($con, "SELECT COUNT(id) as count FROM posts"), MYSQLI_ASSOC);
@@ -28,7 +28,7 @@ if (isset($_SESSION['userName'])) {
     if (isset($_GET['id'])) {
         if (htmlspecialchars($_GET['id']) != '') {
             $id = htmlspecialchars($_GET['id']);
-            $sqlPost = "SELECT p.id, p.authorId, p.title, login, p.title,  conT.icon_name, p.avatar, p.content FROM posts p JOIN users u ON p.authorId = u.id JOIN content_type conT ON typeID = conT.id WHERE p.typeID = $id   ORDER BY views DESC  LIMIT 6 OFFSET $offset";
+            $sqlPost = "SELECT p.id, p.authorId, p.title, login, p.title,  conT.icon_name, p.avatar, p.content,p.author, p.creationDate,COUNT(l.id) AS likesCount FROM posts p JOIN users u ON p.authorId = u.id JOIN content_type conT ON typeID = conT.id left JOIN likes l  ON l.recipientId = p.id WHERE p.typeID = $id  GROUP BY  p.id ORDER BY likesCount DESC LIMIT 6 OFFSET $offset";
             $resultPosts = mysqli_query($con, $sqlPost);//узнать количество постов
             $rowsPosts = mysqli_fetch_all($resultPosts, MYSQLI_ASSOC);
             $postsCount = count($rowsPosts);
@@ -37,7 +37,6 @@ if (isset($_SESSION['userName'])) {
             $id = 0;
         }
     }
-//    var_dump();
 
     $page_content = include_template('main.php', [
         'posts' => $rowsPosts,
@@ -52,4 +51,4 @@ if (isset($_SESSION['userName'])) {
 } else {
     header("Location:http://395709-readme-12/");
 }
-?>
+

@@ -35,6 +35,7 @@ CREATE TABLE posts
     views        INT,
     avatar       VARCHAR(128),
     author       VARCHAR(128),
+    repostCount  VARCHAR(128),
     FOREIGN KEY (authorId) REFERENCES users (id),
     FOREIGN KEY (typeId) REFERENCES content_type (id)
 );
@@ -107,4 +108,3 @@ CREATE INDEX h_title ON hashtag (title);
 CREATE FULLTEXT INDEX post_search ON posts (title, content);
 CREATE FULLTEXT INDEX Tag_search ON hashtag (title)
 
-message

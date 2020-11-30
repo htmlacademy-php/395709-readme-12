@@ -25,22 +25,11 @@
     </div>
 </div>
 </div>
-<?php if (isset($error['photo-heading'])): ?>
-    <div class="form__invalid-block">
-        <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-        <ul class="form__invalid-list">
-            <?php $errorPhotoHeader = ["Заголовок", "Ссылка из интернета", "Теги", "Фото", "", "Cсылка"];
-            $i = 0; ?>
-            <?php foreach ($error as $er) { ?>
-                <?php
-                if ($er != ''):?>
-                    <li class="form__invalid-item"><?= $errorPhotoHeader[$i].': '.$er; ?></li>
-                <?php endif; ?>
-                <?php $i = $i + 1; ?>
-            <?php } ?>
-        </ul>
-    </div>
-<?php endif; ?>
+<?php
+$errorPhotoHeader = ["Заголовок", "Ссылка из интернета", "Теги", "Фото", "", "Cсылка"];
+if (array_key_exists('photo-heading',$error)){
+    AddErrors($error,$errorPhotoHeader);
+} ?>
 </div>
 <div class="adding-post__input-file-container form__input-container form__input-container--file">
     <div class="adding-post__input-file-wrapper form__input-file-wrapper">

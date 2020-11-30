@@ -4,35 +4,6 @@
     </div>
     <div class="popular container">
         <div class="popular__filters-wrapper">
-            <div class="popular__sorting sorting">
-                <b class="popular__sorting-caption sorting__caption">Сортировка:</b>
-                <ul class="popular__sorting-list sorting__list">
-                    <li class="sorting__item sorting__item--popular">
-                        <a class="sorting__link sorting__link--active" href="#">
-                            <span>Популярность</span>
-                            <svg class="sorting__icon" width="10" height="12">
-                                <use xlink:href="#icon-sort"></use>
-                            </svg>
-                        </a>
-                    </li>
-                    <li class="sorting__item">
-                        <a class="sorting__link" href="#">
-                            <span>Лайки</span>
-                            <svg class="sorting__icon" width="10" height="12">
-                                <use xlink:href="#icon-sort"></use>
-                            </svg>
-                        </a>
-                    </li>
-                    <li class="sorting__item">
-                        <a class="sorting__link" href="#">
-                            <span>Дата</span>
-                            <svg class="sorting__icon" width="10" height="12">
-                                <use xlink:href="#icon-sort"></use>
-                            </svg>
-                        </a>
-                    </li>
-                </ul>
-            </div>
             <div class="popular__filters filters">
                 <b class="popular__filters-caption filters__caption">Тип контента:</b>
                 <ul class="popular__filters-list filters__list">
@@ -99,10 +70,8 @@
         </div>
         <div class="popular__posts">
             <?php
-            $index = 0;
             foreach ($posts as $post):
-                $date = DateFormat($index);
-                $index = $index + 1;
+                $date = DateFormat(1,$post['creationDate']);
                 ?>
                 <article class="popular__post post <?= $post['icon_name'] ?>">
                     <?php
@@ -119,7 +88,7 @@
                                 <p>
                                     <?= htmlspecialchars($post['content']) ?>
                                 </p>
-                                <cite>Неизвестный Автор</cite>
+                                <cite><?= $post['author'] ?> </cite>
                             </blockquote>
 
                         <?php elseif ($post['icon_name'] == 'post-text'): ?>
@@ -153,14 +122,7 @@
                         <?php endif; ?>
                         <br>
                         <div style="display:flex; margin-left: 10px">
-                            <?php
-                            $tagsId = SqlRequest('hashtagId', 'posthashtag', 'postId =', $con, $post['id']);
-                            foreach ($tagsId as $tag) {
-                                $tagLink = SqlRequest('title', 'hashtag', 'id= ', $con, $tag["hashtagId"]); ?>
-                                <a style="background-color: white; border: solid transparent; color: #2a4ad0;"
-                                   href=<?= sprintf("http://395709-readme-12/search.php?request=%s",
-                                    '%23'.$tagLink[0]['title']) ?>> <?= '#'.$tagLink[0]['title']; ?> </a>
-                            <?php } ?>
+                               <?php getTags($con,$post['id']);?>
                         </div>
                     </div>
                     <footer class="post__footer">
@@ -168,10 +130,8 @@
                             <a class="post__author-link"
                                href=<?= sprintf("profileControl.php?UserId=%s", $post['authorId']) ?> title="Автор">
                                 <div class="post__avatar-wrapper">
-                                    <!--укажите путь к файлу аватара-->
-
                                     <img class="post__author-avatar" src="img/<?= htmlspecialchars($post['avatar']) ?>"
-                                         alt="Аватар пользователя" style="float:none"> <!-----           --->
+                                         alt="Аватар пользователя" style="float:none" width="40" height="40">
                                 </div>
                                 <div class="post__info">
                                     <b class="post__author-name"> <?= htmlspecialchars($post['login']) ?></b>
@@ -180,34 +140,7 @@
                             </a>
                         </div>
                         <div class="post__indicators">
-                            <div class="post__buttons">
-                                <a class="post__indicator post__indicator--likes button"
-                                   href="like.php?postId=<?= $post['id'] ?>" title="Лайк">
-                                    <svg class="post__indicator-icon" width="20" height="17">
-                                        <use xlink:href="#icon-heart"></use>
-                                    </svg>
-                                    <svg class="post__indicator-icon post__indicator-icon--like-active" width="20"
-                                         height="17">
-                                        <use xlink:href="#icon-heart-active"></use>
-                                    </svg>
-                                    <?php
-                                    $ComLike = SqlRequest('COUNT(id)', 'likes', 'recipientId =', $con, $post['id'],
-                                        "as L");
-                                    ?>
-                                    <span><?= $ComLike[0]['L'] ?></span>
-                                    <span class="visually-hidden">количество лайков</span>
-                                </a>
-                                <a class="post__indicator post__indicator--comments button"
-                                   href="http://395709-readme-12/post.php?id=<?= $post['id'] ?>" title="Комментарии">
-                                    <svg class="post__indicator-icon" width="19" height="17">
-                                        <use xlink:href="#icon-comment"></use>
-                                    </svg>
-                                    <?php $Comment = SqlRequest('COUNT(content)', 'comments', 'postId =', $con,
-                                        $post['id'], "as L"); ?>
-                                    <span><?= $Comment[0]['L'] ?></span>
-                                    <span class="visually-hidden">количество комментариев</span>
-                                </a>
-                            </div>
+                            <?php echo include_template('widgets/likesRepostsComments.php', ['con'=>$con, 'id' => $post['id']]);?>
                         </div>
                     </footer>
                 </article>

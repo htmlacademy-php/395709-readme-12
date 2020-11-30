@@ -39,5 +39,6 @@ if (isset($_POST['Send'])) {
         header("Location:http://395709-readme-12/");
     }
 }
-echo include_template('registration.php', ['con' => $con, 'errors' => $errors]);
+$page_content = include_template('registration.php', ['con' => $con, 'errors' => $errors]);
+echo include_template('layout.php', ['content' => $page_content, 'title' => 'Blog']);
 ?>
