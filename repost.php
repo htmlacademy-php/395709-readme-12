@@ -1,11 +1,9 @@
 <?php
 session_start();
+require('functions.php');
+require('dbConfig.php');
 if (isset($_SESSION['userName'])) {
-    require('functions.php');
-    $con = mysqli_connect("395709-readme-12", "root", "root", "Blog");
-    mysqli_set_charset($con, "utf8");
-    $id = htmlspecialchars($_GET['id']);
-
+    $id = intval($_GET['id']);
     $data = SqlRequest('*', 'posts', 'id=', $con, $id);
     $title = $data[0]['title'];
     $content = $data[0]['content'];
@@ -16,12 +14,13 @@ if (isset($_SESSION['userName'])) {
     $sql = "UPDATE posts SET repostCount =".$repostCount." WHERE id = $id";
     $result = mysqli_query($con, $sql);
 
-    SQLINSERT("posts(title,content,typeID,authorId,repostCount,avatar,views)",
-        "'$title'".", "."'$content'".','."'$typeID'".', '."'$authorId'".','."0".','."'$avatar'".', 0', $con);
+    SqlInsert("posts(title,content,typeID,authorId,repostCount,views)",
+        "'$title'".", "."'$content'".','."'$typeID'".', '."'$authorId'".','."0, 0", $con);
     header("Location: ".$_SERVER['HTTP_REFERER']);
 
 } else {
-    header("Location:http://395709-readme-12/");
+    echo include_template('authorization.php',
+        ['con' => $con, 'errors' => array(), 'avatar' => "../img/userpic-larisa.jpg", 'userName' => 'Новый юзер']);
 }
 
 
