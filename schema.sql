@@ -33,7 +33,6 @@ CREATE TABLE posts
     video        VARCHAR(255),
     link         VARCHAR(255),
     views        INT,
-    avatar       VARCHAR(128),
     author       VARCHAR(128),
     repostCount  VARCHAR(128),
     FOREIGN KEY (authorId) REFERENCES users (id),

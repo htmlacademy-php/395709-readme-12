@@ -1,7 +1,7 @@
 <?php
 $sql = "SELECT  * from subscription where userId =  $userId  AND authorId = $subscription";
 if (empty(mysqli_fetch_all(mysqli_query($con, $sql), MYSQLI_ASSOC))) {
-    SQLINSERT("subscription(authorId,userId)", $subscription.','.$_SESSION['id'], $con);
+    SqlInsert("subscription(authorId,userId)", $subscription.','.$_SESSION['id'], $con);
     $UserInfo = SqlRequest('email, login', 'users', 'id = ', $con, $subscription);
     $login = $UserInfo[0]['login'];
     $email = $UserInfo[0]['email'];
@@ -17,4 +17,3 @@ if (empty(mysqli_fetch_all(mysqli_query($con, $sql), MYSQLI_ASSOC))) {
 }
 header("Location: ".$_SERVER["REQUEST_URI"]);
 exit;
-?>

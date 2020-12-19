@@ -1,28 +1,32 @@
 <?php
 session_start();
+require('functions.php');
+include "helpers.php";
+require('dbConfig.php');
 if (isset($_SESSION['userName'])) {
-    require('functions.php');
-    include "helpers.php";
-
-    $con = mysqli_connect("395709-readme-12", "root", "root", "Blog");
     $newMessageId = 0;
     $errors = [];
-    if (htmlspecialchars(isset($_POST['text']))) {
+    $AuthorId = [];
+    $message = [];
+    $Author = [];
+
+    if (isset($_POST['text'])) {
         if (htmlspecialchars($_POST['text']) == '') {
             $errors['text'] = 'Поле не заполнено';
         }
         if (empty($errors)) {
             $id = htmlspecialchars($_POST['recipientId']);
             $content = htmlspecialchars($_POST['text']);
-            SQLINSERT('message(authorId,recipientId,content)', $_SESSION['id'].', '.$id.','."'$content'", $con);
+            SqlInsert('message(authorId,recipientId,content)', $_SESSION['id'].', '.$id.','."'$content'", $con);
         }
 
     }
-    if (htmlspecialchars(isset($_GET['newMessage']))) {
+    if (isset($_GET['newMessage'])) {
         $newMessageId = htmlspecialchars($_GET['newMessage']);
-        if (empty(SqlRequest("id", "message",
+        $isMessagesExist = empty(SqlRequest("id", "message",
             " (authorId = $newMessageId and recipientId = ".$_SESSION['id']."2 ) OR (authorId = ".$_SESSION['id']." and recipientId = $newMessageId)",
-            $con))) {
+            $con));
+        if ($isMessagesExist) {
             $newMessageAuthor = SqlRequest("  avatar, login", "users", "id =".$newMessageId, $con, '', '', "");
             $newMessageAuthor[0]['authorId'] = $newMessageId;
             $newMessageAuthor[0]['recipientId'] = $_SESSION['id'];
@@ -32,21 +36,47 @@ if (isset($_SESSION['userName'])) {
             $newMessageAuthor = [];
         }
     }
-
-    $messageAuthor = SqlRequest("  DATE, users.avatar, users.login, message.authorId, message.recipientId", "message",
+    mysqli_query($con, " SET sql_mode = ''");
+    $messageAuthor = SqlRequest("  DATE, users.avatar, users.login, message.authorId, message.recipientId, users.id", "message",
         "recipientId =".$_SESSION['id']." or authorId = ".$_SESSION['id']." AND message.authorId NOT  in (SELECT recipientId FROM message  WHERE authorId = message.recipientId  ) group BY LEAST(message.authorId, message.recipientId)  ORDER BY DATE DESC  ",
         $con, '', '',
         "JOIN users ON IF(message.authorId = ".$_SESSION['id'].", users.id = message.recipientId  ,  users.id = message.authorId)  ");
-
-
-    if ( ! empty($newMessageAuthor)) {
+    if ( !empty($newMessageAuthor) && !empty($messageAuthor)) {
         array_unshift($messageAuthor, $newMessageAuthor[0]);
     }
-    $layout_content = include_template("messages.php", ['messageAuthor' => $messageAuthor, 'con' => $con, 'error' => $errors]);
-    echo include_template('layout.php', ['content' => $layout_content, 'title' => 'Blog']);
+    else if (!empty($newMessageAuthor) ) {
+        $messageAuthor =  $newMessageAuthor[0];
+    }
 
+    if ( ! empty($messageAuthor)) {
+        $AuthorId = (isset($_GET['id']) ? htmlspecialchars($_GET['id']) : ($messageAuthor[0]['authorId'] == $_SESSION['id'] ? $messageAuthor[0]['recipientId'] : $messageAuthor[0]['authorId']));
+        $message = SqlRequest("  date,content,  message.authorId", "message",
+            "(recipientId = ".$_SESSION['id']." AND authorId =  ".$AuthorId.") OR (recipientId = ".$AuthorId." AND authorId =  ".$_SESSION['id'].")  ORDER BY date",
+            $con, '', '');
+        $Author = SqlRequest(" avatar, login,id", "users", "id = $AuthorId or id =  ".$_SESSION['id'],
+            $con);
+    }
+
+
+    $pageContent = include_template("messages.php",
+        [
+            'messageAuthor' => $messageAuthor,
+            'con' => $con,
+            'error' => $errors,
+            'AuthorId' => $AuthorId,
+            'Author' => $Author,
+            'message' => $message,
+        ]);
+    echo include_template('layout.php',
+        [
+            'content' => $pageContent,
+            'title' => 'Blog',
+            'userName' => $_SESSION['userName'],
+            'avatar' => "../img/".$_SESSION['avatar'],
+        ]);
 } else {
-    header("Location:http://395709-readme-12/");
+    echo include_template('authorization.php',
+        ['con' => $con, 'errors' => array(), 'avatar' => "../img/userpic-larisa.jpg", 'userName' => 'Новый юзер']);
 }
 ?>
 

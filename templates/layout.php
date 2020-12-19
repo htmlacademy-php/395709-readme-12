@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?></title>
+    <title><?= strip_tags($title) ?></title>
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body class="page">
@@ -104,98 +104,92 @@
         </form>
         <div class="header__nav-wrapper">
             <nav class="header__nav">
-                <?php $tab = htmlspecialchars(isset($_GET['tab'])) ? htmlspecialchars($_GET['tab']) : ''; ?>
+                <?php $tab = isset($_GET['tab']) ? htmlspecialchars($_GET['tab']) : ''; ?>
                 <ul class="header__my-nav">
                     <li class="header__my-page header__my-page--popular">
-                        <a class="header__page-link <?= $tab == 'popular' ? 'header__page-link--active' : '' ?>"
+                        <a class="header__page-link <?= $tab === 'popular' ? 'header__page-link--active' : '' ?>"
                            href="../popular.php?tab=popular"
                            title="Популярный контент">
                             <span class="visually-hidden">Популярный контент</span>
                         </a>
                     </li>
                     <li class="header__my-page header__my-page--feed">
-                        <a class="header__page-link <?= ($tab == 'feed' || $tab == '') ? 'header__page-link--active' : '' ?>"
-                           href="/templates/feed.php?tab=feed" title="Моя лента">
+                        <a class="header__page-link <?= ($tab === 'feed' || $tab === '') ? 'header__page-link--active' : '' ?>"
+                           href="/index.php?tab=feed" title="Моя лента">
                             <span class="visually-hidden">Моя лента</span>
                         </a>
                     </li>
                     <li class="header__my-page header__my-page--messages">
-                        <a class="header__page-link <?= $tab == 'message' ? 'header__page-link--active' : '' ?> "
+                        <a class="header__page-link <?= $tab === 'message' ? 'header__page-link--active' : '' ?> "
                            href="../messages.php?tab=message" title="Личные сообщения">
                             <span class="visually-hidden">Личные сообщения</span>
                         </a>
                     </li>
                 </ul>
 
-                    <?php
-                    if(!isset($_SESSION)) {?>
-                        <li class="header__authorization">
-                            <a class="header__user-button header__authorization-button button" href="http://395709-readme-12/">Вход</a>
-                        </li>
-                        <li>
-                            <a class="header__user-button header__user-button--active header__register-button button">Регистрация</a>
-                        </li>
+                <?php
+                if ( ! isset($_SESSION)) { ?>
+                    <li class="header__authorization">
+                        <a class="header__user-button header__authorization-button button"
+                           href="../index.php">Вход</a>
+                    </li>
+                    <li>
+                        <a class="header__user-button header__user-button--active header__register-button button">Регистрация</a>
+                    </li>
 
-                    <?php }else{ ?>
-                        <ul class="header__user-nav">
-                            <li class="header__profile">
-                                        <a class="header__profile-link" href="#">
-                                            <div class="header__avatar-wrapper">
-                                                <?php
-                                                if(!isset($_SESSION)) {
-                                                    $avatar = "../img/userpic-larisa.jpg";
-                                                    $name = 'Новый юзер';
-                                                }else{
-                                                    $name = $_SESSION['userName'];
-                                                    $avatar = "../img/". $_SESSION['avatar'];
-                                                }?>
-                                                <img class="header__profile-avatar" src="<?= $avatar ?>"
-                                                     alt="Аватар профиля">
-                                            </div>
-                                            <div class="header__profile-name">
+                <?php } else { ?>
+                    <ul class="header__user-nav">
+                        <li class="header__profile">
+                            <a class="header__profile-link" href="#">
+                                <div class="header__avatar-wrapper">
+                                    <img class="header__profile-avatar" src="<?= strip_tags($avatar) ?>"
+                                         alt="Аватар профиля">
+                                </div>
+                                <div class="header__profile-name">
                                             <span>
-                                            <?= $name; ?>  <!--здесь должно быть имя пользователя-->
+                                            <?= strip_tags($userName); ?>
                                             </span>
-                                                <svg class="header__link-arrow" width="10" height="6">
-                                                    <use xlink:href="#icon-arrow-right-ad"></use>
-                                                </svg>
-                                            </div>
-                                        </a>
-                                        <div class="header__tooltip-wrapper">
-                                            <div class="header__profile-tooltip">
-                                                <ul class="header__profile-nav">
-                                                    <li class="header__profile-nav-item">
-                                                        <a class="header__profile-nav-link"
-                                                           href="http://395709-readme-12/profileControl.php?UserId=<?= $_SESSION['id'] ?>">
+                                    <svg class="header__link-arrow" width="10" height="6">
+                                        <use xlink:href="#icon-arrow-right-ad"></use>
+                                    </svg>
+                                </div>
+                            </a>
+                            <div class="header__tooltip-wrapper">
+                                <div class="header__profile-tooltip">
+                                    <ul class="header__profile-nav">
+                                        <li class="header__profile-nav-item">
+                                            <a class="header__profile-nav-link"
+                                               href="profileControl.php?UserId=<?= $_SESSION['id'] ?>">
                                       <span class="header__profile-nav-text">
                                         Мой профиль
                                       </span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="header__profile-nav-item">
-                                                        <a class="header__profile-nav-link" href="http://395709-readme-12/messages.php">
+                                            </a>
+                                        </li>
+                                        <li class="header__profile-nav-item">
+                                            <a class="header__profile-nav-link"
+                                               href="messages.php">
                                       <span class="header__profile-nav-text">
                                         Сообщения
                                       </span>
-                                                        </a>
-                                                    </li>
+                                            </a>
+                                        </li>
 
-                                                    <li class="header__profile-nav-item">
-                                                        <a class="header__profile-nav-link" href="../logout.php">
+                                        <li class="header__profile-nav-item">
+                                            <a class="header__profile-nav-link" href="../logout.php">
                                       <span class="header__profile-nav-text">
                                         Выход
                                       </span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="header__post-button button button--transparent" href="add.php">Пост</a>
-                                    </li>
-                          </ul>
-                <?php }?>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="header__post-button button button--transparent" href="add.php">Пост</a>
+                        </li>
+                    </ul>
+                <?php } ?>
 
             </nav>
         </div>

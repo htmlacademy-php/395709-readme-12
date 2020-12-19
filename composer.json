@@ -1,12 +1,12 @@
 {
-    "name": "mansur/395709-readme-12",
-    "authors": [
-        {
-            "name": "Mansur Taktashev",
-            "email": "taktashev.m@gmail.com"
-        }
-    ],
-    "require": {
-        "swiftmailer/swiftmailer": "^6.2"
+  "name": "mansur/395709-readme-12",
+  "authors": [
+    {
+      "name": "Mansur Taktashev",
+      "email": "taktashev.m@gmail.com"
     }
+  ],
+  "require": {
+    "swiftmailer/swiftmailer": "^6.2"
+  }
 }

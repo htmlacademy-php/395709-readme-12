@@ -1,4 +1,13 @@
 <?php
+/**
+ * Возвращает обрезанный до определенной длины текст
+ * Пример использования:
+ * text_split("Пример использования",6);
+ * результат: "Пример"
+ * @param string $text ваш тескст
+ * @param int $lenght длина до которой хотите его сократить
+ * @return string обрезанный текст
+ */
 function text_split($text, $lenght = 300)
 {
     if (mb_strlen($text, 'utf8') > $lenght) {
@@ -22,11 +31,24 @@ function text_split($text, $lenght = 300)
     return $text;
 }
 
+/**
+ * Возвращает разницу во времени публикации с текущим временем если задана $data
+ * или рандомное значение времени если указан только индекс
+ * Пример использования:
+ * DateFormat("1");
+ * результат: "час назад"
+ * DateFormat("1",$now)
+ * результат: "ноль минут назад"
+ * @param int $index значение для  рандомного  значения даты
+ * @param string $data значение даты, с которой хотите сравнить текущее время
+ * @return data разница с текущим временем
+ */
+
 function DateFormat($index, $data = '')
 {
     date_default_timezone_set('Asia/Almaty');
     $RandomDate = date_create(generate_random_date($index));
-    if ($data != '') {
+    if ( ! empty($data)) {
         $RandomDate = new DateTime($data);
     }
     $current_time = new DateTime();
@@ -50,82 +72,126 @@ function DateFormat($index, $data = '')
     }
 }
 
+/**
+ * Вспомогательная функция, помогающая определить множественную форму существительного и объединить в предложение
+ * @param string $str дата
+ * @param string $one Форма единственного числа: яблоко, час, минута
+ * @param string $two Форма множественного числа для 2, 3, 4: яблока, часа, минуты
+ * @param string $many Форма множественного числа для остальных чисел
+ * @param string $ending окончанае предложения
+ * @return string
+ */
+
+
 function seePlural($str, $one, $two, $many, $ending = ' назад')
 {
     return $str.' '.get_noun_plural_form($str, $one, $two, $many).$ending;
 }
 
+
+/**
+ * Функция формирующая sql запрос
+ * @param int $index значение для  рандомного  значения даты
+ * @param string $reques столбцы которые вы хотите получить
+ * @param string $from из какой таблицы
+ * @param string $where условие
+ * @param string $con подключение к бд
+ * @param string $id для удобства при, внесении данных запроса
+ * @param string $as переименовать значение полученного стобца
+ * @param string $join присоединить таблицу
+ * @return array  массив данных из бд
+ */
+
 function SqlRequest($reques, $from, $where, $con, $id = '', $as = '', $join = "")
 {
     $sql = sprintf("SELECT  %s %s  from %s %s WHERE %s %s", $reques, $as, $from, $join, $where, $id);
     $result = mysqli_query($con, $sql);
-    $Count = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    return $Count;
+    $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    return $data;
 }
 
-function SQLINSERT($into, $values, $con)
+/**
+ * Функция формирующая sql запрос на добавление данных в бд
+ * @param string $into в какую таблицу и стобцы
+ * @param string $values значения, которые вы хотите добавить
+ * @param string $con подключение к бд
+ * @return bool  результат выполнения
+ */
+
+function SqlInsert($into, $values, $con)
 {
     $sql = sprintf("INSERT INTO %s VALUES (%s)", $into, $values);
     $result = mysqli_query($con, $sql);
+
     return $result;
 
 }
 
+/**
+ * Функция сохранющая значение, которое внес пользователь в поле формы, при перегрузке
+ * @param string $name имя формы, в которую были внесены данные
+ * @param string $con подключение к бд
+ * @return string  значение внесееное пользователем
+ */
 
-function getPostVal($name)
+function getPostVal($name, $con)
 {
-    return $_POST[$name] ?? "";
+    return mysqli_real_escape_string($con, $_POST[$name] ?? "");
 }
+
+/**
+ * Функция проводящая валидацию тегов
+ * @param string $tagValidation тег, который нужно провалидировать
+ * @return string   ошибка полученная при валидации
+ */
 
 function validateTag($tagValidation)
 {
-    if ($tagValidation != '') {
+    if ( ! empty($tagValidation)) {
         if (strpos($tagValidation, '.') || strpos($tagValidation, ',')) {
             return 'Недопустимый символ';
-        } else {
-            return;
         }
-
-    } else {
-        return;
     }
-
 }
 
-function validateVideo()
+/**
+ * Функция проводящая валидацию ссылки на видео
+ * @param string $tagValidation ссылка на видео
+ * @return string   ошибка полученная при валидации
+ */
+
+function validateVideo($videoValidation = null)
 {
-    if (isset($_POST['Video-link'])) {
-        if ($_POST['Video-link'] != '') {
-            if ( !filter_var($_POST['Video-link'], FILTER_VALIDATE_URL)) {
+    if (isset($videoValidation)) {
+        if ( ! empty($videoValidation)) {
+            if ( ! htmlspecialchars(filter_var($_POST['Video-link']), FILTER_VALIDATE_URL)) {
                 return 'Неправильная ссылка';
-            } else {
-                if (check_youtube_url($_POST['Video-link']) != 1) {
-                    return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
-                } else {
-                    return;
-                }
+            }
+            if (intval(check_youtube_url($videoValidation)) !== 1) {
+                return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
             }
         } else {
-
-            return;
+            return 'Поле не заполнено';
         }
-
     }
 }
 
+/**
+ * Функция проводящая валидацию фотографии
+ * @param string $photo получает картинку на вход
+ * @return string   ошибка полученная при валидации
+ */
 
-function photoValidation()
+function photoValidation($photo)
 {
-    if (isset($_FILES['userpic-file-photo']['name']) && isset($_POST['photo-link'])) {
-        if ($_FILES['userpic-file-photo']['name'] != '') {
+    if (isset($photo)) {
+        if ( ! empty($_FILES['userpic-file-photo']['name'])) {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_name = $_FILES['userpic-file-photo']['tmp_name'];
+            $file_name = htmlspecialchars($_FILES['userpic-file-photo']['tmp_name']);
             $file_type = finfo_file($finfo, $file_name);
             $extension = array("image/gif", "image/png", "image/jpeg");
             if ( ! in_array($file_type, $extension)) {
                 return 'Неверный формат';
-            } else {
-                return;
             }
         } else {
             return "Поле не заполнено";
@@ -135,23 +201,24 @@ function photoValidation()
 
 }
 
+/**
+ * Функция проводящая валидацию ссылки на фото
+ * @param string $photoLink ссылка на фото
+ * @return string   ошибка полученная при валидации
+ */
 
-function validatePhotoLink()
+function validatePhotoLink($photoLink)
 {
-    if (isset($_POST['photo-link'])) {
-
-        if ($_POST['photo-link'] != '') {
-            if ( !filter_var($_POST['photo-link'], FILTER_VALIDATE_URL)) {
+    if (isset($photoLink)) {
+        if ( ! empty($photoLink)) {
+            if ( ! filter_var($photoLink, FILTER_VALIDATE_URL)) {
                 return 'Неправильная ссылка';
             }
-            $content = file_get_contents($_POST['photo-link']);
-            $extension = explode(".", $_POST['photo-link']);
+            $extension = explode(".", $photoLink);
             $extension = end($extension);
-            $checkExtension = array("gif", "png", "jpeg","jpg");
-            if ( !in_array($extension, $checkExtension)) {
+            $checkExtension = array("gif", "png", "jpeg", "jpg");
+            if ( ! in_array($extension, $checkExtension)) {
                 return 'Неверный формат';
-            } else {
-                return;
             }
         } else {
             return 'Не заполненное поле';
@@ -160,29 +227,50 @@ function validatePhotoLink()
     }
 }
 
-function validateLink($link){
-    if (  !filter_var($link, FILTER_VALIDATE_URL) ) {
+/**
+ * Функция проводящая валидацию ссылки
+ * @param string $link ссылка
+ * @return string   ошибка полученная при валидации
+ */
+
+function validateLink($link)
+{
+    if ( ! filter_var($link, FILTER_VALIDATE_URL)) {
         return 'Неправильная ссылка';
     }
 }
 
+/**
+ * Функция проверки существования пользователя с таким email
+ * @param string $con подключение к бд
+ * @param string $email
+ * @return string   ошибка полученная при валидации
+ *
+ */
+
 function IsEmailExist($con, $email)
 {
-    if ($email != '') {
-        $sql = sprintf("SELECT  email  from users where email = '%s'", htmlspecialchars($email));
-        if (mysqli_fetch_all(mysqli_query($con, $sql))) {
+    if ( ! empty($email)) {
+        if (SqlRequest("email", "users", "email = ", $con, "'$email'")) {
             return " Данный email уже используется";
         }
-    } else {
-        return;
     }
+
 }
+
+/**
+ * Валидация email
+ * @param string $email
+ * @return string   ошибка полученная при валидации
+ *
+ */
+
 
 function EmailValidation($email)
 {
     if (isset($email)) {
-        if ($email != '') {
-            if (filter_input(INPUT_POST, $email, FILTER_VALIDATE_EMAIL)) {
+        if ( ! empty($email)) {
+            if ( ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return "Введите корректный email";
             }
         } else {
@@ -191,60 +279,82 @@ function EmailValidation($email)
     }
 }
 
-function comparePassword()
+/**
+ * Проверка совпадения введенных паролей
+ * @param string $password пароль
+ * @param string $repeat повторите пароль
+ * @return string   ошибка полученная при несовпадении паролей
+ *
+ */
+
+function comparePassword($password, $repeat)
 {
-    if ( ! ($_POST['password'] == $_POST['password-repeat'] and $_POST['password'] != "")) {
+    if ( ! ($password === $repeat && ! empty($password))) {
         return "Пaроли не совпадают";
-    } else {
-        return;
     }
 }
 
-function AddErrors($error,$errorHeader){
-       echo '<div class="form__invalid-block">
-        <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-        <ul class="form__invalid-list">';
-             $i = 0;
-             foreach ($error as $er) {
-                if ($er != ''){
-                   echo "<li class='form__invalid-item'> $errorHeader[$i]  : $er </li>";
-                 };
-                 $i = $i + 1;
-             };
-        echo '</ul>
-    </div>';
-}
 
+/**
+ * сортировка постов по типу
+ * @param int $id тип
+ * @param int $vertical для страницы feed
+ * @return string  ссылка на страницу на которой только посты выбранного типа
+ */
 
 function typeRequest($id, $vertical = 0)
 {
-    $params = $_GET;
-    $params['id'] = $id;
-    $params['offset'] = 0;
-    $params['tab'] = 'popular';
-    $query = http_build_query($params);
-    $url = "http://395709-readme-12/popular.php"."?".$query;
-
-    if ($vertical == 1) {
-        $params['tab'] = 'feed';
-        $query = http_build_query($params);
-        $url = "http://395709-readme-12/"."?".$query;
+    $url = "popular.php?id=$id&offset=0&tab=popular";
+    if ($vertical === 1) {
+        $url = "index.php?id=$id&offset=0&tab=feed";
     }
 
     return $url;
 }
 
-function getTags($con, $id){
-$tagsId = SqlRequest('hashtagId', 'posthashtag', 'postId =', $con, $id);
-foreach ($tagsId as $tag) {
-    $tagLink = SqlRequest('title', 'hashtag', 'id= ', $con,
-        $tag["hashtagId"]);
-    $title = $tagLink[0]['title'];
-    echo "<a style='background-color: white; border: solid transparent; color: #2a4ad0;'".
-      " href=http://395709-readme-12/search.php?request=%23$title>".$title."</a>";
+/**
+ * получить список тегов для поста
+ * @param string $con подключение к бд
+ * @param int $id id поста
+ * @return array массив тегов
+ */
+
+function getTags($con, $id)
+{
+    $tags = array();
+    $tagsId = SqlRequest('hashtagId', 'posthashtag', 'postId =', $con, mysqli_real_escape_string($con, $id));
+    foreach ($tagsId as $tag) {
+        $tagLink = SqlRequest('title', 'hashtag', 'id= ', $con,
+            mysqli_real_escape_string($con, $tag["hashtagId"]));
+        $title = $tagLink[0]['title'];
+        array_push($tags, $title);
     }
+
+    return $tags;
+}
+
+/**
+ * получить массив данных для вывода статистики поста (like, comment ...)
+ * @param string $con подключение к бд
+ * @param int $id id поста
+ * @return array массив данных
+ */
+function preparePostSatatisticDate($con, $id)
+{
+    $data = array();
+    $like = SqlRequest('COUNT(userId)', 'likes', 'recipientId =', $con, mysqli_real_escape_string($con, $id));
+    $comment = SqlRequest('COUNT(content)', 'comments', 'postId =', $con, mysqli_real_escape_string($con, $id));
+    $reposts = SqlRequest("repostCount", "posts", "id = ", $con, mysqli_real_escape_string($con, $id));
+    $view = SqlRequest('views', 'posts', ' id =', $con, mysqli_real_escape_string($con, $id));
+    array_push($data, array(
+        'like' => $like[0]['COUNT(userId)'],
+        'comment' => $comment[0]['COUNT(content)'],
+        'reposts' => $reposts[0]['repostCount'],
+        'view' => $view[0]['views'],
+    ));
+
+    return $data;
 }
 
 
 
-?>

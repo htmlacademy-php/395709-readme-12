@@ -127,7 +127,7 @@
         </section>
         <section class="authorization">
             <h2 class="visually-hidden">Авторизация</h2>
-            <form class="authorization__form form" action="#" method="post">
+            <form class="authorization__form form" action="../index.php" method="post">
                 <div class="authorization__input-wrapper form__input-wrapper">
                     <div class="form__input-section  <?= isset($errors['login']) ? 'form__input-section--error' : '' ?>">
                         <input class="authorization__input authorization__input--login form__input" type="text"
@@ -200,7 +200,7 @@
                         <a class="footer__page-link" href="../popular.php">Популярный контент</a>
                     </li>
                     <li class="footer__my-page footer__my-page--messages">
-                        <a class="footer__page-link" href="messages.html">Личные сообщения</a>
+                        <a class="footer__page-link" href="../messages.php">Личные сообщения</a>
                     </li>
                 </ul>
                 <div class="footer__copyright">

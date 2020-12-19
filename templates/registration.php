@@ -1,4 +1,3 @@
-
 <main class="page__main page__main--registration">
     <div class="container">
         <h1 class="page__title page__title--registration">Регистрация</h1>
@@ -11,23 +10,23 @@
                     <div class="registration__input-wrapper form__input-wrapper">
                         <label class="registration__label form__label" for="registration-email">Электронная почта <span
                                     class="form__input-required">*</span></label>
-                        <div class="form__input-section  <?= $errors['email'] != '' ? "form__input-section--error" : "" ?>">
+                        <div class="form__input-section  <?= ! empty($errors['email']) || $errors['emailExist'] ? "form__input-section--error" : "" ?>">
                             <input class="registration__input form__input" id="registration-email" type="email"
-                                   name="email" value="<?= getPostVal('email') ?>" placeholder="Укажите эл.почту">
+                                   name="email" value="<?= getPostVal('email', $con) ?>" placeholder="Укажите эл.почту">
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                             </button>
                             <div class="form__error-text">
                                 <h3 class="form__error-title">Заголовок сообщения</h3>
-                                <p class="form__error-desc"><?= $errors['email'] ?></p>
+                                <p class="form__error-desc"><?= $errors['email'] ? $errors['email'] : $errors['emailExist'] ?></p>
                             </div>
                         </div>
                     </div>
                     <div class="registration__input-wrapper form__input-wrapper">
                         <label class="registration__label form__label" for="registration-login">Логин <span
                                     class="form__input-required">*</span></label>
-                        <div class="form__input-section <?= $errors['login'] != '' ? "form__input-section--error" : "" ?>">
+                        <div class="form__input-section <?= ! empty($errors['login']) ? "form__input-section--error" : "" ?>">
                             <input class="registration__input form__input" id="registration-login" type="text"
-                                   name="login" value="<?= getPostVal('login') ?>" placeholder="Укажите логин">
+                                   name="login" value="<?= getPostVal('login', $con) ?>" placeholder="Укажите логин">
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                             </button>
                             <div class="form__error-text">
@@ -39,7 +38,7 @@
                     <div class="registration__input-wrapper form__input-wrapper">
                         <label class="registration__label form__label" for="registration-password">Пароль<span
                                     class="form__input-required">*</span></label>
-                        <div class="form__input-section <?= $errors['password'] != '' ? "form__input-section--error" : "" ?>">
+                        <div class="form__input-section <?= ! empty($errors['password']) ? "form__input-section--error" : "" ?>">
                             <input class="registration__input form__input" id="registration-password" type="password"
                                    name="password" placeholder="Придумайте пароль">
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
@@ -53,7 +52,7 @@
                     <div class="registration__input-wrapper form__input-wrapper">
                         <label class="registration__label form__label" for="registration-password-repeat">Повтор
                             пароля<span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?= $errors['password-repeat'] != '' ? "form__input-section--error" : "" ?>">
+                        <div class="form__input-section <?= ! empty($errors['password-repeat']) ? "form__input-section--error" : "" ?>">
                             <input class="registration__input form__input" id="registration-password-repeat"
                                    type="password" name="password-repeat" placeholder="Повторите пароль">
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
@@ -65,23 +64,12 @@
                         </div>
                     </div>
                 </div>
-                <?php
-                if ( ! empty($errors)):?>
-                    <div class="form__invalid-block">
-                        <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-                        <ul class="form__invalid-list">
-                            <?php $errorLogin = ["Email", "Логин", "Пароль", "Повтор пароля ", "Аватар", "Email"];
-                            $i = 0; ?>
-                            <?php foreach ($errors as $er) { ?>
-                                <?php
-                                if ($er != ''):?>
-                                    <li class="form__invalid-item"><?= $errorLogin[$i].': '.$er; ?></li>
-                                <?php endif; ?>
-                                <?php $i = $i + 1; ?>
-                            <?php } ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
+                <?php if ( ! empty($errors)) {
+                    echo include_template('widgets/formErrors.php', [
+                        'error' => $errors,
+                        'errorHeader' => array("Email", "Логин", "Пароль", "Повтор пароля ", "Аватар", "Email"),
+                    ]);
+                } ?>
 
             </div>
             <div class="registration__input-file-container form__input-container form__input-container--file">
