@@ -24,7 +24,7 @@ VALUES (3, 3, 'Наконец, обработал фотки!', 'rock-medium.jpg
 INSERT INTO posts (authorId, typeID, title, content)
 VALUES (1, 3, 'Моя мечта', 'coast-medium.jpg');
 INSERT INTO posts (authorId, typeID, title, content)
-VALUES (2, 5, 'Лучшие курсы', 'www.htmlacademy.ru');
+VALUES (2, 5, 'Лучшие курсы', 'https://htmlacademy.ru');
 
 
 INSERT INTO comments (authorId, postId, content)

@@ -104,7 +104,6 @@
         </form>
         <div class="header__nav-wrapper">
             <nav class="header__nav">
-                <?php $tab = isset($_GET['tab']) ? htmlspecialchars($_GET['tab']) : ''; ?>
                 <ul class="header__my-nav">
                     <li class="header__my-page header__my-page--popular">
                         <a class="header__page-link <?= $tab === 'popular' ? 'header__page-link--active' : '' ?>"
@@ -128,7 +127,7 @@
                 </ul>
 
                 <?php
-                if ( ! isset($_SESSION)) { ?>
+                if (! isset($_SESSION)) { ?>
                     <li class="header__authorization">
                         <a class="header__user-button header__authorization-button button"
                            href="../index.php">Вход</a>
@@ -159,7 +158,7 @@
                                     <ul class="header__profile-nav">
                                         <li class="header__profile-nav-item">
                                             <a class="header__profile-nav-link"
-                                               href="profileControl.php?UserId=<?= $_SESSION['id'] ?>">
+                                               href="profileControl.php?UserId=<?= strip_tags($sessionId) ?>">
                                       <span class="header__profile-nav-text">
                                         Мой профиль
                                       </span>
@@ -233,7 +232,7 @@
             <div class="footer__my-info">
                 <ul class="footer__my-pages">
                     <li class="footer__my-page footer__my-page--feed">
-                        <a class="footer__page-link" href="/templates/feed.php">Моя лента</a>
+                        <a class="footer__page-link" href="../index.php">Моя лента</a>
                     </li>
                     <li class="footer__my-page footer__my-page--popular">
                         <a class="footer__page-link" href="../popular.php">Популярный контент</a>

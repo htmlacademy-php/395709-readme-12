@@ -48,7 +48,7 @@ function DateFormat($index, $data = '')
 {
     date_default_timezone_set('Asia/Almaty');
     $RandomDate = date_create(generate_random_date($index));
-    if ( ! empty($data)) {
+    if (! empty($data)) {
         $RandomDate = new DateTime($data);
     }
     $current_time = new DateTime();
@@ -59,11 +59,13 @@ function DateFormat($index, $data = '')
     } elseif (1.25 <= ((int)$date->format('%m')) + ($date->format('%d')) / 31) {
         return seePlural($date->format('%m'), 'месяц', 'месяца', 'месяцев');
     } elseif (7 <= (int)$date->format('%m') * 31 + (int)$date->format('%d')) {
-
-        return seePlural(floor(($date->format('%d')) / 7) + (int)$date->format('%m') * 4, ' неделю', 'недели',
-            'недель');
+        return seePlural(
+            floor(($date->format('%d')) / 7) + (int)$date->format('%m') * 4,
+            ' неделю',
+            'недели',
+            'недель'
+        );
     } elseif ((1 <= $date->format('%d'))) {
-
         return seePlural($date->format('%d'), 'день', 'дня', 'дней');
     } elseif (1 <= $date->format('%h')) {
         return seePlural($date->format('%h'), 'час', 'часа', 'часов');
@@ -124,7 +126,6 @@ function SqlInsert($into, $values, $con)
     $result = mysqli_query($con, $sql);
 
     return $result;
-
 }
 
 /**
@@ -147,11 +148,12 @@ function getPostVal($name, $con)
 
 function validateTag($tagValidation)
 {
-    if ( ! empty($tagValidation)) {
+    if (! empty($tagValidation)) {
         if (strpos($tagValidation, '.') || strpos($tagValidation, ',')) {
             return 'Недопустимый символ';
         }
     }
+    return null;
 }
 
 /**
@@ -163,8 +165,8 @@ function validateTag($tagValidation)
 function validateVideo($videoValidation = null)
 {
     if (isset($videoValidation)) {
-        if ( ! empty($videoValidation)) {
-            if ( ! htmlspecialchars(filter_var($_POST['Video-link']), FILTER_VALIDATE_URL)) {
+        if (!empty($videoValidation)) {
+            if (! filter_var($_POST['Video-link'], FILTER_VALIDATE_URL)) {
                 return 'Неправильная ссылка';
             }
             if (intval(check_youtube_url($videoValidation)) !== 1) {
@@ -174,6 +176,7 @@ function validateVideo($videoValidation = null)
             return 'Поле не заполнено';
         }
     }
+    return null;
 }
 
 /**
@@ -185,20 +188,19 @@ function validateVideo($videoValidation = null)
 function photoValidation($photo)
 {
     if (isset($photo)) {
-        if ( ! empty($_FILES['userpic-file-photo']['name'])) {
+        if (! empty($_FILES['userpic-file-photo']['name'])) {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_name = htmlspecialchars($_FILES['userpic-file-photo']['tmp_name']);
+            $file_name = strip_tags($_FILES['userpic-file-photo']['tmp_name']);
             $file_type = finfo_file($finfo, $file_name);
             $extension = array("image/gif", "image/png", "image/jpeg");
-            if ( ! in_array($file_type, $extension)) {
+            if (! in_array($file_type, $extension)) {
                 return 'Неверный формат';
             }
         } else {
-            return "Поле не заполнено";
+            return 'Поле не заполнено';
         }
-
     }
-
+    return null;
 }
 
 /**
@@ -210,21 +212,21 @@ function photoValidation($photo)
 function validatePhotoLink($photoLink)
 {
     if (isset($photoLink)) {
-        if ( ! empty($photoLink)) {
-            if ( ! filter_var($photoLink, FILTER_VALIDATE_URL)) {
+        if (! empty($photoLink)) {
+            if (! filter_var($photoLink, FILTER_VALIDATE_URL)) {
                 return 'Неправильная ссылка';
             }
             $extension = explode(".", $photoLink);
             $extension = end($extension);
             $checkExtension = array("gif", "png", "jpeg", "jpg");
-            if ( ! in_array($extension, $checkExtension)) {
+            if (! in_array($extension, $checkExtension)) {
                 return 'Неверный формат';
             }
         } else {
             return 'Не заполненное поле';
         }
-
     }
+    return null;
 }
 
 /**
@@ -235,9 +237,10 @@ function validatePhotoLink($photoLink)
 
 function validateLink($link)
 {
-    if ( ! filter_var($link, FILTER_VALIDATE_URL)) {
+    if (! filter_var($link, FILTER_VALIDATE_URL)) {
         return 'Неправильная ссылка';
     }
+    return null;
 }
 
 /**
@@ -250,12 +253,13 @@ function validateLink($link)
 
 function IsEmailExist($con, $email)
 {
-    if ( ! empty($email)) {
+    if (! empty($email)) {
+        $email = mysqli_real_escape_string($con, $email);
         if (SqlRequest("email", "users", "email = ", $con, "'$email'")) {
             return " Данный email уже используется";
         }
     }
-
+    return null;
 }
 
 /**
@@ -269,14 +273,15 @@ function IsEmailExist($con, $email)
 function EmailValidation($email)
 {
     if (isset($email)) {
-        if ( ! empty($email)) {
-            if ( ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (! empty($email)) {
+            if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return "Введите корректный email";
             }
         } else {
             return "Поле не заполнено";
         }
     }
+    return null;
 }
 
 /**
@@ -289,9 +294,10 @@ function EmailValidation($email)
 
 function comparePassword($password, $repeat)
 {
-    if ( ! ($password === $repeat && ! empty($password))) {
+    if (! ($password === $repeat && ! empty($password))) {
         return "Пaроли не совпадают";
     }
+    return  null;
 }
 
 
@@ -305,10 +311,9 @@ function comparePassword($password, $repeat)
 function typeRequest($id, $vertical = 0)
 {
     $url = "popular.php?id=$id&offset=0&tab=popular";
-    if ($vertical === 1) {
+    if (intval($vertical) === 1) {
         $url = "index.php?id=$id&offset=0&tab=feed";
     }
-
     return $url;
 }
 
@@ -324,12 +329,16 @@ function getTags($con, $id)
     $tags = array();
     $tagsId = SqlRequest('hashtagId', 'posthashtag', 'postId =', $con, mysqli_real_escape_string($con, $id));
     foreach ($tagsId as $tag) {
-        $tagLink = SqlRequest('title', 'hashtag', 'id= ', $con,
-            mysqli_real_escape_string($con, $tag["hashtagId"]));
+        $tagLink = SqlRequest(
+            'title',
+            'hashtag',
+            'id= ',
+            $con,
+            mysqli_real_escape_string($con, $tag["hashtagId"])
+        );
         $title = $tagLink[0]['title'];
         array_push($tags, $title);
     }
-
     return $tags;
 }
 
@@ -352,9 +361,5 @@ function preparePostSatatisticDate($con, $id)
         'reposts' => $reposts[0]['repostCount'],
         'view' => $view[0]['views'],
     ));
-
     return $data;
 }
-
-
-

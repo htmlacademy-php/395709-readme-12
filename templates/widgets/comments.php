@@ -1,6 +1,6 @@
 <div class="comments__list-wrapper">
     <ul class="comments__list">
-        <?php foreach ($comments as $inf): ?>
+        <?php foreach ($comments as $inf) : ?>
             <li class="comments__item user">
                 <div class="comments__avatar">
                     <a class="user__avatar-link" href="#">
@@ -17,7 +17,6 @@
                     </div>
                     <p class="comments__text">
                         <?= strip_tags($inf['content']) ?>
-
                     </p>
                 </div>
             </li>

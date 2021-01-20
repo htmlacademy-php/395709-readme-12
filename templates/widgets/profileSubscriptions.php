@@ -33,7 +33,7 @@
                     </p>
                 </div>
                 <div class="post-mini__user-buttons user__buttons">
-                    <form action="../profileControl.php?UserId=<?= intval($_GET['UserId']) ?>"
+                    <form action="../profileControl.php?UserId=<?= strip_tags($UserId) ?>"
                           method="post">
                         <input name="UserId" type="hidden"
                                value="<?= intval($subscriber['id']) ?>">

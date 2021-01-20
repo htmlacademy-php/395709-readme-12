@@ -8,7 +8,7 @@
                 <div class="adding-post__tabs filters">
                     <ul class="adding-post__tabs-list filters__list tabs__list">
                         <li class="adding-post__tabs-item filters__item">
-                            <a class="adding-post__tabs-link filters__button filters__button--photo filters__button--active tabs__item tabs__item--active button  <?= (empty($error) || $type == 1) ? "  filters__button--active" : "" ?> ">
+                            <a class="adding-post__tabs-link filters__button filters__button--photo filters__button--active tabs__item tabs__item--active button  <?= (empty($error) || intval($type) === 1) ? "  filters__button--active" : "" ?> ">
                                 <svg class="filters__icon" width="22" height="18">
                                     <use xlink:href="#icon-filter-photo"></use>
                                 </svg>
@@ -54,31 +54,30 @@
                         </li>
                     </ul>
                 </div>
-
                 <div class="adding-post__tab-content">
                     <section
                             class="adding-post__photo tabs__content  <?= (intval($type) === 0 or intval($type) === 1) ? " tabs__content--active" : "" ?> ">
-                        <?= include_template('addPhoto.php', ['error' => $error, 'con' => $con]); ?>
+                        <?= $addPhoto; ?>
                     </section>
 
                     <section
                             class="adding-post__video tabs__content  <?= intval($type) === 2 ? " tabs__content--active" : "" ?> ">
-                        <?= include_template('addVideo.php', ['error' => $error, 'con' => $con]); ?>
+                        <?= $addVideo; ?>
                     </section>
 
                     <section
                             class="adding-post__text tabs__content  <?= intval($type) === 3 ? " tabs__content--active" : "" ?> ">
-                        <?= include_template('addText.php', ['error' => $error, 'con' => $con]); ?>
+                        <?= $addText; ?>
                     </section>
 
                     <section
                             class="adding-post__quote tabs__content  <?= intval($type) === 4 ? " tabs__content--active" : "" ?> ">
-                        <?= include_template('addQuote.php', ['error' => $error, 'con' => $con]); ?>
+                        <?= $addQuote; ?>
                     </section>
 
                     <section
                             class="adding-post__link tabs__content <?= intval($type) === 5 ? " tabs__content--active" : "" ?> ">
-                        <?= include_template('addLink.php', ['error' => $error, 'con' => $con]); ?>
+                        <?= $addLink; ?>
                     </section>
                 </div>
             </div>

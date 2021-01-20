@@ -3,7 +3,7 @@
     <ul class="form__invalid-list">
         <?php $i = 0;
         foreach ($error as $er) {
-            if ( ! empty($er)) { ?>
+            if (! empty($er)) { ?>
                 <li class='form__invalid-item'> <?= $errorHeader[$i].':'.$er ?> </li>
             <?php }
             $i++;

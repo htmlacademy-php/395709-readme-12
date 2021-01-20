@@ -1,82 +1,5 @@
 <?php
-/**
- * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
- *
- * Примеры использования:
- * is_date_valid('2019-01-01'); // true
- * is_date_valid('2016-02-29'); // true
- * is_date_valid('2019-04-31'); // false
- * is_date_valid('10.10.2010'); // false
- * is_date_valid('10/10/2010'); // false
- *
- * @param string $date Дата в виде строки
- *
- * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
- */
-function is_date_valid(string $date): bool
-{
-    $format_to_check = 'Y-m-d';
-    $dateTimeObj = date_create_from_format($format_to_check, $date);
 
-    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
-}
-
-/**
- * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
- *
- * @param $link mysqli Ресурс соединения
- * @param $sql string SQL запрос с плейсхолдерами вместо значений
- * @param array $data Данные для вставки на место плейсхолдеров
- *
- * @return mysqli_stmt Подготовленное выражение
- */
-function db_get_prepare_stmt($link, $sql, $data = [])
-{
-    $stmt = mysqli_prepare($link, $sql);
-
-    if ($stmt === false) {
-        $errorMsg = 'Не удалось инициализировать подготовленное выражение: '.mysqli_error($link);
-        die($errorMsg);
-    }
-
-    if ($data) {
-        $types = '';
-        $stmt_data = [];
-
-        foreach ($data as $value) {
-            $type = 's';
-
-            if (is_int($value)) {
-                $type = 'i';
-            } else {
-                if (is_string($value)) {
-                    $type = 's';
-                } else {
-                    if (is_double($value)) {
-                        $type = 'd';
-                    }
-                }
-            }
-
-            if ($type) {
-                $types .= $type;
-                $stmt_data[] = $value;
-            }
-        }
-
-        $values = array_merge([$stmt, $types], $stmt_data);
-
-        $func = 'mysqli_stmt_bind_param';
-        $func(...$values);
-
-        if (mysqli_errno($link) > 0) {
-            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: '.mysqli_error($link);
-            die($errorMsg);
-        }
-    }
-
-    return $stmt;
-}
 
 /**
  * Возвращает корректную форму множественного числа
@@ -135,7 +58,7 @@ function include_template($name, array $data = [])
     $name = 'templates/'.$name;
     $result = '';
 
-    if ( ! is_readable($name)) {
+    if (! is_readable($name)) {
         return $result;
     }
 
@@ -159,7 +82,7 @@ function check_youtube_url($url)
     $id = extract_youtube_id($url);
     $headers = get_headers('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v='.$id);
 
-    if ( ! is_array($headers)) {
+    if (! is_array($headers)) {
         return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
     }
 
@@ -173,36 +96,20 @@ function check_youtube_url($url)
 }
 
 /**
- * Возвращает код iframe для вставки youtube видео на страницу
- * @param string $youtube_url Ссылка на youtube видео
- * @return string
- */
-function embed_youtube_video($youtube_url)
-{
-    $res = "";
-    $id = extract_youtube_id($youtube_url);
-
-    if ($id) {
-        $src = "https://www.youtube.com/embed/".$id;
-        $res = '<iframe width="760" height="400" src="'.$src.'" frameborder="0"></iframe>';
-    }
-
-    return $res;
-}
-
-/**
  * Возвращает img-тег с обложкой видео для вставки на страницу
  * @param string $youtube_url Ссылка на youtube видео
+ * @param int $width ширина
+ * @param int $height высота
  * @return string
  */
-function embed_youtube_cover($youtube_url)
+function embed_youtube_cover($youtube_url, $width = 320, $height = 120)
 {
     $res = "";
     $id = extract_youtube_id($youtube_url);
 
     if ($id) {
         $src = sprintf("https://img.youtube.com/vi/%s/mqdefault.jpg", $id);
-        $res = '<img alt="youtube cover" width="320" height="120" src="'.$src.'" />';
+        $res = '<img alt="youtube cover" width="'.$width.'"  height="'.$height.'"  src="'.$src.'" />';
     }
 
     return $res;

@@ -23,25 +23,25 @@
                     </div>
                     <div class="post-mini__preview">
                         <a class="post-mini__link" href="#" title="Перейти на публикацию">
-                            <?php if ($like['typeID'] == 3) { ?>
+                            <?php if (intval($like['typeID']) === 3) { ?>
                                 <div class="post-mini__image-wrapper">
-                                    <img class="post-mini__image" src="../img/rock-small.png"
+                                    <img class="post-mini__image" src="<?= $like['content'] ?> "
                                          width="109"
                                          height="109" alt="Превью публикации">
                                 </div>
                                 <span class="visually-hidden">Фото</span>
 
-                            <?php } elseif ($like['typeID'] == 2) { ?>
+                            <?php } elseif (intval($like['typeID']) === 2) { ?>
                                 <span class="visually-hidden">Цитата</span>
                                 <svg class="post-mini__preview-icon" width="21" height="20">
                                     <use xlink:href="#icon-filter-quote"></use>
                                 </svg>
-                            <?php } elseif ($like['typeID'] == 1) { ?>
+                            <?php } elseif (intval($like['typeID']) === 1) { ?>
                                 <span class="visually-hidden">Текст</span>
                                 <svg class="post-mini__preview-icon" width="20" height="21">
                                     <use xlink:href="#icon-filter-text"></use>
                                 </svg>
-                            <?php } elseif ($like['typeID'] == 5) { ?>
+                            <?php } elseif (intval($like['typeID']) === 5) { ?>
                                 <span class="visually-hidden">Ссылка</span>
                                 <svg class="post-mini__preview-icon" width="21" height="18">
                                     <use xlink:href="#icon-filter-link"></use>

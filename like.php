@@ -5,11 +5,11 @@ if (isset($_SESSION['userName'])) {
     require('functions.php');
     require('dbConfig.php');
 
-    $postId = intval($_GET['postId']);
-    $userId = $_SESSION['id'];
+    $postId = mysqli_real_escape_string($con, $_GET['postId']);
+    $userId = mysqli_real_escape_string($con, $_SESSION['id']);
     $isLikeSet = SqlRequest("id", "likes", "recipientId = $postId  AND userId = $userId", $con);
 
-    if ( ! $isLikeSet) {
+    if (! $isLikeSet) {
         SqlInsert('likes(recipientId, userId)', $postId.','.$userId, $con);
     } else {
         $sqlPost = "DELETE FROM likes WHERE recipientId = $postId  AND userId = $userId";

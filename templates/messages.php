@@ -1,7 +1,7 @@
 <main class="page__main page__main--messages">
     <h1 class="visually-hidden">Личные сообщения</h1>
     <?php
-    if ( ! empty($messageAuthor)) { ?>
+    if (! empty($messageAuthor)) { ?>
         <section class="messages tabs">
             <h2 class="visually-hidden">Сообщения</h2>
             <div class="messages__contacts" >
@@ -9,8 +9,8 @@
                     <?php
                     foreach ($messageAuthor as $author) { ?>
                         <li class="messages__contacts-item">
-                            <a href="../messages.php?id=<?= intval($author['authorId']) === intval($_SESSION['id']) ? intval($author['recipientId']) : intval($author['authorId']) ?>&tab=message">
-                                <div class="messages__contacts-tab <?=  intval($author['id']) === intval($_GET['id']) ? 'messages__contacts-tab--active' : '' ?>   ">
+                            <a href="../messages.php?id=<?= intval($author['authorId']) === intval($sessionId) ? intval($author['recipientId']) : intval($author['authorId']) ?>&tab=message">
+                                <div class="messages__contacts-tab <?=  intval($author['id']) === intval($id) || intval($newMessage) === intval($author['recipientId']) ?  'messages__contacts-tab--active' : '' ?>   ">
                                     <div class="messages__avatar-wrapper">
                                         <img class="messages__avatar" src="img/<?= strip_tags($author['avatar']) ?>"
                                              alt="Аватар пользователя">
@@ -21,7 +21,7 @@
                                                 </span>
                                         <div class="messages__preview">
                                             <p class="messages__preview-text">
-                                                Озеро Байкал – огромное
+                                                <?=end($message)['content'] ?>
                                             </p>
                                             <time class="messages__preview-time" datetime="2019-05-01T14:40">
                                                 <?= DateFormat(0, $author['DATE']) ?>
@@ -38,14 +38,14 @@
 
             <div class="messages__chat">
                 <?php
-                if (isset($_GET['id'])) { ?>
+                if (isset($id) && !empty($id)) { ?>
                 <div class="messages__chat-wrapper">
 
                     <ul class="messages__list tabs__content tabs__content--active">
                         <?php
                         foreach ($message as $mes) {
-                            $role = intval($mes['authorId']) === intval($_SESSION['id']) ? 1 : 0 ?>
-                            <li class="messages__item <?= $role == 1 ? 'messages__item--my' : '' ?>">
+                            $role = intval($mes['authorId']) === intval($sessionId) ? 1 : 0 ?>
+                            <li class="messages__item <?= intval($role)  === 1 ? 'messages__item--my' : '' ?>">
                                 <div class="messages__info-wrapper">
                                     <div class="messages__item-avatar">
                                         <a class="messages__author-link"
@@ -73,7 +73,7 @@
                 </div>
                 <div class="comments">
                     <form class="comments__form form"
-                          action="../messages.php?id=<?= intval($_GET['id']) ?>&tab=message"
+                          action="../messages.php?id=<?= intval($id) ?>&tab=message"
                           method="post">
                         <div class="comments__my-avatar">
                             <img class="comments__picture" src="img/userpic-medium.jpg" alt="Аватар пользователя">
@@ -83,7 +83,7 @@
                                                           name='text'
                                                           placeholder="Ваше сообщение"></textarea>
                             <label class="visually-hidden">Ваше сообщение</label>
-                            <?php if ( ! empty($error)) { ?>
+                            <?php if (! empty($error)) { ?>
                                 <button class="form__error-button button" type="button">!</button>
                                 <div class="form__error-text">
                                     <h3 class="form__error-title">Ошибка валидации</h3>
@@ -95,11 +95,11 @@
 
                         <button class="comments__submit button button--green" type="submit">Отправить</button>
                     </form>
-                    <?php } else { ?>
+                <?php } else { ?>
                         <div class="container" style="height: 300px; width:100%">
                             <h2>Выберите человека, которому хотите написать</h2>
                         </div>
-                    <?php } ?>
+                <?php } ?>
                 </div>
 
         </section>

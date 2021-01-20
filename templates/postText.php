@@ -10,32 +10,13 @@
                             <p><?= text_split(strip_tags($post['content'])) ?></p>
                         </div>
                         <div class="post__indicators">
-                            <?php echo include_template('widgets/likesRepostsComments.php',
-                                [
-                                    'like' => $post[0]['like'],
-                                    'comment' => $post[0]['comment'],
-                                    'reposts' => $post[0]['reposts'],
-                                    'view' => $post[0]['view'],
-                                    'id' => $id,
-                                ]); ?>
+                            <?= $post[0]['likesRepostsComments']; ?>
                         </div>
                         <div class="comments">
-                            <?php
-                            echo include_template('widgets/newCommentForm.php',
-                                ['con' => $con, 'postId' => $post['id']]);
-                            echo include_template('widgets/comments.php',
-                                ['con' => $con, 'postId' => $post['id'], 'comments' => $post[0]["comments"]]);
-                            ?>
+                            <?php echo $post[0]['commentForm'],$post[0]['comments']; ?>
                         </div>
                     </div>
-                    <?php echo include_template('widgets/postCreateUser.php', [
-                        'con' => $con,
-                        'id' => $id,
-                        'postAuthor' => $authorInfo['postAuthor'],
-                        'postsCount' => $authorInfo['postsCount'],
-                        'subscribersCount' => $authorInfo['subscribersCount'],
-                        'isSubscribed' => $isSubscribed,
-                    ]); ?>
+                    <?= $post[0]['postCreator']; ?>
                 </div>
             </article>
         </section>
