@@ -24,8 +24,10 @@
                 <div class="form__input-section <?= ! empty($error['QuoteName']) ? "form__input-section--error" : "" ?>">
                     <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input"
                               id="cite-text"
-                              name="QuoteName" placeholder="Текст цитаты"><?= getPostVal('QuoteName',
-                            $con) ?></textarea>
+                              name="QuoteName" placeholder="Текст цитаты"><?= getPostVal(
+                                  'QuoteName',
+                                  $con
+                              ) ?></textarea>
                     <button class="form__error-button button" type="button">!<span
                                 class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
@@ -63,9 +65,8 @@
             </div>
         </div>
         <?php
-        if ( ! empty($error)) {
-            echo include_template('widgets/formErrors.php',
-                ['error' => $error, 'errorHeader' => array("Заголовок", "Текст цитаты", "Автор", "Теги")]);
+        if (! empty($error)) {
+            echo $errorForm;
         } ?>
     </div>
     <div class="adding-post__buttons">

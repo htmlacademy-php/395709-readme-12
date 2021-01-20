@@ -25,17 +25,17 @@
                         <span class="profile__rating-text user__rating-text">подписчиков</span>
                     </p>
                 </div>
-                <?php if (intval($_GET['UserId']) !== intval($_SESSION['id'])) { ?>
+                <?php if (intval($userId) !== intval($sessionId)) { ?>
                     <div class="profile__user-buttons user__buttons">
-                        <form action="../profileControl.php?UserId=<?= intval($_GET['UserId']) ?>"
+                        <form action="../profileControl.php?UserId=<?= intval($userId) ?>"
                               method="post">
-                            <input name="UserId" type="hidden" value="<?= intval($_GET['UserId']) ?>">
+                            <input name="UserId" type="hidden" value="<?= intval($userId) ?>">
                             <button class="profile__user-button user__button user__button--subscription button button--main"
                                     style="width: 100%;"
                                     type="submit"><?= intval($isSubscribedOnPostAuthor) === 0 ? "Подписаться" : "Отписаться" ?></button>
                         </form>
                         <a class="profile__user-button user__button user__button--writing button button--green"
-                           href="/messages.php?newMessage=<?= intval($_GET['UserId']) ?>&id=<?= intval($_GET['UserId']) ?>">Сообщение</a>
+                           href="/messages.php?newMessage=<?= intval($userId) ?>&id=<?= intval($userId) ?>">Сообщение</a>
                     </div>
                 <?php } ?>
             </div>
@@ -48,7 +48,7 @@
                         <li class="profile__tabs-item filters__item">
                             <a class="profile__tabs-link filters__button filters__button--active tabs__item tabs__item--active button">Посты</a>
                         </li>
-                        <?php if (intval($_SESSION['id']) === intval($_GET['UserId'])) { ?>
+                        <?php if (intval($sessionId) === intval($userId)) { ?>
                             <li class="profile__tabs-item filters__item">
                                 <a class="profile__tabs-link filters__button tabs__item button" href="#">Лайки</a>
                             </li>
@@ -61,11 +61,9 @@
                 </div>
                 <div class="profile__tab-content">
                     <?php
-                    echo include_template('widgets/profilePosts.php', ['posts' => $posts, 'con' => $con]);
-
-                    if (intval($_SESSION['id']) === intval($_GET['UserId'])) {
-                        echo include_template('widgets/profilelikes.php', ['postsWithLikes' => $postsWithLikes]);
-                        echo include_template('widgets/profileSubscriptions.php', ['subscribers' => $subscribers]);
+                    echo $profilePosts;
+                    if (intval($sessionId) === intval($userId)) {
+                        echo $profileLikes,$profileSubscriptions;
                     }
                     ?>
                 </div>

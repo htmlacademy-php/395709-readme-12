@@ -64,13 +64,9 @@
                         </div>
                     </div>
                 </div>
-                <?php if ( ! empty($errors)) {
-                    echo include_template('widgets/formErrors.php', [
-                        'error' => $errors,
-                        'errorHeader' => array("Email", "Логин", "Пароль", "Повтор пароля ", "Аватар", "Email"),
-                    ]);
+                <?php if (! empty($errors)) {
+                    echo $formErrors;
                 } ?>
-
             </div>
             <div class="registration__input-file-container form__input-container form__input-container--file">
                 <div class="registration__input-file-wrapper form__input-file-wrapper">

@@ -1,31 +1,40 @@
 "use strict";
 
 var _createClass = function () {
-    function defineProperties(target, props) {
+    function defineProperties(target, props)
+    {
         for (var i = 0; i < props.length; i++) {
             var descriptor = props[i];
             descriptor.enumerable = descriptor.enumerable || false;
             descriptor.configurable = true;
-            if ("value" in descriptor) descriptor.writable = true;
+            if ("value" in descriptor) {
+                descriptor.writable = true;
+            }
             Object.defineProperty(target, descriptor.key, descriptor);
         }
     }
 
     return function (Constructor, protoProps, staticProps) {
-        if (protoProps) defineProperties(Constructor.prototype, protoProps);
-        if (staticProps) defineProperties(Constructor, staticProps);
+        if (protoProps) {
+            defineProperties(Constructor.prototype, protoProps);
+        }
+        if (staticProps) {
+            defineProperties(Constructor, staticProps);
+        }
         return Constructor;
     };
 }();
 
-function _possibleConstructorReturn(self, call) {
+function _possibleConstructorReturn(self, call)
+{
     if (!self) {
         throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
     return call && (typeof call === "object" || typeof call === "function") ? call : self;
 }
 
-function _inherits(subClass, superClass) {
+function _inherits(subClass, superClass)
+{
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
     }
@@ -37,10 +46,13 @@ function _inherits(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    if (superClass) {
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    }
 }
 
-function _classCallCheck(instance, Constructor) {
+function _classCallCheck(instance, Constructor)
+{
     if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
     }
@@ -77,7 +89,8 @@ function _classCallCheck(instance, Constructor) {
 // It is strongly based on component's emitter class, and I removed the
 // functionality because of the dependency hell with different frameworks.
 var Emitter = function () {
-    function Emitter() {
+    function Emitter()
+    {
         _classCallCheck(this, Emitter);
     }
 
@@ -85,7 +98,8 @@ var Emitter = function () {
         key: "on",
 
         // Add an event listener for given event
-        value: function on(event, fn) {
+        value: function on(event, fn)
+        {
             this._callbacks = this._callbacks || {};
             // Create namespace for this event
             if (!this._callbacks[event]) {
@@ -96,7 +110,8 @@ var Emitter = function () {
         }
     }, {
         key: "emit",
-        value: function emit(event) {
+        value: function emit(event)
+        {
             this._callbacks = this._callbacks || {};
             var callbacks = this._callbacks[event];
 
@@ -105,15 +120,19 @@ var Emitter = function () {
                     args[_key - 1] = arguments[_key];
                 }
 
-                for (var _iterator = callbacks, _isArray = true, _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator](); ;) {
+                for (var _iterator = callbacks, _isArray = true, _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
                     var _ref;
 
                     if (_isArray) {
-                        if (_i >= _iterator.length) break;
+                        if (_i >= _iterator.length) {
+                            break;
+                        }
                         _ref = _iterator[_i++];
                     } else {
                         _i = _iterator.next();
-                        if (_i.done) break;
+                        if (_i.done) {
+                            break;
+                        }
                         _ref = _i.value;
                     }
 
@@ -132,7 +151,8 @@ var Emitter = function () {
 
     }, {
         key: "off",
-        value: function off(event, fn) {
+        value: function off(event, fn)
+        {
             if (!this._callbacks || arguments.length === 0) {
                 this._callbacks = {};
                 return this;
@@ -171,7 +191,8 @@ var Dropzone = function (_Emitter) {
 
     _createClass(Dropzone, null, [{
         key: "initClass",
-        value: function initClass() {
+        value: function initClass()
+        {
 
             // Exposing the emitter class, mainly for tests
             this.prototype.Emitter = Emitter;
@@ -530,7 +551,8 @@ var Dropzone = function (_Emitter) {
                  * Called when dropzone initialized
                  * You can add event listeners here
                  */
-                init: function init() {
+                init: function init()
+                {
                 },
 
 
@@ -544,7 +566,8 @@ var Dropzone = function (_Emitter) {
                  *
                  * This is the same as adding hidden input fields in the form element.
                  */
-                params: function params(files, xhr, chunk) {
+                params: function params(files, xhr, chunk)
+                {
                     if (chunk) {
                         return {
                             dzuuid: chunk.file.upload.uuid,
@@ -567,7 +590,8 @@ var Dropzone = function (_Emitter) {
                  * message will be displayed.
                  * This function will not be called if the file is too big or doesn't match the mime types.
                  */
-                accept: function accept(file, done) {
+                accept: function accept(file, done)
+                {
                     return done();
                 },
 
@@ -578,7 +602,8 @@ var Dropzone = function (_Emitter) {
                  * and the `done` function as second. `done()` needs to be invoked when everything
                  * needed to finish the upload process is done.
                  */
-                chunksUploaded: function chunksUploaded(file, done) {
+                chunksUploaded: function chunksUploaded(file, done)
+                {
                     done();
                 },
 
@@ -587,20 +612,25 @@ var Dropzone = function (_Emitter) {
                  * The default implementation shows the fallback input field and adds
                  * a text.
                  */
-                fallback: function fallback() {
+                fallback: function fallback()
+                {
                     // This code should pass in IE7... :(
                     var messageElement = void 0;
                     this.element.className = this.element.className + " dz-browser-not-supported";
 
-                    for (var _iterator2 = this.element.getElementsByTagName("div"), _isArray2 = true, _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator](); ;) {
+                    for (var _iterator2 = this.element.getElementsByTagName("div"), _isArray2 = true, _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
                         var _ref2;
 
                         if (_isArray2) {
-                            if (_i2 >= _iterator2.length) break;
+                            if (_i2 >= _iterator2.length) {
+                                break;
+                            }
                             _ref2 = _iterator2[_i2++];
                         } else {
                             _i2 = _iterator2.next();
-                            if (_i2.done) break;
+                            if (_i2.done) {
+                                break;
+                            }
                             _ref2 = _i2.value;
                         }
 
@@ -642,7 +672,8 @@ var Dropzone = function (_Emitter) {
                  *
                  * Those values are going to be used by `ctx.drawImage()`.
                  */
-                resize: function resize(file, width, height, resizeMethod) {
+                resize: function resize(file, width, height, resizeMethod)
+                {
                     var info = {
                         srcX: 0,
                         srcY: 0,
@@ -709,7 +740,8 @@ var Dropzone = function (_Emitter) {
                  * Gets the `file` as the first parameter, and a `done()` function as the second, that needs
                  * to be invoked with the file when the transformation is done.
                  */
-                transformFile: function transformFile(file, done) {
+                transformFile: function transformFile(file, done)
+                {
                     if ((this.options.resizeWidth || this.options.resizeHeight) && file.type.match(/image.*/)) {
                         return this.resizeImage(file, this.options.resizeWidth, this.options.resizeHeight, this.options.resizeMethod, done);
                     } else {
@@ -748,37 +780,46 @@ var Dropzone = function (_Emitter) {
                  */
 
                 // Those are self explanatory and simply concern the DragnDrop.
-                drop: function drop(e) {
+                drop: function drop(e)
+                {
                     return this.element.classList.remove("dz-drag-hover");
                 },
-                dragstart: function dragstart(e) {
+                dragstart: function dragstart(e)
+                {
                 },
-                dragend: function dragend(e) {
+                dragend: function dragend(e)
+                {
                     return this.element.classList.remove("dz-drag-hover");
                 },
-                dragenter: function dragenter(e) {
+                dragenter: function dragenter(e)
+                {
                     return this.element.classList.add("dz-drag-hover");
                 },
-                dragover: function dragover(e) {
+                dragover: function dragover(e)
+                {
                     return this.element.classList.add("dz-drag-hover");
                 },
-                dragleave: function dragleave(e) {
+                dragleave: function dragleave(e)
+                {
                     return this.element.classList.remove("dz-drag-hover");
                 },
-                paste: function paste(e) {
+                paste: function paste(e)
+                {
                 },
 
 
                 // Called whenever there are no files left in the dropzone anymore, and the
                 // dropzone should be displayed as if in the initial state.
-                reset: function reset() {
+                reset: function reset()
+                {
                     return this.element.classList.remove("dz-started");
                 },
 
 
                 // Called when a file is added to the queue
                 // Receives `file`
-                addedfile: function addedfile(file) {
+                addedfile: function addedfile(file)
+                {
                     var _this2 = this;
 
                     if (this.element === this.previewsContainer) {
@@ -790,15 +831,19 @@ var Dropzone = function (_Emitter) {
                         file.previewTemplate = file.previewElement; // Backwards compatibility
 
                         this.previewsContainer.appendChild(file.previewElement);
-                        for (var _iterator3 = file.previewElement.querySelectorAll("[data-dz-name]"), _isArray3 = true, _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[Symbol.iterator](); ;) {
+                        for (var _iterator3 = file.previewElement.querySelectorAll("[data-dz-name]"), _isArray3 = true, _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[Symbol.iterator]();;) {
                             var _ref3;
 
                             if (_isArray3) {
-                                if (_i3 >= _iterator3.length) break;
+                                if (_i3 >= _iterator3.length) {
+                                    break;
+                                }
                                 _ref3 = _iterator3[_i3++];
                             } else {
                                 _i3 = _iterator3.next();
-                                if (_i3.done) break;
+                                if (_i3.done) {
+                                    break;
+                                }
                                 _ref3 = _i3.value;
                             }
 
@@ -806,13 +851,17 @@ var Dropzone = function (_Emitter) {
 
                             node.textContent = file.name;
                         }
-                        for (var _iterator4 = file.previewElement.querySelectorAll("[data-dz-size]"), _isArray4 = true, _i4 = 0, _iterator4 = _isArray4 ? _iterator4 : _iterator4[Symbol.iterator](); ;) {
+                        for (var _iterator4 = file.previewElement.querySelectorAll("[data-dz-size]"), _isArray4 = true, _i4 = 0, _iterator4 = _isArray4 ? _iterator4 : _iterator4[Symbol.iterator]();;) {
                             if (_isArray4) {
-                                if (_i4 >= _iterator4.length) break;
+                                if (_i4 >= _iterator4.length) {
+                                    break;
+                                }
                                 node = _iterator4[_i4++];
                             } else {
                                 _i4 = _iterator4.next();
-                                if (_i4.done) break;
+                                if (_i4.done) {
+                                    break;
+                                }
                                 node = _i4.value;
                             }
 
@@ -824,7 +873,8 @@ var Dropzone = function (_Emitter) {
                             file.previewElement.appendChild(file._removeLink);
                         }
 
-                        var removeFileEvent = function removeFileEvent(e) {
+                        var removeFileEvent = function removeFileEvent(e)
+                        {
                             e.preventDefault();
                             e.stopPropagation();
                             if (file.status === Dropzone.UPLOADING) {
@@ -842,15 +892,19 @@ var Dropzone = function (_Emitter) {
                             }
                         };
 
-                        for (var _iterator5 = file.previewElement.querySelectorAll("[data-dz-remove]"), _isArray5 = true, _i5 = 0, _iterator5 = _isArray5 ? _iterator5 : _iterator5[Symbol.iterator](); ;) {
+                        for (var _iterator5 = file.previewElement.querySelectorAll("[data-dz-remove]"), _isArray5 = true, _i5 = 0, _iterator5 = _isArray5 ? _iterator5 : _iterator5[Symbol.iterator]();;) {
                             var _ref4;
 
                             if (_isArray5) {
-                                if (_i5 >= _iterator5.length) break;
+                                if (_i5 >= _iterator5.length) {
+                                    break;
+                                }
                                 _ref4 = _iterator5[_i5++];
                             } else {
                                 _i5 = _iterator5.next();
-                                if (_i5.done) break;
+                                if (_i5.done) {
+                                    break;
+                                }
                                 _ref4 = _i5.value;
                             }
 
@@ -863,7 +917,8 @@ var Dropzone = function (_Emitter) {
 
 
                 // Called whenever a file is removed.
-                removedfile: function removedfile(file) {
+                removedfile: function removedfile(file)
+                {
                     if (file.previewElement != null && file.previewElement.parentNode != null) {
                         file.previewElement.parentNode.removeChild(file.previewElement);
                     }
@@ -873,18 +928,23 @@ var Dropzone = function (_Emitter) {
 
                 // Called when a thumbnail has been generated
                 // Receives `file` and `dataUrl`
-                thumbnail: function thumbnail(file, dataUrl) {
+                thumbnail: function thumbnail(file, dataUrl)
+                {
                     if (file.previewElement) {
                         file.previewElement.classList.remove("dz-file-preview");
-                        for (var _iterator6 = file.previewElement.querySelectorAll("[data-dz-thumbnail]"), _isArray6 = true, _i6 = 0, _iterator6 = _isArray6 ? _iterator6 : _iterator6[Symbol.iterator](); ;) {
+                        for (var _iterator6 = file.previewElement.querySelectorAll("[data-dz-thumbnail]"), _isArray6 = true, _i6 = 0, _iterator6 = _isArray6 ? _iterator6 : _iterator6[Symbol.iterator]();;) {
                             var _ref5;
 
                             if (_isArray6) {
-                                if (_i6 >= _iterator6.length) break;
+                                if (_i6 >= _iterator6.length) {
+                                    break;
+                                }
                                 _ref5 = _iterator6[_i6++];
                             } else {
                                 _i6 = _iterator6.next();
-                                if (_i6.done) break;
+                                if (_i6.done) {
+                                    break;
+                                }
                                 _ref5 = _i6.value;
                             }
 
@@ -903,21 +963,26 @@ var Dropzone = function (_Emitter) {
 
                 // Called whenever an error occurs
                 // Receives `file` and `message`
-                error: function error(file, message) {
+                error: function error(file, message)
+                {
                     if (file.previewElement) {
                         file.previewElement.classList.add("dz-error");
                         if (typeof message !== "String" && message.error) {
                             message = message.error;
                         }
-                        for (var _iterator7 = file.previewElement.querySelectorAll("[data-dz-errormessage]"), _isArray7 = true, _i7 = 0, _iterator7 = _isArray7 ? _iterator7 : _iterator7[Symbol.iterator](); ;) {
+                        for (var _iterator7 = file.previewElement.querySelectorAll("[data-dz-errormessage]"), _isArray7 = true, _i7 = 0, _iterator7 = _isArray7 ? _iterator7 : _iterator7[Symbol.iterator]();;) {
                             var _ref6;
 
                             if (_isArray7) {
-                                if (_i7 >= _iterator7.length) break;
+                                if (_i7 >= _iterator7.length) {
+                                    break;
+                                }
                                 _ref6 = _iterator7[_i7++];
                             } else {
                                 _i7 = _iterator7.next();
-                                if (_i7.done) break;
+                                if (_i7.done) {
+                                    break;
+                                }
                                 _ref6 = _i7.value;
                             }
 
@@ -927,14 +992,16 @@ var Dropzone = function (_Emitter) {
                         }
                     }
                 },
-                errormultiple: function errormultiple() {
+                errormultiple: function errormultiple()
+                {
                 },
 
 
                 // Called when a file gets processed. Since there is a cue, not all added
                 // files are processed immediately.
                 // Receives `file`
-                processing: function processing(file) {
+                processing: function processing(file)
+                {
                     if (file.previewElement) {
                         file.previewElement.classList.add("dz-processing");
                         if (file._removeLink) {
@@ -942,24 +1009,30 @@ var Dropzone = function (_Emitter) {
                         }
                     }
                 },
-                processingmultiple: function processingmultiple() {
+                processingmultiple: function processingmultiple()
+                {
                 },
 
 
                 // Called whenever the upload progress gets updated.
                 // Receives `file`, `progress` (percentage 0-100) and `bytesSent`.
                 // To get the total number of bytes of the file, use `file.size`
-                uploadprogress: function uploadprogress(file, progress, bytesSent) {
+                uploadprogress: function uploadprogress(file, progress, bytesSent)
+                {
                     if (file.previewElement) {
-                        for (var _iterator8 = file.previewElement.querySelectorAll("[data-dz-uploadprogress]"), _isArray8 = true, _i8 = 0, _iterator8 = _isArray8 ? _iterator8 : _iterator8[Symbol.iterator](); ;) {
+                        for (var _iterator8 = file.previewElement.querySelectorAll("[data-dz-uploadprogress]"), _isArray8 = true, _i8 = 0, _iterator8 = _isArray8 ? _iterator8 : _iterator8[Symbol.iterator]();;) {
                             var _ref7;
 
                             if (_isArray8) {
-                                if (_i8 >= _iterator8.length) break;
+                                if (_i8 >= _iterator8.length) {
+                                    break;
+                                }
                                 _ref7 = _iterator8[_i8++];
                             } else {
                                 _i8 = _iterator8.next();
-                                if (_i8.done) break;
+                                if (_i8.done) {
+                                    break;
+                                }
                                 _ref7 = _i8.value;
                             }
 
@@ -973,41 +1046,49 @@ var Dropzone = function (_Emitter) {
 
                 // Called whenever the total upload progress gets updated.
                 // Called with totalUploadProgress (0-100), totalBytes and totalBytesSent
-                totaluploadprogress: function totaluploadprogress() {
+                totaluploadprogress: function totaluploadprogress()
+                {
                 },
 
 
                 // Called just before the file is sent. Gets the `xhr` object as second
                 // parameter, so you can modify it (for example to add a CSRF token) and a
                 // `formData` object to add additional information.
-                sending: function sending() {
+                sending: function sending()
+                {
                 },
-                sendingmultiple: function sendingmultiple() {
+                sendingmultiple: function sendingmultiple()
+                {
                 },
 
 
                 // When the complete upload is finished and successful
                 // Receives `file`
-                success: function success(file) {
+                success: function success(file)
+                {
                     if (file.previewElement) {
                         return file.previewElement.classList.add("dz-success");
                     }
                 },
-                successmultiple: function successmultiple() {
+                successmultiple: function successmultiple()
+                {
                 },
 
 
                 // When the upload is canceled.
-                canceled: function canceled(file) {
+                canceled: function canceled(file)
+                {
                     return this.emit("error", file, this.options.dictUploadCanceled);
                 },
-                canceledmultiple: function canceledmultiple() {
+                canceledmultiple: function canceledmultiple()
+                {
                 },
 
 
                 // When the upload is finished, either with success or an error.
                 // Receives `file`
-                complete: function complete(file) {
+                complete: function complete(file)
+                {
                     if (file._removeLink) {
                         file._removeLink.innerHTML = this.options.dictRemoveFile;
                     }
@@ -1015,15 +1096,20 @@ var Dropzone = function (_Emitter) {
                         return file.previewElement.classList.add("dz-complete");
                     }
                 },
-                completemultiple: function completemultiple() {
+                completemultiple: function completemultiple()
+                {
                 },
-                maxfilesexceeded: function maxfilesexceeded() {
+                maxfilesexceeded: function maxfilesexceeded()
+                {
                 },
-                maxfilesreached: function maxfilesreached() {
+                maxfilesreached: function maxfilesreached()
+                {
                 },
-                queuecomplete: function queuecomplete() {
+                queuecomplete: function queuecomplete()
+                {
                 },
-                addedfiles: function addedfiles() {
+                addedfiles: function addedfiles()
+                {
                 }
             };
 
@@ -1035,20 +1121,25 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "extend",
-        value: function extend(target) {
+        value: function extend(target)
+        {
             for (var _len2 = arguments.length, objects = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
                 objects[_key2 - 1] = arguments[_key2];
             }
 
-            for (var _iterator9 = objects, _isArray9 = true, _i9 = 0, _iterator9 = _isArray9 ? _iterator9 : _iterator9[Symbol.iterator](); ;) {
+            for (var _iterator9 = objects, _isArray9 = true, _i9 = 0, _iterator9 = _isArray9 ? _iterator9 : _iterator9[Symbol.iterator]();;) {
                 var _ref8;
 
                 if (_isArray9) {
-                    if (_i9 >= _iterator9.length) break;
+                    if (_i9 >= _iterator9.length) {
+                        break;
+                    }
                     _ref8 = _iterator9[_i9++];
                 } else {
                     _i9 = _iterator9.next();
-                    if (_i9.done) break;
+                    if (_i9.done) {
+                        break;
+                    }
                     _ref8 = _i9.value;
                 }
 
@@ -1063,7 +1154,8 @@ var Dropzone = function (_Emitter) {
         }
     }]);
 
-    function Dropzone(el, options) {
+    function Dropzone(el, options)
+    {
         _classCallCheck(this, Dropzone);
 
         var _this = _possibleConstructorReturn(this, (Dropzone.__proto__ || Object.getPrototypeOf(Dropzone)).call(this));
@@ -1173,7 +1265,8 @@ var Dropzone = function (_Emitter) {
 
     _createClass(Dropzone, [{
         key: "getAcceptedFiles",
-        value: function getAcceptedFiles() {
+        value: function getAcceptedFiles()
+        {
             return this.files.filter(function (file) {
                 return file.accepted;
             }).map(function (file) {
@@ -1186,7 +1279,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "getRejectedFiles",
-        value: function getRejectedFiles() {
+        value: function getRejectedFiles()
+        {
             return this.files.filter(function (file) {
                 return !file.accepted;
             }).map(function (file) {
@@ -1195,7 +1289,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "getFilesWithStatus",
-        value: function getFilesWithStatus(status) {
+        value: function getFilesWithStatus(status)
+        {
             return this.files.filter(function (file) {
                 return file.status === status;
             }).map(function (file) {
@@ -1207,17 +1302,20 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "getQueuedFiles",
-        value: function getQueuedFiles() {
+        value: function getQueuedFiles()
+        {
             return this.getFilesWithStatus(Dropzone.QUEUED);
         }
     }, {
         key: "getUploadingFiles",
-        value: function getUploadingFiles() {
+        value: function getUploadingFiles()
+        {
             return this.getFilesWithStatus(Dropzone.UPLOADING);
         }
     }, {
         key: "getAddedFiles",
-        value: function getAddedFiles() {
+        value: function getAddedFiles()
+        {
             return this.getFilesWithStatus(Dropzone.ADDED);
         }
 
@@ -1225,7 +1323,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "getActiveFiles",
-        value: function getActiveFiles() {
+        value: function getActiveFiles()
+        {
             return this.files.filter(function (file) {
                 return file.status === Dropzone.UPLOADING || file.status === Dropzone.QUEUED;
             }).map(function (file) {
@@ -1238,7 +1337,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "init",
-        value: function init() {
+        value: function init()
+        {
             var _this3 = this;
 
             // In case it isn't set already
@@ -1251,7 +1351,8 @@ var Dropzone = function (_Emitter) {
             }
 
             if (this.clickableElements.length) {
-                var setupHiddenFileInput = function setupHiddenFileInput() {
+                var setupHiddenFileInput = function setupHiddenFileInput()
+                {
                     if (_this3.hiddenFileInput) {
                         _this3.hiddenFileInput.parentNode.removeChild(_this3.hiddenFileInput);
                     }
@@ -1282,15 +1383,19 @@ var Dropzone = function (_Emitter) {
                         var files = _this3.hiddenFileInput.files;
 
                         if (files.length) {
-                            for (var _iterator10 = files, _isArray10 = true, _i10 = 0, _iterator10 = _isArray10 ? _iterator10 : _iterator10[Symbol.iterator](); ;) {
+                            for (var _iterator10 = files, _isArray10 = true, _i10 = 0, _iterator10 = _isArray10 ? _iterator10 : _iterator10[Symbol.iterator]();;) {
                                 var _ref9;
 
                                 if (_isArray10) {
-                                    if (_i10 >= _iterator10.length) break;
+                                    if (_i10 >= _iterator10.length) {
+                                        break;
+                                    }
                                     _ref9 = _iterator10[_i10++];
                                 } else {
                                     _i10 = _iterator10.next();
-                                    if (_i10.done) break;
+                                    if (_i10.done) {
+                                        break;
+                                    }
                                     _ref9 = _i10.value;
                                 }
 
@@ -1311,15 +1416,19 @@ var Dropzone = function (_Emitter) {
             // Setup all event listeners on the Dropzone object itself.
             // They're not in @setupEventListeners() because they shouldn't be removed
             // again when the dropzone gets disabled.
-            for (var _iterator11 = this.events, _isArray11 = true, _i11 = 0, _iterator11 = _isArray11 ? _iterator11 : _iterator11[Symbol.iterator](); ;) {
+            for (var _iterator11 = this.events, _isArray11 = true, _i11 = 0, _iterator11 = _isArray11 ? _iterator11 : _iterator11[Symbol.iterator]();;) {
                 var _ref10;
 
                 if (_isArray11) {
-                    if (_i11 >= _iterator11.length) break;
+                    if (_i11 >= _iterator11.length) {
+                        break;
+                    }
                     _ref10 = _iterator11[_i11++];
                 } else {
                     _i11 = _iterator11.next();
-                    if (_i11.done) break;
+                    if (_i11.done) {
+                        break;
+                    }
                     _ref10 = _i11.value;
                 }
 
@@ -1350,7 +1459,8 @@ var Dropzone = function (_Emitter) {
                 }
             });
 
-            var noPropagation = function noPropagation(e) {
+            var noPropagation = function noPropagation(e)
+            {
                 e.stopPropagation();
                 if (e.preventDefault) {
                     return e.preventDefault();
@@ -1363,14 +1473,17 @@ var Dropzone = function (_Emitter) {
             this.listeners = [{
                 element: this.element,
                 events: {
-                    "dragstart": function dragstart(e) {
+                    "dragstart": function dragstart(e)
+                    {
                         return _this3.emit("dragstart", e);
                     },
-                    "dragenter": function dragenter(e) {
+                    "dragenter": function dragenter(e)
+                    {
                         noPropagation(e);
                         return _this3.emit("dragenter", e);
                     },
-                    "dragover": function dragover(e) {
+                    "dragover": function dragover(e)
+                    {
                         // Makes it possible to drag files from chrome's download bar
                         // http://stackoverflow.com/questions/19526430/drag-and-drop-file-uploads-from-chrome-downloads-bar
                         // Try is required to prevent bug in Internet Explorer 11 (SCRIPT65535 exception)
@@ -1384,14 +1497,17 @@ var Dropzone = function (_Emitter) {
                         noPropagation(e);
                         return _this3.emit("dragover", e);
                     },
-                    "dragleave": function dragleave(e) {
+                    "dragleave": function dragleave(e)
+                    {
                         return _this3.emit("dragleave", e);
                     },
-                    "drop": function drop(e) {
+                    "drop": function drop(e)
+                    {
                         noPropagation(e);
                         return _this3.drop(e);
                     },
-                    "dragend": function dragend(e) {
+                    "dragend": function dragend(e)
+                    {
                         return _this3.emit("dragend", e);
                     }
 
@@ -1406,7 +1522,8 @@ var Dropzone = function (_Emitter) {
                 return _this3.listeners.push({
                     element: clickableElement,
                     events: {
-                        "click": function click(evt) {
+                        "click": function click(evt)
+                        {
                             // Only the actual dropzone or the message element should trigger file selection
                             if (clickableElement !== _this3.element || evt.target === _this3.element || Dropzone.elementInside(evt.target, _this3.element.querySelector(".dz-message"))) {
                                 _this3.hiddenFileInput.click(); // Forward the click
@@ -1426,7 +1543,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "destroy",
-        value: function destroy() {
+        value: function destroy()
+        {
             this.disable();
             this.removeAllFiles(true);
             if (this.hiddenFileInput != null ? this.hiddenFileInput.parentNode : undefined) {
@@ -1438,7 +1556,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "updateTotalUploadProgress",
-        value: function updateTotalUploadProgress() {
+        value: function updateTotalUploadProgress()
+        {
             var totalUploadProgress = void 0;
             var totalBytesSent = 0;
             var totalBytes = 0;
@@ -1446,15 +1565,19 @@ var Dropzone = function (_Emitter) {
             var activeFiles = this.getActiveFiles();
 
             if (activeFiles.length) {
-                for (var _iterator12 = this.getActiveFiles(), _isArray12 = true, _i12 = 0, _iterator12 = _isArray12 ? _iterator12 : _iterator12[Symbol.iterator](); ;) {
+                for (var _iterator12 = this.getActiveFiles(), _isArray12 = true, _i12 = 0, _iterator12 = _isArray12 ? _iterator12 : _iterator12[Symbol.iterator]();;) {
                     var _ref11;
 
                     if (_isArray12) {
-                        if (_i12 >= _iterator12.length) break;
+                        if (_i12 >= _iterator12.length) {
+                            break;
+                        }
                         _ref11 = _iterator12[_i12++];
                     } else {
                         _i12 = _iterator12.next();
-                        if (_i12.done) break;
+                        if (_i12.done) {
+                            break;
+                        }
                         _ref11 = _i12.value;
                     }
 
@@ -1476,7 +1599,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_getParamName",
-        value: function _getParamName(n) {
+        value: function _getParamName(n)
+        {
             if (typeof this.options.paramName === "function") {
                 return this.options.paramName(n);
             } else {
@@ -1489,7 +1613,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_renameFile",
-        value: function _renameFile(file) {
+        value: function _renameFile(file)
+        {
             if (typeof this.options.renameFile !== "function") {
                 return file.name;
             }
@@ -1503,7 +1628,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "getFallbackForm",
-        value: function getFallbackForm() {
+        value: function getFallbackForm()
+        {
             var existingFallback = void 0,
                 form = void 0;
             if (existingFallback = this.getExistingFallback()) {
@@ -1534,17 +1660,23 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "getExistingFallback",
-        value: function getExistingFallback() {
-            var getFallback = function getFallback(elements) {
-                for (var _iterator13 = elements, _isArray13 = true, _i13 = 0, _iterator13 = _isArray13 ? _iterator13 : _iterator13[Symbol.iterator](); ;) {
+        value: function getExistingFallback()
+        {
+            var getFallback = function getFallback(elements)
+            {
+                for (var _iterator13 = elements, _isArray13 = true, _i13 = 0, _iterator13 = _isArray13 ? _iterator13 : _iterator13[Symbol.iterator]();;) {
                     var _ref12;
 
                     if (_isArray13) {
-                        if (_i13 >= _iterator13.length) break;
+                        if (_i13 >= _iterator13.length) {
+                            break;
+                        }
                         _ref12 = _iterator13[_i13++];
                     } else {
                         _i13 = _iterator13.next();
-                        if (_i13.done) break;
+                        if (_i13.done) {
+                            break;
+                        }
                         _ref12 = _i13.value;
                     }
 
@@ -1570,7 +1702,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "setupEventListeners",
-        value: function setupEventListeners() {
+        value: function setupEventListeners()
+        {
             return this.listeners.map(function (elementListeners) {
                 return function () {
                     var result = [];
@@ -1587,7 +1720,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "removeEventListeners",
-        value: function removeEventListeners() {
+        value: function removeEventListeners()
+        {
             return this.listeners.map(function (elementListeners) {
                 return function () {
                     var result = [];
@@ -1604,7 +1738,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "disable",
-        value: function disable() {
+        value: function disable()
+        {
             var _this4 = this;
 
             this.clickableElements.forEach(function (element) {
@@ -1619,7 +1754,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "enable",
-        value: function enable() {
+        value: function enable()
+        {
             delete this.disabled;
             this.clickableElements.forEach(function (element) {
                 return element.classList.add("dz-clickable");
@@ -1631,7 +1767,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "filesize",
-        value: function filesize(size) {
+        value: function filesize(size)
+        {
             var selectedSize = 0;
             var selectedUnit = "b";
 
@@ -1659,7 +1796,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_updateMaxFilesReachedClass",
-        value: function _updateMaxFilesReachedClass() {
+        value: function _updateMaxFilesReachedClass()
+        {
             if (this.options.maxFiles != null && this.getAcceptedFiles().length >= this.options.maxFiles) {
                 if (this.getAcceptedFiles().length === this.options.maxFiles) {
                     this.emit('maxfilesreached', this.files);
@@ -1671,7 +1809,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "drop",
-        value: function drop(e) {
+        value: function drop(e)
+        {
             if (!e.dataTransfer) {
                 return;
             }
@@ -1700,7 +1839,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "paste",
-        value: function paste(e) {
+        value: function paste(e)
+        {
             if (__guard__(e != null ? e.clipboardData : undefined, function (x) {
                 return x.items;
             }) == null) {
@@ -1717,16 +1857,21 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "handleFiles",
-        value: function handleFiles(files) {
-            for (var _iterator14 = files, _isArray14 = true, _i15 = 0, _iterator14 = _isArray14 ? _iterator14 : _iterator14[Symbol.iterator](); ;) {
+        value: function handleFiles(files)
+        {
+            for (var _iterator14 = files, _isArray14 = true, _i15 = 0, _iterator14 = _isArray14 ? _iterator14 : _iterator14[Symbol.iterator]();;) {
                 var _ref13;
 
                 if (_isArray14) {
-                    if (_i15 >= _iterator14.length) break;
+                    if (_i15 >= _iterator14.length) {
+                        break;
+                    }
                     _ref13 = _iterator14[_i15++];
                 } else {
                     _i15 = _iterator14.next();
-                    if (_i15.done) break;
+                    if (_i15.done) {
+                        break;
+                    }
                     _ref13 = _i15.value;
                 }
 
@@ -1741,20 +1886,25 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_addFilesFromItems",
-        value: function _addFilesFromItems(items) {
+        value: function _addFilesFromItems(items)
+        {
             var _this5 = this;
 
             return function () {
                 var result = [];
-                for (var _iterator15 = items, _isArray15 = true, _i16 = 0, _iterator15 = _isArray15 ? _iterator15 : _iterator15[Symbol.iterator](); ;) {
+                for (var _iterator15 = items, _isArray15 = true, _i16 = 0, _iterator15 = _isArray15 ? _iterator15 : _iterator15[Symbol.iterator]();;) {
                     var _ref14;
 
                     if (_isArray15) {
-                        if (_i16 >= _iterator15.length) break;
+                        if (_i16 >= _iterator15.length) {
+                            break;
+                        }
                         _ref14 = _iterator15[_i16++];
                     } else {
                         _i16 = _iterator15.next();
-                        if (_i16.done) break;
+                        if (_i16.done) {
+                            break;
+                        }
                         _ref14 = _i16.value;
                     }
 
@@ -1788,29 +1938,36 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_addFilesFromDirectory",
-        value: function _addFilesFromDirectory(directory, path) {
+        value: function _addFilesFromDirectory(directory, path)
+        {
             var _this6 = this;
 
             var dirReader = directory.createReader();
 
-            var errorHandler = function errorHandler(error) {
+            var errorHandler = function errorHandler(error)
+            {
                 return __guardMethod__(console, 'log', function (o) {
                     return o.log(error);
                 });
             };
 
-            var readEntries = function readEntries() {
+            var readEntries = function readEntries()
+            {
                 return dirReader.readEntries(function (entries) {
                     if (entries.length > 0) {
-                        for (var _iterator16 = entries, _isArray16 = true, _i17 = 0, _iterator16 = _isArray16 ? _iterator16 : _iterator16[Symbol.iterator](); ;) {
+                        for (var _iterator16 = entries, _isArray16 = true, _i17 = 0, _iterator16 = _isArray16 ? _iterator16 : _iterator16[Symbol.iterator]();;) {
                             var _ref15;
 
                             if (_isArray16) {
-                                if (_i17 >= _iterator16.length) break;
+                                if (_i17 >= _iterator16.length) {
+                                    break;
+                                }
                                 _ref15 = _iterator16[_i17++];
                             } else {
                                 _i17 = _iterator16.next();
-                                if (_i17.done) break;
+                                if (_i17.done) {
+                                    break;
+                                }
                                 _ref15 = _i17.value;
                             }
 
@@ -1850,7 +2007,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "accept",
-        value: function accept(file, done) {
+        value: function accept(file, done)
+        {
             if (this.options.maxFilesize && file.size > this.options.maxFilesize * 1024 * 1024) {
                 return done(this.options.dictFileTooBig.replace("", Math.round(file.size / 1024 / 10.24) / 100).replace("", this.options.maxFilesize));
             } else if (!Dropzone.isValidFile(file, this.options.acceptedFiles)) {
@@ -1864,7 +2022,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "addFile",
-        value: function addFile(file) {
+        value: function addFile(file)
+        {
             var _this7 = this;
 
             file.upload = {
@@ -1904,16 +2063,21 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "enqueueFiles",
-        value: function enqueueFiles(files) {
-            for (var _iterator17 = files, _isArray17 = true, _i18 = 0, _iterator17 = _isArray17 ? _iterator17 : _iterator17[Symbol.iterator](); ;) {
+        value: function enqueueFiles(files)
+        {
+            for (var _iterator17 = files, _isArray17 = true, _i18 = 0, _iterator17 = _isArray17 ? _iterator17 : _iterator17[Symbol.iterator]();;) {
                 var _ref16;
 
                 if (_isArray17) {
-                    if (_i18 >= _iterator17.length) break;
+                    if (_i18 >= _iterator17.length) {
+                        break;
+                    }
                     _ref16 = _iterator17[_i18++];
                 } else {
                     _i18 = _iterator17.next();
-                    if (_i18.done) break;
+                    if (_i18.done) {
+                        break;
+                    }
                     _ref16 = _i18.value;
                 }
 
@@ -1925,7 +2089,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "enqueueFile",
-        value: function enqueueFile(file) {
+        value: function enqueueFile(file)
+        {
             var _this8 = this;
 
             if (file.status === Dropzone.ADDED && file.accepted === true) {
@@ -1941,7 +2106,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "_enqueueThumbnail",
-        value: function _enqueueThumbnail(file) {
+        value: function _enqueueThumbnail(file)
+        {
             var _this9 = this;
 
             if (this.options.createImageThumbnails && file.type.match(/image.*/) && file.size <= this.options.maxThumbnailFilesize * 1024 * 1024) {
@@ -1953,7 +2119,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "_processThumbnailQueue",
-        value: function _processThumbnailQueue() {
+        value: function _processThumbnailQueue()
+        {
             var _this10 = this;
 
             if (this._processingThumbnail || this._thumbnailQueue.length === 0) {
@@ -1973,7 +2140,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "removeFile",
-        value: function removeFile(file) {
+        value: function removeFile(file)
+        {
             if (file.status === Dropzone.UPLOADING) {
                 this.cancelUpload(file);
             }
@@ -1989,20 +2157,25 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "removeAllFiles",
-        value: function removeAllFiles(cancelIfNecessary) {
+        value: function removeAllFiles(cancelIfNecessary)
+        {
             // Create a copy of files since removeFile() changes the @files array.
             if (cancelIfNecessary == null) {
                 cancelIfNecessary = false;
             }
-            for (var _iterator18 = this.files.slice(), _isArray18 = true, _i19 = 0, _iterator18 = _isArray18 ? _iterator18 : _iterator18[Symbol.iterator](); ;) {
+            for (var _iterator18 = this.files.slice(), _isArray18 = true, _i19 = 0, _iterator18 = _isArray18 ? _iterator18 : _iterator18[Symbol.iterator]();;) {
                 var _ref17;
 
                 if (_isArray18) {
-                    if (_i19 >= _iterator18.length) break;
+                    if (_i19 >= _iterator18.length) {
+                        break;
+                    }
                     _ref17 = _iterator18[_i19++];
                 } else {
                     _i19 = _iterator18.next();
-                    if (_i19.done) break;
+                    if (_i19.done) {
+                        break;
+                    }
                     _ref17 = _i19.value;
                 }
 
@@ -2021,7 +2194,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "resizeImage",
-        value: function resizeImage(file, width, height, resizeMethod, callback) {
+        value: function resizeImage(file, width, height, resizeMethod, callback)
+        {
             var _this11 = this;
 
             return this.createThumbnail(file, width, height, resizeMethod, true, function (dataUrl, canvas) {
@@ -2045,7 +2219,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "createThumbnail",
-        value: function createThumbnail(file, width, height, resizeMethod, fixOrientation, callback) {
+        value: function createThumbnail(file, width, height, resizeMethod, fixOrientation, callback)
+        {
             var _this12 = this;
 
             var fileReader = new FileReader();
@@ -2069,7 +2244,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "createThumbnailFromUrl",
-        value: function createThumbnailFromUrl(file, width, height, resizeMethod, fixOrientation, callback, crossOrigin) {
+        value: function createThumbnailFromUrl(file, width, height, resizeMethod, fixOrientation, callback, crossOrigin)
+        {
             var _this13 = this;
 
             // Not using `new Image` here because of a bug in latest Chrome versions.
@@ -2081,11 +2257,13 @@ var Dropzone = function (_Emitter) {
             }
 
             img.onload = function () {
-                var loadExif = function loadExif(callback) {
+                var loadExif = function loadExif(callback)
+                {
                     return callback(1);
                 };
                 if (typeof EXIF !== 'undefined' && EXIF !== null && fixOrientation) {
-                    loadExif = function loadExif(callback) {
+                    loadExif = function loadExif(callback)
+                    {
                         return EXIF.getData(img, function () {
                             return callback(EXIF.getTag(this, 'Orientation'));
                         });
@@ -2170,7 +2348,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "processQueue",
-        value: function processQueue() {
+        value: function processQueue()
+        {
             var parallelUploads = this.options.parallelUploads;
 
             var processingLength = this.getUploadingFiles().length;
@@ -2205,7 +2384,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "processFile",
-        value: function processFile(file) {
+        value: function processFile(file)
+        {
             return this.processFiles([file]);
         }
 
@@ -2213,16 +2393,21 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "processFiles",
-        value: function processFiles(files) {
-            for (var _iterator19 = files, _isArray19 = true, _i20 = 0, _iterator19 = _isArray19 ? _iterator19 : _iterator19[Symbol.iterator](); ;) {
+        value: function processFiles(files)
+        {
+            for (var _iterator19 = files, _isArray19 = true, _i20 = 0, _iterator19 = _isArray19 ? _iterator19 : _iterator19[Symbol.iterator]();;) {
                 var _ref18;
 
                 if (_isArray19) {
-                    if (_i20 >= _iterator19.length) break;
+                    if (_i20 >= _iterator19.length) {
+                        break;
+                    }
                     _ref18 = _iterator19[_i20++];
                 } else {
                     _i20 = _iterator19.next();
-                    if (_i20.done) break;
+                    if (_i20.done) {
+                        break;
+                    }
                     _ref18 = _i20.value;
                 }
 
@@ -2242,7 +2427,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "_getFilesWithXhr",
-        value: function _getFilesWithXhr(xhr) {
+        value: function _getFilesWithXhr(xhr)
+        {
             var files = void 0;
             return files = this.files.filter(function (file) {
                 return file.xhr === xhr;
@@ -2258,18 +2444,23 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "cancelUpload",
-        value: function cancelUpload(file) {
+        value: function cancelUpload(file)
+        {
             if (file.status === Dropzone.UPLOADING) {
                 var groupedFiles = this._getFilesWithXhr(file.xhr);
-                for (var _iterator20 = groupedFiles, _isArray20 = true, _i21 = 0, _iterator20 = _isArray20 ? _iterator20 : _iterator20[Symbol.iterator](); ;) {
+                for (var _iterator20 = groupedFiles, _isArray20 = true, _i21 = 0, _iterator20 = _isArray20 ? _iterator20 : _iterator20[Symbol.iterator]();;) {
                     var _ref19;
 
                     if (_isArray20) {
-                        if (_i21 >= _iterator20.length) break;
+                        if (_i21 >= _iterator20.length) {
+                            break;
+                        }
                         _ref19 = _iterator20[_i21++];
                     } else {
                         _i21 = _iterator20.next();
-                        if (_i21.done) break;
+                        if (_i21.done) {
+                            break;
+                        }
                         _ref19 = _i21.value;
                     }
 
@@ -2280,15 +2471,19 @@ var Dropzone = function (_Emitter) {
                 if (typeof file.xhr !== 'undefined') {
                     file.xhr.abort();
                 }
-                for (var _iterator21 = groupedFiles, _isArray21 = true, _i22 = 0, _iterator21 = _isArray21 ? _iterator21 : _iterator21[Symbol.iterator](); ;) {
+                for (var _iterator21 = groupedFiles, _isArray21 = true, _i22 = 0, _iterator21 = _isArray21 ? _iterator21 : _iterator21[Symbol.iterator]();;) {
                     var _ref20;
 
                     if (_isArray21) {
-                        if (_i22 >= _iterator21.length) break;
+                        if (_i22 >= _iterator21.length) {
+                            break;
+                        }
                         _ref20 = _iterator21[_i22++];
                     } else {
                         _i22 = _iterator21.next();
-                        if (_i22.done) break;
+                        if (_i22.done) {
+                            break;
+                        }
                         _ref20 = _i22.value;
                     }
 
@@ -2313,7 +2508,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "resolveOption",
-        value: function resolveOption(option) {
+        value: function resolveOption(option)
+        {
             if (typeof option === 'function') {
                 for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
                     args[_key3 - 1] = arguments[_key3];
@@ -2325,12 +2521,14 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "uploadFile",
-        value: function uploadFile(file) {
+        value: function uploadFile(file)
+        {
             return this.uploadFiles([file]);
         }
     }, {
         key: "uploadFiles",
-        value: function uploadFiles(files) {
+        value: function uploadFiles(files)
+        {
             var _this14 = this;
 
             this._transformFiles(files, function (transformedFiles) {
@@ -2345,7 +2543,8 @@ var Dropzone = function (_Emitter) {
 
                     file.upload.chunks = [];
 
-                    var handleNextChunk = function handleNextChunk() {
+                    var handleNextChunk = function handleNextChunk()
+                    {
                         var chunkIndex = 0;
 
                         // Find the next item in file.upload.chunks that is not defined yet.
@@ -2354,7 +2553,9 @@ var Dropzone = function (_Emitter) {
                         }
 
                         // This means, that all chunks have already been started.
-                        if (chunkIndex >= file.upload.totalChunkCount) return;
+                        if (chunkIndex >= file.upload.totalChunkCount) {
+                            return;
+                        }
 
                         startedChunkCount++;
 
@@ -2430,7 +2631,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_getChunk",
-        value: function _getChunk(file, xhr) {
+        value: function _getChunk(file, xhr)
+        {
             for (var i = 0; i < file.upload.totalChunkCount; i++) {
                 if (file.upload.chunks[i] !== undefined && file.upload.chunks[i].xhr === xhr) {
                     return file.upload.chunks[i];
@@ -2444,21 +2646,26 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_uploadData",
-        value: function _uploadData(files, dataBlocks) {
+        value: function _uploadData(files, dataBlocks)
+        {
             var _this15 = this;
 
             var xhr = new XMLHttpRequest();
 
             // Put the xhr object in the file objects to be able to reference it later.
-            for (var _iterator22 = files, _isArray22 = true, _i24 = 0, _iterator22 = _isArray22 ? _iterator22 : _iterator22[Symbol.iterator](); ;) {
+            for (var _iterator22 = files, _isArray22 = true, _i24 = 0, _iterator22 = _isArray22 ? _iterator22 : _iterator22[Symbol.iterator]();;) {
                 var _ref21;
 
                 if (_isArray22) {
-                    if (_i24 >= _iterator22.length) break;
+                    if (_i24 >= _iterator22.length) {
+                        break;
+                    }
                     _ref21 = _iterator22[_i24++];
                 } else {
                     _i24 = _iterator22.next();
-                    if (_i24.done) break;
+                    if (_i24.done) {
+                        break;
+                    }
                     _ref21 = _i24.value;
                 }
 
@@ -2528,15 +2735,19 @@ var Dropzone = function (_Emitter) {
             }
 
             // Let the user add additional data if necessary
-            for (var _iterator23 = files, _isArray23 = true, _i25 = 0, _iterator23 = _isArray23 ? _iterator23 : _iterator23[Symbol.iterator](); ;) {
+            for (var _iterator23 = files, _isArray23 = true, _i25 = 0, _iterator23 = _isArray23 ? _iterator23 : _iterator23[Symbol.iterator]();;) {
                 var _ref22;
 
                 if (_isArray23) {
-                    if (_i25 >= _iterator23.length) break;
+                    if (_i25 >= _iterator23.length) {
+                        break;
+                    }
                     _ref22 = _iterator23[_i25++];
                 } else {
                     _i25 = _iterator23.next();
-                    if (_i25.done) break;
+                    if (_i25.done) {
+                        break;
+                    }
                     _ref22 = _i25.value;
                 }
 
@@ -2564,14 +2775,16 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_transformFiles",
-        value: function _transformFiles(files, done) {
+        value: function _transformFiles(files, done)
+        {
             var _this16 = this;
 
             var transformedFiles = [];
             // Clumsy way of handling asynchronous calls, until I get to add a proper Future library.
             var doneCounter = 0;
 
-            var _loop = function _loop(i) {
+            var _loop = function _loop(i)
+            {
                 _this16.options.transformFile.call(_this16, files[i], function (transformedFile) {
                     transformedFiles[i] = transformedFile;
                     if (++doneCounter === files.length) {
@@ -2589,18 +2802,23 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_addFormElementData",
-        value: function _addFormElementData(formData) {
+        value: function _addFormElementData(formData)
+        {
             // Take care of other input elements
             if (this.element.tagName === "FORM") {
-                for (var _iterator24 = this.element.querySelectorAll("input, textarea, select, button"), _isArray24 = true, _i26 = 0, _iterator24 = _isArray24 ? _iterator24 : _iterator24[Symbol.iterator](); ;) {
+                for (var _iterator24 = this.element.querySelectorAll("input, textarea, select, button"), _isArray24 = true, _i26 = 0, _iterator24 = _isArray24 ? _iterator24 : _iterator24[Symbol.iterator]();;) {
                     var _ref23;
 
                     if (_isArray24) {
-                        if (_i26 >= _iterator24.length) break;
+                        if (_i26 >= _iterator24.length) {
+                            break;
+                        }
                         _ref23 = _iterator24[_i26++];
                     } else {
                         _i26 = _iterator24.next();
-                        if (_i26.done) break;
+                        if (_i26.done) {
+                            break;
+                        }
                         _ref23 = _i26.value;
                     }
 
@@ -2608,22 +2826,30 @@ var Dropzone = function (_Emitter) {
 
                     var inputName = input.getAttribute("name");
                     var inputType = input.getAttribute("type");
-                    if (inputType) inputType = inputType.toLowerCase();
+                    if (inputType) {
+                        inputType = inputType.toLowerCase();
+                    }
 
                     // If the input doesn't have a name, we can't use it.
-                    if (typeof inputName === 'undefined' || inputName === null) continue;
+                    if (typeof inputName === 'undefined' || inputName === null) {
+                        continue;
+                    }
 
                     if (input.tagName === "SELECT" && input.hasAttribute("multiple")) {
                         // Possibly multiple values
-                        for (var _iterator25 = input.options, _isArray25 = true, _i27 = 0, _iterator25 = _isArray25 ? _iterator25 : _iterator25[Symbol.iterator](); ;) {
+                        for (var _iterator25 = input.options, _isArray25 = true, _i27 = 0, _iterator25 = _isArray25 ? _iterator25 : _iterator25[Symbol.iterator]();;) {
                             var _ref24;
 
                             if (_isArray25) {
-                                if (_i27 >= _iterator25.length) break;
+                                if (_i27 >= _iterator25.length) {
+                                    break;
+                                }
                                 _ref24 = _iterator25[_i27++];
                             } else {
                                 _i27 = _iterator25.next();
-                                if (_i27.done) break;
+                                if (_i27.done) {
+                                    break;
+                                }
                                 _ref24 = _i27.value;
                             }
 
@@ -2645,7 +2871,8 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_updateFilesUploadProgress",
-        value: function _updateFilesUploadProgress(files, xhr, e) {
+        value: function _updateFilesUploadProgress(files, xhr, e)
+        {
             var progress = void 0;
             if (typeof e !== 'undefined') {
                 progress = 100 * e.loaded / e.total;
@@ -2672,15 +2899,19 @@ var Dropzone = function (_Emitter) {
                     }
                     file.upload.progress = file.upload.progress / file.upload.totalChunkCount;
                 } else {
-                    for (var _iterator26 = files, _isArray26 = true, _i28 = 0, _iterator26 = _isArray26 ? _iterator26 : _iterator26[Symbol.iterator](); ;) {
+                    for (var _iterator26 = files, _isArray26 = true, _i28 = 0, _iterator26 = _isArray26 ? _iterator26 : _iterator26[Symbol.iterator]();;) {
                         var _ref25;
 
                         if (_isArray26) {
-                            if (_i28 >= _iterator26.length) break;
+                            if (_i28 >= _iterator26.length) {
+                                break;
+                            }
                             _ref25 = _iterator26[_i28++];
                         } else {
                             _i28 = _iterator26.next();
-                            if (_i28.done) break;
+                            if (_i28.done) {
+                                break;
+                            }
                             _ref25 = _i28.value;
                         }
 
@@ -2691,15 +2922,19 @@ var Dropzone = function (_Emitter) {
                         _file2.upload.bytesSent = e.loaded;
                     }
                 }
-                for (var _iterator27 = files, _isArray27 = true, _i29 = 0, _iterator27 = _isArray27 ? _iterator27 : _iterator27[Symbol.iterator](); ;) {
+                for (var _iterator27 = files, _isArray27 = true, _i29 = 0, _iterator27 = _isArray27 ? _iterator27 : _iterator27[Symbol.iterator]();;) {
                     var _ref26;
 
                     if (_isArray27) {
-                        if (_i29 >= _iterator27.length) break;
+                        if (_i29 >= _iterator27.length) {
+                            break;
+                        }
                         _ref26 = _iterator27[_i29++];
                     } else {
                         _i29 = _iterator27.next();
-                        if (_i29.done) break;
+                        if (_i29.done) {
+                            break;
+                        }
                         _ref26 = _i29.value;
                     }
 
@@ -2714,15 +2949,19 @@ var Dropzone = function (_Emitter) {
 
                 progress = 100;
 
-                for (var _iterator28 = files, _isArray28 = true, _i30 = 0, _iterator28 = _isArray28 ? _iterator28 : _iterator28[Symbol.iterator](); ;) {
+                for (var _iterator28 = files, _isArray28 = true, _i30 = 0, _iterator28 = _isArray28 ? _iterator28 : _iterator28[Symbol.iterator]();;) {
                     var _ref27;
 
                     if (_isArray28) {
-                        if (_i30 >= _iterator28.length) break;
+                        if (_i30 >= _iterator28.length) {
+                            break;
+                        }
                         _ref27 = _iterator28[_i30++];
                     } else {
                         _i30 = _iterator28.next();
-                        if (_i30.done) break;
+                        if (_i30.done) {
+                            break;
+                        }
                         _ref27 = _i30.value;
                     }
 
@@ -2740,15 +2979,19 @@ var Dropzone = function (_Emitter) {
                     return;
                 }
 
-                for (var _iterator29 = files, _isArray29 = true, _i31 = 0, _iterator29 = _isArray29 ? _iterator29 : _iterator29[Symbol.iterator](); ;) {
+                for (var _iterator29 = files, _isArray29 = true, _i31 = 0, _iterator29 = _isArray29 ? _iterator29 : _iterator29[Symbol.iterator]();;) {
                     var _ref28;
 
                     if (_isArray29) {
-                        if (_i31 >= _iterator29.length) break;
+                        if (_i31 >= _iterator29.length) {
+                            break;
+                        }
                         _ref28 = _iterator29[_i31++];
                     } else {
                         _i31 = _iterator29.next();
-                        if (_i31.done) break;
+                        if (_i31.done) {
+                            break;
+                        }
                         _ref28 = _i31.value;
                     }
 
@@ -2760,7 +3003,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "_finishedUploading",
-        value: function _finishedUploading(files, xhr, e) {
+        value: function _finishedUploading(files, xhr, e)
+        {
             var response = void 0;
 
             if (files[0].status === Dropzone.CANCELED) {
@@ -2798,7 +3042,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "_handleUploadError",
-        value: function _handleUploadError(files, xhr, response) {
+        value: function _handleUploadError(files, xhr, response)
+        {
             if (files[0].status === Dropzone.CANCELED) {
                 return;
             }
@@ -2813,15 +3058,19 @@ var Dropzone = function (_Emitter) {
                 }
             }
 
-            for (var _iterator30 = files, _isArray30 = true, _i32 = 0, _iterator30 = _isArray30 ? _iterator30 : _iterator30[Symbol.iterator](); ;) {
+            for (var _iterator30 = files, _isArray30 = true, _i32 = 0, _iterator30 = _isArray30 ? _iterator30 : _iterator30[Symbol.iterator]();;) {
                 var _ref29;
 
                 if (_isArray30) {
-                    if (_i32 >= _iterator30.length) break;
+                    if (_i32 >= _iterator30.length) {
+                        break;
+                    }
                     _ref29 = _iterator30[_i32++];
                 } else {
                     _i32 = _iterator30.next();
-                    if (_i32.done) break;
+                    if (_i32.done) {
+                        break;
+                    }
                     _ref29 = _i32.value;
                 }
 
@@ -2832,7 +3081,8 @@ var Dropzone = function (_Emitter) {
         }
     }, {
         key: "submitRequest",
-        value: function submitRequest(xhr, formData, files) {
+        value: function submitRequest(xhr, formData, files)
+        {
             xhr.send(formData);
         }
 
@@ -2841,16 +3091,21 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_finished",
-        value: function _finished(files, responseText, e) {
-            for (var _iterator31 = files, _isArray31 = true, _i33 = 0, _iterator31 = _isArray31 ? _iterator31 : _iterator31[Symbol.iterator](); ;) {
+        value: function _finished(files, responseText, e)
+        {
+            for (var _iterator31 = files, _isArray31 = true, _i33 = 0, _iterator31 = _isArray31 ? _iterator31 : _iterator31[Symbol.iterator]();;) {
                 var _ref30;
 
                 if (_isArray31) {
-                    if (_i33 >= _iterator31.length) break;
+                    if (_i33 >= _iterator31.length) {
+                        break;
+                    }
                     _ref30 = _iterator31[_i33++];
                 } else {
                     _i33 = _iterator31.next();
-                    if (_i33.done) break;
+                    if (_i33.done) {
+                        break;
+                    }
                     _ref30 = _i33.value;
                 }
 
@@ -2875,16 +3130,21 @@ var Dropzone = function (_Emitter) {
 
     }, {
         key: "_errorProcessing",
-        value: function _errorProcessing(files, message, xhr) {
-            for (var _iterator32 = files, _isArray32 = true, _i34 = 0, _iterator32 = _isArray32 ? _iterator32 : _iterator32[Symbol.iterator](); ;) {
+        value: function _errorProcessing(files, message, xhr)
+        {
+            for (var _iterator32 = files, _isArray32 = true, _i34 = 0, _iterator32 = _isArray32 ? _iterator32 : _iterator32[Symbol.iterator]();;) {
                 var _ref31;
 
                 if (_isArray32) {
-                    if (_i34 >= _iterator32.length) break;
+                    if (_i34 >= _iterator32.length) {
+                        break;
+                    }
                     _ref31 = _iterator32[_i34++];
                 } else {
                     _i34 = _iterator32.next();
-                    if (_i34.done) break;
+                    if (_i34.done) {
+                        break;
+                    }
                     _ref31 = _i34.value;
                 }
 
@@ -2905,7 +3165,8 @@ var Dropzone = function (_Emitter) {
         }
     }], [{
         key: "uuidv4",
-        value: function uuidv4() {
+        value: function uuidv4()
+        {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
                 var r = Math.random() * 16 | 0,
                     v = c === 'x' ? r : r & 0x3 | 0x8;
@@ -2972,18 +3233,23 @@ Dropzone.discover = function () {
     } else {
         dropzones = [];
         // IE :(
-        var checkElements = function checkElements(elements) {
+        var checkElements = function checkElements(elements)
+        {
             return function () {
                 var result = [];
-                for (var _iterator33 = elements, _isArray33 = true, _i35 = 0, _iterator33 = _isArray33 ? _iterator33 : _iterator33[Symbol.iterator](); ;) {
+                for (var _iterator33 = elements, _isArray33 = true, _i35 = 0, _iterator33 = _isArray33 ? _iterator33 : _iterator33[Symbol.iterator]();;) {
                     var _ref32;
 
                     if (_isArray33) {
-                        if (_i35 >= _iterator33.length) break;
+                        if (_i35 >= _iterator33.length) {
+                            break;
+                        }
                         _ref32 = _iterator33[_i35++];
                     } else {
                         _i35 = _iterator33.next();
-                        if (_i35.done) break;
+                        if (_i35.done) {
+                            break;
+                        }
                         _ref32 = _i35.value;
                     }
 
@@ -3004,15 +3270,19 @@ Dropzone.discover = function () {
 
     return function () {
         var result = [];
-        for (var _iterator34 = dropzones, _isArray34 = true, _i36 = 0, _iterator34 = _isArray34 ? _iterator34 : _iterator34[Symbol.iterator](); ;) {
+        for (var _iterator34 = dropzones, _isArray34 = true, _i36 = 0, _iterator34 = _isArray34 ? _iterator34 : _iterator34[Symbol.iterator]();;) {
             var _ref33;
 
             if (_isArray34) {
-                if (_i36 >= _iterator34.length) break;
+                if (_i36 >= _iterator34.length) {
+                    break;
+                }
                 _ref33 = _iterator34[_i36++];
             } else {
                 _i36 = _iterator34.next();
-                if (_i36.done) break;
+                if (_i36.done) {
+                    break;
+                }
                 _ref33 = _i36.value;
             }
 
@@ -3053,15 +3323,19 @@ Dropzone.isBrowserSupported = function () {
             capableBrowser = false;
         } else {
             // The browser supports the API, but may be blacklisted.
-            for (var _iterator35 = Dropzone.blacklistedBrowsers, _isArray35 = true, _i37 = 0, _iterator35 = _isArray35 ? _iterator35 : _iterator35[Symbol.iterator](); ;) {
+            for (var _iterator35 = Dropzone.blacklistedBrowsers, _isArray35 = true, _i37 = 0, _iterator35 = _isArray35 ? _iterator35 : _iterator35[Symbol.iterator]();;) {
                 var _ref34;
 
                 if (_isArray35) {
-                    if (_i37 >= _iterator35.length) break;
+                    if (_i37 >= _iterator35.length) {
+                        break;
+                    }
                     _ref34 = _iterator35[_i37++];
                 } else {
                     _i37 = _iterator35.next();
-                    if (_i37.done) break;
+                    if (_i37.done) {
+                        break;
+                    }
                     _ref34 = _i37.value;
                 }
 
@@ -3100,7 +3374,8 @@ Dropzone.dataURItoBlob = function (dataURI) {
 };
 
 // Returns an array without the rejected item
-var without = function without(list, rejectedItem) {
+var without = function without(list, rejectedItem)
+{
     return list.filter(function (item) {
         return item !== rejectedItem;
     }).map(function (item) {
@@ -3109,7 +3384,8 @@ var without = function without(list, rejectedItem) {
 };
 
 // abc-def_ghi -> abcDefGhi
-var camelize = function camelize(str) {
+var camelize = function camelize(str)
+{
     return str.replace(/[\-_](\w)/g, function (match) {
         return match.charAt(1).toUpperCase();
     });
@@ -3154,13 +3430,17 @@ Dropzone.getElements = function (els, name) {
     if (els instanceof Array) {
         elements = [];
         try {
-            for (var _iterator36 = els, _isArray36 = true, _i38 = 0, _iterator36 = _isArray36 ? _iterator36 : _iterator36[Symbol.iterator](); ;) {
+            for (var _iterator36 = els, _isArray36 = true, _i38 = 0, _iterator36 = _isArray36 ? _iterator36 : _iterator36[Symbol.iterator]();;) {
                 if (_isArray36) {
-                    if (_i38 >= _iterator36.length) break;
+                    if (_i38 >= _iterator36.length) {
+                        break;
+                    }
                     el = _iterator36[_i38++];
                 } else {
                     _i38 = _iterator36.next();
-                    if (_i38.done) break;
+                    if (_i38.done) {
+                        break;
+                    }
                     el = _i38.value;
                 }
 
@@ -3171,13 +3451,17 @@ Dropzone.getElements = function (els, name) {
         }
     } else if (typeof els === "string") {
         elements = [];
-        for (var _iterator37 = document.querySelectorAll(els), _isArray37 = true, _i39 = 0, _iterator37 = _isArray37 ? _iterator37 : _iterator37[Symbol.iterator](); ;) {
+        for (var _iterator37 = document.querySelectorAll(els), _isArray37 = true, _i39 = 0, _iterator37 = _isArray37 ? _iterator37 : _iterator37[Symbol.iterator]();;) {
             if (_isArray37) {
-                if (_i39 >= _iterator37.length) break;
+                if (_i39 >= _iterator37.length) {
+                    break;
+                }
                 el = _iterator37[_i39++];
             } else {
                 _i39 = _iterator37.next();
-                if (_i39.done) break;
+                if (_i39.done) {
+                    break;
+                }
                 el = _i39.value;
             }
 
@@ -3218,15 +3502,19 @@ Dropzone.isValidFile = function (file, acceptedFiles) {
     var mimeType = file.type;
     var baseMimeType = mimeType.replace(/\/.*$/, "");
 
-    for (var _iterator38 = acceptedFiles, _isArray38 = true, _i40 = 0, _iterator38 = _isArray38 ? _iterator38 : _iterator38[Symbol.iterator](); ;) {
+    for (var _iterator38 = acceptedFiles, _isArray38 = true, _i40 = 0, _iterator38 = _isArray38 ? _iterator38 : _iterator38[Symbol.iterator]();;) {
         var _ref35;
 
         if (_isArray38) {
-            if (_i40 >= _iterator38.length) break;
+            if (_i40 >= _iterator38.length) {
+                break;
+            }
             _ref35 = _iterator38[_i40++];
         } else {
             _i40 = _iterator38.next();
-            if (_i40.done) break;
+            if (_i40.done) {
+                break;
+            }
             _ref35 = _i40.value;
         }
 
@@ -3293,7 +3581,8 @@ Dropzone.SUCCESS = "success";
 // Detecting vertical squash in loaded image.
 // Fixes a bug which squash image vertically while drawing into canvas for some images.
 // This is a bug in iOS6 devices. This function from https://github.com/stomita/ios-imagefile-megapixel
-var detectVerticalSquash = function detectVerticalSquash(img) {
+var detectVerticalSquash = function detectVerticalSquash(img)
+{
     var iw = img.naturalWidth;
     var ih = img.naturalHeight;
     var canvas = document.createElement("canvas");
@@ -3333,7 +3622,8 @@ var detectVerticalSquash = function detectVerticalSquash(img) {
 
 // A replacement for context.drawImage
 // (args are for source and destination).
-var drawImageIOSFix = function drawImageIOSFix(ctx, img, sx, sy, sw, sh, dx, dy, dw, dh) {
+var drawImageIOSFix = function drawImageIOSFix(ctx, img, sx, sy, sw, sh, dx, dy, dw, dh)
+{
     var vertSquashRatio = detectVerticalSquash(img);
     return ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh / vertSquashRatio);
 };
@@ -3343,18 +3633,21 @@ var drawImageIOSFix = function drawImageIOSFix(ctx, img, sx, sy, sw, sh, dx, dy,
 // http://elicon.blog57.fc2.com/blog-entry-206.html
 
 var ExifRestore = function () {
-    function ExifRestore() {
+    function ExifRestore()
+    {
         _classCallCheck(this, ExifRestore);
     }
 
     _createClass(ExifRestore, null, [{
         key: "initClass",
-        value: function initClass() {
+        value: function initClass()
+        {
             this.KEY_STR = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
         }
     }, {
         key: "encode64",
-        value: function encode64(input) {
+        value: function encode64(input)
+        {
             var output = '';
             var chr1 = undefined;
             var chr2 = undefined;
@@ -3388,7 +3681,8 @@ var ExifRestore = function () {
         }
     }, {
         key: "restore",
-        value: function restore(origFileBase64, resizedFileBase64) {
+        value: function restore(origFileBase64, resizedFileBase64)
+        {
             if (!origFileBase64.match('data:image/jpeg;base64,')) {
                 return resizedFileBase64;
             }
@@ -3399,7 +3693,8 @@ var ExifRestore = function () {
         }
     }, {
         key: "exifManipulation",
-        value: function exifManipulation(resizedFileBase64, segments) {
+        value: function exifManipulation(resizedFileBase64, segments)
+        {
             var exifArray = this.getExifArray(segments);
             var newImageArray = this.insertExif(resizedFileBase64, exifArray);
             var aBuffer = new Uint8Array(newImageArray);
@@ -3407,7 +3702,8 @@ var ExifRestore = function () {
         }
     }, {
         key: "getExifArray",
-        value: function getExifArray(segments) {
+        value: function getExifArray(segments)
+        {
             var seg = undefined;
             var x = 0;
             while (x < segments.length) {
@@ -3421,7 +3717,8 @@ var ExifRestore = function () {
         }
     }, {
         key: "insertExif",
-        value: function insertExif(resizedFileBase64, exifArray) {
+        value: function insertExif(resizedFileBase64, exifArray)
+        {
             var imageData = resizedFileBase64.replace('data:image/jpeg;base64,', '');
             var buf = this.decode64(imageData);
             var separatePoint = buf.indexOf(255, 3);
@@ -3434,7 +3731,8 @@ var ExifRestore = function () {
         }
     }, {
         key: "slice2Segments",
-        value: function slice2Segments(rawImageArray) {
+        value: function slice2Segments(rawImageArray)
+        {
             var head = 0;
             var segments = [];
             while (true) {
@@ -3459,7 +3757,8 @@ var ExifRestore = function () {
         }
     }, {
         key: "decode64",
-        value: function decode64(input) {
+        value: function decode64(input)
+        {
             var output = '';
             var chr1 = undefined;
             var chr2 = undefined;
@@ -3522,7 +3821,8 @@ ExifRestore.initClass();
 
 // @win window reference
 // @fn function reference
-var contentLoaded = function contentLoaded(win, fn) {
+var contentLoaded = function contentLoaded(win, fn)
+{
     var done = false;
     var top = true;
     var doc = win.document;
@@ -3530,7 +3830,8 @@ var contentLoaded = function contentLoaded(win, fn) {
     var add = doc.addEventListener ? "addEventListener" : "attachEvent";
     var rem = doc.addEventListener ? "removeEventListener" : "detachEvent";
     var pre = doc.addEventListener ? "" : "on";
-    var init = function init(e) {
+    var init = function init(e)
+    {
         if (e.type === "readystatechange" && doc.readyState !== "complete") {
             return;
         }
@@ -3540,7 +3841,8 @@ var contentLoaded = function contentLoaded(win, fn) {
         }
     };
 
-    var poll = function poll() {
+    var poll = function poll()
+    {
         try {
             root.doScroll("left");
         } catch (e) {
@@ -3574,11 +3876,13 @@ Dropzone._autoDiscoverFunction = function () {
 };
 contentLoaded(window, Dropzone._autoDiscoverFunction);
 
-function __guard__(value, transform) {
+function __guard__(value, transform)
+{
     return typeof value !== 'undefined' && value !== null ? transform(value) : undefined;
 }
 
-function __guardMethod__(obj, methodName, transform) {
+function __guardMethod__(obj, methodName, transform)
+{
     if (typeof obj !== 'undefined' && obj !== null && typeof obj[methodName] === 'function') {
         return transform(obj, methodName);
     } else {

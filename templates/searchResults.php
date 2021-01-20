@@ -1,5 +1,5 @@
 <?php
-if (isset($_SESSION['userName'])) { ?>
+if (isset($userName)) { ?>
     <main class="page__main page__main--search-results">
         <h1 class="visually-hidden">Страница результатов поиска</h1>
         <section class="search">
@@ -13,7 +13,7 @@ if (isset($_SESSION['userName'])) { ?>
             <div class="search__results-wrapper">
                 <div class="container">
                     <div class="search__content">
-                        <?php foreach ($posts as $post): ?>
+                        <?php foreach ($posts as $post) : ?>
                             <article class="search__post post post-text">
                                 <header class="post__header post__author">
                                     <a class="post__author-link" href="#" title="Автор">
@@ -29,33 +29,18 @@ if (isset($_SESSION['userName'])) { ?>
                                     </a>
                                 </header>
                                 <div class="post__main">
-                                    <?php echo include_template('widgets/postFeed.php', [
-                                        'con' => $con,
-                                        'id' => $post['id'],
-                                        'content' => $post['content'],
-                                        'typeID' => $post['typeID'],
-                                        'link' => '',
-                                        'title' => $post['title'],
-                                        'quoteAuthor' => $post['author'],
-                                    ]); ?>
+                                    <?= $post[0]['postFeed']?>
                                     <br>
                                     <div style="display:flex; margin-left: 10px ">
-                                        <?php foreach (getTags($con, $post['id']) as $tag) { ?>
+                                        <?php foreach ($post[0]['tags'] as $tag) { ?>
                                             <a style='background-color: white; border: solid transparent; color: #2a4ad0;'
-                                               href="/search.php?request=%23<?= $tag ?>"><?= $tag ?></a>
+                                               href="/search.php?request=%23<?= strip_tags($tag) ?>"><?= strip_tags($tag) ?></a>
                                         <?php } ?>
                                     </div>
 
                                 </div>
                                 <footer class="post__footer post__indicators">
-                                    <?php echo include_template('widgets/likesRepostsComments.php',
-                                        [
-                                            'like' => $post[0]['like'],
-                                            'comment' => $post[0]['comment'],
-                                            'reposts' => $post[0]['reposts'],
-                                            'view' => $post[0]['view'],
-                                            'id' => $post['id'],
-                                        ]); ?>
+                                    <?= $post[0]['likesRepostsComments'] ?>
                                 </footer>
                             </article>
                         <?php endforeach; ?>

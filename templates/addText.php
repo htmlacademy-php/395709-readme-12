@@ -47,9 +47,8 @@
             </div>
         </div>
         <?php
-        if ( ! empty($error)) {
-            echo include_template('widgets/formErrors.php',
-                ['error' => $error, 'errorHeader' => array("Заголовок", "Текст поста", "Теги")]);
+        if (! empty($error)) {
+            echo $errorForm;
         } ?>
     </div>
     <div class="adding-post__buttons">
